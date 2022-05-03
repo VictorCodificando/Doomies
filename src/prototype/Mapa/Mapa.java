@@ -6,4 +6,10 @@ package prototype.Mapa;
  */
 public class Mapa {
 
+    private final Tile[][] tiles;
+
+    public Mapa(Tile[][] tiles) {
+        this.tiles = tiles;
+    }
+
 }

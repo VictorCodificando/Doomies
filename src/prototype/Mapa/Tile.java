@@ -6,7 +6,6 @@ import prototype.Visual.Sprite;
  *
  * @author Víctor Zero
  */
-public class Tiles {//Nada todavia
-
+public class Tile {//Nada todavia
     Sprite sprite;
 }

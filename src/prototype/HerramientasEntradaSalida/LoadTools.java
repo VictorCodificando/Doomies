@@ -1,12 +1,10 @@
 package prototype.HerramientasEntradaSalida;
 
 import java.awt.Color;
-import java.io.InputStream;
 import java.io.FileInputStream;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.GraphicsConfiguration;
-import java.awt.image.ImageObserver;
 import java.util.Scanner;
 import java.io.File;
 import javax.imageio.ImageIO;
@@ -14,6 +12,11 @@ import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.awt.Font;
 import java.awt.Transparency;
+import java.io.IOException;
+import java.util.ArrayList;
+import prototype.Visual.Sprite;
+import prototype.Visual.SpriteSheet;
+import prototype.mapa.Tile;
 
 public class LoadTools {
 
@@ -69,5 +72,37 @@ public class LoadTools {
         int blue = (c.getBlue() <= (0 + n)) ? 0 : c.getBlue() - n;
         Color c2 = new Color(red, green, blue);
         return c2;
+    }
+
+    public static Tile[] loadMap(String path) {
+        File f = null;
+        ArrayList<Tile> tiles = new ArrayList();
+        Tile tilesArray[];
+        SpriteSheet hoja = SpriteSheet.MAPA_ACTUAL;
+        try {
+            if (RUTA_ACTUAL.contains(".jar")) {
+                f = new File(path);
+            } else {
+                f = new File(RUTA_ACTUAL + path);
+            }
+            Scanner lector = new Scanner(f);
+            for (int i = 0; lector.hasNext(); i++) {
+                String linea[] = lector.next().split("-");
+                for (int j = 0; j < 10; j++) {
+                    int[] id_Bloque = {Integer.parseInt(linea[j].substring(0, 1)), Integer.parseInt(linea[j].substring(1))};
+                    Sprite spTemp[] = {hoja.getSprite(id_Bloque[0], id_Bloque[1])};
+                    tiles.add(new Tile(1, 1, spTemp));
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("ERROR MAPA NO ENCONTRADO");
+        } catch (Exception e) {
+            System.out.println("ERROR EN LA LECTURA DEL MAPA");
+        }
+        tilesArray = new Tile[tiles.size()];
+        for (int i = 0; i < tilesArray.length; i++) {
+            tilesArray[i]=(Tile)tiles.get(i);
+        }
+        return tilesArray;
     }
 }

@@ -24,15 +24,23 @@ public class Mapa {
     }
 
     public void dibujar(Graphics g) {
+        //Dibujamos los tiles
         for (int i = 0; i < tiles.length; i++) {
             if (tiles[i].isVisible()) {
                 tiles[i].dibujar(g);
             }
         }
+        //Dibujamos los seres
+        for (int i = 0; i < seres.length; i++) {
+            if (seres[i].isVisible()) {
+                seres[i].dibujar(g);
+            }
+        }
     }
 
     public void actualizar() {
-
+        x+=xa;
+        y+=ya;
     }
 
 }

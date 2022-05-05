@@ -17,7 +17,8 @@ public class GestorJuego {
 
     private Jugador jugador;
     private Mapa mapa;
-
+    private boolean pausa;
+    private boolean jugando;
     public GestorJuego(int ID_MAPA) {
         mapa = new Mapa(LoadTools.loadMap("/Map/mapa1.txt"), null);
         Teclado teclado = null;

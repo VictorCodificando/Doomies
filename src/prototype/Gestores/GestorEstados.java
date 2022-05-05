@@ -10,24 +10,24 @@ import java.awt.Graphics;
  *
  * @author Víctor Zero
  */
-public class GestorEstados {
+public class GestorEstados implements Gestor{
 
     private boolean jugando;
     private boolean inicio;
+    private Gestor gestorActual;
 
     public GestorEstados() {
+        inicio=true;
+        jugando=false;
+        gestorActual=(Gestor) new GestorMenu();
     }
 
     public void dibujar(Graphics g) {
-        if (jugando) {
-            
-        }else{
-            
-        }
+        gestorActual.dibujar(g);
     }
 
     public void actualizar() {
-        
+        gestorActual.actualizar();
     }
 
 }

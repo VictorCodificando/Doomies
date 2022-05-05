@@ -17,7 +17,12 @@ public class Mapa {
     private int y;
     private int xa;
     private int ya;
-
+    /**
+     * Crea el mapa teniendo los tiles y los seres que componen el mapa
+     * 
+     * @param tiles Los tiles que representan los mapas
+     * @param seres Los seres, enemigos... que estan representados en el mapa
+     */
     public Mapa(Tile[] tiles, SerVivo[] seres) {
         this.tiles = tiles;
         this.seres = seres;
@@ -37,7 +42,9 @@ public class Mapa {
             }
         }
     }
-
+    /**
+     * Actualizamos la posicion actual del mapa
+     */
     public void actualizar() {
         x+=xa;
         y+=ya;

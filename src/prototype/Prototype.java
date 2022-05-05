@@ -11,7 +11,7 @@ public class Prototype {
     private Ventana ventana;
     private Lienzo canvas;
     private boolean enEjecucion = false;//Variable que funcionara como bucle infinito
-
+    
     public Prototype(int width, int height) {//inicializo el canvas primero y luego se lo paso al frame(ventana)
         this.canvas = new Lienzo(width, height);
         this.ventana = new Ventana(canvas);

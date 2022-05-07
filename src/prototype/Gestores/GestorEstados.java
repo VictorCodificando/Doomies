@@ -5,6 +5,8 @@
 package prototype.Gestores;
 
 import java.awt.Graphics;
+import prototype.HerramientasEntradaSalida.Mouse;
+import prototype.HerramientasEntradaSalida.Teclado;
 
 /**
  *
@@ -16,10 +18,10 @@ public class GestorEstados implements Gestor{
     private boolean inicio;
     private Gestor gestorActual;
 
-    public GestorEstados() {
+    public GestorEstados(final int WIDTH, final int HEIGHT, final Teclado teclado,final Mouse raton) {
         inicio=true;
         jugando=false;
-        gestorActual=(Gestor) new GestorMenu();
+        gestorActual=(Gestor) new GestorMenu(WIDTH,HEIGHT,teclado,raton);
     }
 
     public void dibujar(Graphics g) {

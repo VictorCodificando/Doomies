@@ -16,7 +16,7 @@ public class Pantalla {//Clase donde ocurre todo en la pantalla
     public Pantalla(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
-        ge=new GestorEstados();
+        ge=new GestorEstados(WIDTH,HEIGHT,teclado,raton);
     }
 
     public void actualizar() {

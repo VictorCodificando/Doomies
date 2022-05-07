@@ -10,16 +10,16 @@ import java.awt.Graphics;
  *
  * @author Víctor Zero
  */
-public class InterfazPausa implements Interfaz {
+public class InterfazSeleccNiveles implements Interfaz{
 
     @Override
     public void dibujar(Graphics g) {
-      
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void actualizar() {
-      
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
+    
 }

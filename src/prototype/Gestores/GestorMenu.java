@@ -5,6 +5,12 @@
 package prototype.Gestores;
 
 import java.awt.Graphics;
+import prototype.HerramientasEntradaSalida.Mouse;
+import prototype.HerramientasEntradaSalida.Teclado;
+import prototype.Interfaces.Interfaz;
+import prototype.Interfaces.InterfazCargaGuarda;
+import prototype.Interfaces.InterfazInicio;
+import prototype.Interfaces.InterfazSeleccNiveles;
 
 /**
  *
@@ -12,48 +18,58 @@ import java.awt.Graphics;
  */
 public class GestorMenu implements Gestor {
 
-    private boolean inicio;
-    private boolean menuSaveLoad;
-    private boolean seleccNiveles;
+    private int WIDTH;
+    private int HEIGHT;
+    private Mouse raton;
+    private Teclado teclado;
+    private Interfaz interActual;
 
-    public GestorMenu() {
-        inicio = true;
-        menuSaveLoad = false;
-        seleccNiveles = false;
+    public GestorMenu(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
+        this.WIDTH = WIDTH;
+        this.HEIGHT = HEIGHT;
+        this.raton = raton;
+        this.teclado=teclado;
+        interActual = (Interfaz) new InterfazInicio(WIDTH, HEIGHT, teclado, raton);
     }
 
     @Override
     public void actualizar() {
-
+        interActual.actualizar();
+        if (this.isInicio()) {
+            InterfazInicio temp=(InterfazInicio)interActual;
+            if (temp.isStart()) {
+                this.setMenuSaveLoad();
+            }
+        }
     }
 
     @Override
     public void dibujar(Graphics g) {
-
+        interActual.dibujar(g);
     }
 
     public boolean isInicio() {
-        return inicio;
+        return interActual instanceof InterfazInicio;
     }
 
-    public void setInicio(boolean inicio) {
-        this.inicio = inicio;
+    public void setInicio() {
+        this.interActual = (Interfaz) new InterfazInicio(WIDTH, HEIGHT, teclado, raton);
     }
 
     public boolean isMenuSaveLoad() {
-        return menuSaveLoad;
+        return interActual instanceof InterfazCargaGuarda;
     }
 
-    public void setMenuSaveLoad(boolean menuSaveLoad) {
-        this.menuSaveLoad = menuSaveLoad;
+    public void setMenuSaveLoad() {
+        this.interActual = (Interfaz) new InterfazCargaGuarda(WIDTH, HEIGHT, teclado, raton);
     }
 
     public boolean isSeleccNiveles() {
-        return seleccNiveles;
+        return interActual instanceof InterfazSeleccNiveles;
     }
 
-    public void setSeleccNiveles(boolean seleccNiveles) {
-        this.seleccNiveles = seleccNiveles;
+    public void setSeleccNiveles() {
+        //this.interActual = (Interfaz) new InterfazSeleccNiveles(WIDTH, HEIGHT, teclado, raton);
     }
 
 }

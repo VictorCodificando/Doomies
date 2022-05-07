@@ -34,6 +34,7 @@ public class LoadTools {
 
         } catch (Exception ex) {
             System.out.println("ERROR CARGANDO LA IMAGEN EN LA RUTA " + path);
+            System.out.println(RUTA_ACTUAL+path);
             String espera = new Scanner(System.in).nextLine();
             System.exit(0);
         }
@@ -54,6 +55,7 @@ public class LoadTools {
             }
         } catch (Exception e) {
             System.out.println("ERROR CARGANDO LA FUENTE EN LA RUTA" + path);
+            System.out.println(RUTA_ACTUAL+path);
         }
         return font;
     }

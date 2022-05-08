@@ -29,10 +29,18 @@ public class InterfazInicio implements Interfaz {
     //private Font fuente = new Font("Arial", Font.BOLD,48);
     private Boton botonStart;
     private boolean start;
-    public InterfazInicio(final int WIDTH, final int HEIGHT,final Teclado teclado, final Mouse raton) {
+
+    /**
+     *
+     * @param WIDTH Altura de la interfaz
+     * @param HEIGHT Anchura de la interfaz
+     * @param teclado Teclado que podra usar la interfaz
+     * @param raton Raton que usaran los botones de la interfaz
+     */
+    public InterfazInicio(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
-        start=false;
+        start = false;
         botonStart = new Boton(400, 600, 480, 84, "START", font.deriveFont(30f), Color.gray, -10, 4, raton);
     }
 
@@ -49,10 +57,12 @@ public class InterfazInicio implements Interfaz {
 
     }
 
-    //Animacion
     public void actualizar() {
+        //Actualizacion de boton
         botonStart.actualizar();
-        //control de la posicion de la imagen
+        /**
+         * Control de la posicion de la imagen
+         */
         //Limite derecho
         if (x == 0) {
             right = true;
@@ -60,18 +70,25 @@ public class InterfazInicio implements Interfaz {
         else if (x == -720) {
             right = false;
         }
-        //movimiento de la imagen hacia la derecha
+        //Movimiento de la imagen hacia la derecha
         if (right == true) {
             x--;
-        } //movimiento de la imagen hacia la izquierda
+        } //Movimiento de la imagen hacia la izquierda
         else if (right == false) {
             x++;
         }
+        /*
+        Si se ha pulsado al boton
+         */
         if (botonStart.isClicked()) {
-            start=true;
+            start = true;
         }
     }
 
+    /**
+     *
+     * @return Si se ha pulsado el boton Start
+     */
     public boolean isStart() {
         return start;
     }

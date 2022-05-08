@@ -23,33 +23,80 @@ public class GestorMenu implements Gestor {
     private Mouse raton;
     private Teclado teclado;
     private Interfaz interActual;
+
     /**
-     * Crea el gestor de menu, que va cambiando la forma de su gestor actual segun el tipo de menu que sea
-     * 
+     * Crea el gestor de menu, que va cambiando la forma de su gestor actual
+     * segun el tipo de menu que sea
+     *
      * @param WIDTH Anchura en pantalla
      * @param HEIGHT Altura en pantalla
      * @param teclado Teclado usado
-     * @param raton 
+     * @param raton
      */
     public GestorMenu(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         this.raton = raton;
-        this.teclado=teclado;
+        this.teclado = teclado;
         interActual = (Interfaz) new InterfazInicio(WIDTH, HEIGHT, teclado, raton);
     }
 
     @Override
     public void actualizar() {
         interActual.actualizar();
-        if (this.isInicio() && ((InterfazInicio)interActual).isStart()) {
-                this.setMenuSaveLoad();
-        }else if(this.isMenuSaveLoad()){
-            if (((InterfazCargaGuarda)interActual).jugar) {
-                this.setSeleccNiveles();
-            }
-        }else if(this.isSeleccNiveles()){
-            //Opciones de seleccion de nivel
+        if (this.isInicio()) {
+            this.opcionesInicio();
+        } else if (this.isMenuSaveLoad()) {
+            this.opcionesCargaGuardado();
+        } else if (this.isSeleccNiveles()) {
+            this.opcionesSeleccionNivel();
+        }
+    }
+
+    /**
+     * Solo se podra llamar si la interfaz actual es de inicio
+     */
+    private void opcionesInicio() {
+        if (!this.isInicio()) {
+            return;
+        }
+        InterfazInicio temp = (InterfazInicio) interActual;
+        if (temp.isStart()) {
+            this.setMenuSaveLoad();
+        } else if (teclado.escape) {
+            System.exit(0);
+        }
+    }
+
+    /**
+     * Solo se podra llamar si la interfaz actual es de carga y guardado
+     */
+    private void opcionesCargaGuardado() {
+        if (!this.isMenuSaveLoad()) {
+            return;
+        }
+        InterfazCargaGuarda temp = (InterfazCargaGuarda) interActual;
+        if (temp.isJugar()) {
+            this.setSeleccNiveles();
+        } else if (temp.isCargar()) {
+
+        } else if (temp.isGuardar()) {
+
+        } else if (teclado.escape) {
+            this.setInicio();
+        }
+    }
+
+    /**
+     * Solo se podra llamar si la interfaz actual es de seleccion de niveles
+     */
+    private void opcionesSeleccionNivel() {
+        if (!this.isSeleccNiveles()) {
+            return;
+        }
+        InterfazSeleccNiveles temp = (InterfazSeleccNiveles) interActual;
+        if (teclado.escape) {
+            this.setMenuSaveLoad();
         }
     }
 

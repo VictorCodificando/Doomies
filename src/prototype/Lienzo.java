@@ -59,5 +59,6 @@ public class Lienzo extends Canvas
         raton.setAjusteY((int)this.getLocationOnScreen().getY());
         pantalla.actualizar();//Actualiza todo lo que halla en pantalla
         raton.actualizarCoordenadas();
+        teclado.resetKeys();
     }
 }

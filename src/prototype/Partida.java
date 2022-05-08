@@ -51,29 +51,37 @@ public class Partida {
         }
         return desbloqueado;
     }
+
     /**
-     * 
+     *
      * @return El nombre de la partida
      */
     public String getNombre() {
         return nombre;
     }
+
     /**
      * Modifica el nombre de la partida
-     * 
+     *
      * @param nombre El nombre nuevo
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
     /**
-     * 
+     *
      * @return Los niveles que estan desbloqueados
      */
     public ArrayList<Boolean> getNivelesDesbloqueados() {
         return nivelesDesbloqueados;
     }
 
+    /**
+     * Cambia los niveles desbloqueados en una partida
+     * 
+     * @param nivelesDesbloqueados ArrayList de booleans con los niveles desbloqueados
+     */
     public void setNivelesDesbloqueados(ArrayList<Boolean> nivelesDesbloqueados) {
         this.nivelesDesbloqueados = nivelesDesbloqueados;
     }

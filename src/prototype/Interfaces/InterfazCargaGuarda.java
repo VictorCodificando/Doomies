@@ -19,7 +19,9 @@ import prototype.Interfaces.Elementos.Boton;
  * @author Víctor Zero
  */
 public class InterfazCargaGuarda implements Interfaz {
-
+    /**
+     * Definicion de variables
+     */
     private final int WIDTH;
     private final int HEIGHT;
     private final Font font = LoadTools.loadFont("/fonts/kongtext.ttf");
@@ -27,11 +29,18 @@ public class InterfazCargaGuarda implements Interfaz {
     private final Boton botonCargar;
     private final Boton botonGuardar;
     private final Boton botonSalir;
-    public boolean jugar = false;
+    private boolean jugar = false;
     private boolean cargar = false;
     private boolean guardar = false;
     private boolean salir = false;
 
+    /**
+     *
+     * @param WIDTH Altura de la interfaz
+     * @param HEIGHT Anchura de la interfaz
+     * @param teclado Teclado que podra usar la interfaz
+     * @param raton Raton que usaran los botones de la interfaz
+     */
     public InterfazCargaGuarda(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
@@ -43,34 +52,32 @@ public class InterfazCargaGuarda implements Interfaz {
 
     @Override
     public void dibujar(final Graphics g) {
-
-        //FONDO IMAGEN
-        //g.drawImage(imagen, 0, 0, null);
-        //FONDO IMAGEN     
         //gradiente
         Graphics2D g2d = (Graphics2D) g;
         GradientPaint verticalGradient = new GradientPaint(0, 0, Color.RED, 0, this.HEIGHT, Color.ORANGE);
         g.setColor(Color.red);
         g2d.setPaint(verticalGradient);
         g2d.fillRect(0, 0, this.WIDTH, this.HEIGHT);
-        //gradiente
 
-        //g.setColor(Color.red);
-        //g.fillRect(0, 0, this.WIDTH, this.HEIGHT);
+        //Botones
         botonJugar.dibujar(g);
         botonCargar.dibujar(g);
         botonGuardar.dibujar(g);
         botonSalir.dibujar(g);
-
     }
 
-    //MENU
     @Override
     public void actualizar() {
+        /**
+         * Actualizacion de botones
+         */
         botonJugar.actualizar();
         botonCargar.actualizar();
         botonGuardar.actualizar();
         botonSalir.actualizar();
+        /**
+         * Definicion de estados
+         */
         if (botonJugar.isClicked()) {
             jugar = true;
         }
@@ -87,6 +94,30 @@ public class InterfazCargaGuarda implements Interfaz {
             System.exit(0);
         }
 
+    }
+
+    /**
+     *
+     * @return Si se ha dado al boton jugar
+     */
+    public boolean isJugar() {
+        return jugar;
+    }
+
+    /**
+     *
+     * @return Si se ha dado al boton cargar
+     */
+    public boolean isCargar() {
+        return cargar;
+    }
+
+    /**
+     *
+     * @return Si se ha dado al boton Guardar
+     */
+    public boolean isGuardar() {
+        return guardar;
     }
 
 }

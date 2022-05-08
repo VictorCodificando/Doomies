@@ -22,8 +22,7 @@ public class InterfazCargaGuarda implements Interfaz {
 
     private final int WIDTH;
     private final int HEIGHT;
-    private final Font font = LoadTools.loadFont("fonts/kongtext.ttf");
-    /*    private final Image imagen = LoadTools.loadImage("img/mapa.png");*/
+    private final Font font = LoadTools.loadFont("/fonts/kongtext.ttf");
     private final Boton botonJugar;
     private final Boton botonCargar;
     private final Boton botonGuardar;

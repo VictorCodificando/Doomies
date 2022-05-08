@@ -1,6 +1,5 @@
 package prototype.Entes.Seres;
 
-import java.awt.Rectangle;
 import java.awt.Graphics;
 import prototype.Visual.Sprite;
 import prototype.Entes.Entidad;

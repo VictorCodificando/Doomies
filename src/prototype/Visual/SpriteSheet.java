@@ -16,8 +16,8 @@ public class SpriteSheet {
     private final int SPRITE_HEIGHT;
     private final BufferedImage img;
     private final Sprite[][] sprites;
-    public static final SpriteSheet PERSONAJE = new SpriteSheet(320, 320, 30, 100, "/spritesSheet/PersonajePrueba.png");
-    public static SpriteSheet MAPA_ACTUAL = new SpriteSheet(448, 384, 64, 64, "/spritesSheet/Mapa.png");
+    public static final SpriteSheet PERSONAJE = new SpriteSheet(320, 320, 30, 100, "\\spritesSheet\\PersonajePrueba.png");
+   //public static SpriteSheet MAPA_ACTUAL = new SpriteSheet(448, 384, 64, 64, "\\spritesSheet\\Mapa.png");
 
     /**
      * Crea la hoja de sprite, siendo sprites de un ancho y un alto diferente

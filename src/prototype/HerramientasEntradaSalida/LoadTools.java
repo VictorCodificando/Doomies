@@ -28,7 +28,7 @@ public class LoadTools {
         Image img = null;//La imagen es nula por defecto para que no nos de error
         try {
             if (RUTA_ACTUAL.contains(".jar")) {
-                img = ImageIO.read(Prototype.class.getResourceAsStream(path));//Cargo la imagen
+                img = ImageIO.read(LoadTools.class.getResourceAsStream(path));//Cargo la imagen
             } else {
                 img = ImageIO.read(new File(RUTA_ACTUAL + path));//Cargo la imagen
             }
@@ -50,7 +50,7 @@ public class LoadTools {
         try {
             if (RUTA_ACTUAL.contains(".jar")) {
                 ClassLoader loader = Prototype.class.getClassLoader();
-                font = Font.createFont(Font.TRUETYPE_FONT, Prototype.class.getResourceAsStream(path)).deriveFont(15f);//Cargo la imagen
+                font = Font.createFont(Font.TRUETYPE_FONT, LoadTools.class.getResourceAsStream(path)).deriveFont(15f);//Cargo la imagen
             } else {
                 font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File(RUTA_ACTUAL + path))).deriveFont(15f);//Cargo la imagen
             }
@@ -77,7 +77,7 @@ public class LoadTools {
         return c2;
     }
 
-    public static Tile[] loadMap(String path) {
+    /*public static Tile[] loadMap(String path) {
         File f = null;
         ArrayList<Tile> tiles = new ArrayList();
         Tile tilesArray[];
@@ -107,5 +107,5 @@ public class LoadTools {
             tilesArray[i] = (Tile) tiles.get(i);
         }
         return tilesArray;
-    }
+    }*/
 }

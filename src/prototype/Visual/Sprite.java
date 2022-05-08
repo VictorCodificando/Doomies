@@ -1,7 +1,5 @@
 package prototype.Visual;
 
-import java.awt.image.ImageObserver;
-import java.awt.Image;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 

@@ -57,7 +57,7 @@ public class Lienzo extends Canvas
     public void actualizar() {
         raton.setAjusteX((int)this.getLocationOnScreen().getX());
         raton.setAjusteY((int)this.getLocationOnScreen().getY());
-        raton.actualizarCoordenadas();
         pantalla.actualizar();//Actualiza todo lo que halla en pantalla
+        raton.actualizarCoordenadas();
     }
 }

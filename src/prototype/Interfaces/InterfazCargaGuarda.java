@@ -27,7 +27,7 @@ public class InterfazCargaGuarda implements Interfaz {
     private final Boton botonCargar;
     private final Boton botonGuardar;
     private final Boton botonSalir;
-    private boolean jugar = false;
+    public boolean jugar = false;
     private boolean cargar = false;
     private boolean guardar = false;
     private boolean salir = false;
@@ -84,7 +84,7 @@ public class InterfazCargaGuarda implements Interfaz {
         }
 
         if (botonSalir.isClicked()) {
-            salir = true;
+            System.exit(0);
         }
 
     }

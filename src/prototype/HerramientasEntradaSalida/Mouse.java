@@ -14,8 +14,9 @@ public class Mouse implements MouseListener {
     private int AjusteY;
     public int x = 0;
     public int y = 0;
-    public boolean click;
-    public boolean reseted;
+    public boolean pressed;
+    public boolean released;
+    public boolean clicked;
 
     public Mouse(int AjusteX, int AjusteY) {
         this.AjusteX = AjusteX;
@@ -28,14 +29,13 @@ public class Mouse implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        this.click = false;
-        this.reseted=true;
+        pressed = true;
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        this.click=true;
-        this.reseted=false;
+        released=true;
+        clicked=true;
     }
 
     @Override
@@ -51,7 +51,11 @@ public class Mouse implements MouseListener {
     public void actualizarCoordenadas() {
         x = Math.abs((int) MouseInfo.getPointerInfo().getLocation().x - this.AjusteX);
         y = Math.abs((int) MouseInfo.getPointerInfo().getLocation().y - this.AjusteY);
-
+        if (clicked=true) {
+            pressed=false;
+            released=false;
+            clicked=false;
+        }
     }
 
     public int getAjusteX() {

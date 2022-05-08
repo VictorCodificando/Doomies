@@ -23,7 +23,14 @@ public class GestorMenu implements Gestor {
     private Mouse raton;
     private Teclado teclado;
     private Interfaz interActual;
-
+    /**
+     * Crea el gestor de menu, que va cambiando la forma de su gestor actual segun el tipo de menu que sea
+     * 
+     * @param WIDTH Anchura en pantalla
+     * @param HEIGHT Altura en pantalla
+     * @param teclado Teclado usado
+     * @param raton 
+     */
     public GestorMenu(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
@@ -37,6 +44,12 @@ public class GestorMenu implements Gestor {
         interActual.actualizar();
         if (this.isInicio() && ((InterfazInicio)interActual).isStart()) {
                 this.setMenuSaveLoad();
+        }else if(this.isMenuSaveLoad()){
+            if (((InterfazCargaGuarda)interActual).jugar) {
+                this.setSeleccNiveles();
+            }
+        }else if(this.isSeleccNiveles()){
+            //Opciones de seleccion de nivel
         }
     }
 
@@ -66,7 +79,7 @@ public class GestorMenu implements Gestor {
     }
 
     public void setSeleccNiveles() {
-        //this.interActual = (Interfaz) new InterfazSeleccNiveles(WIDTH, HEIGHT, teclado, raton);
+        this.interActual = (Interfaz) new InterfazSeleccNiveles(WIDTH, HEIGHT, teclado, raton);
     }
 
 }

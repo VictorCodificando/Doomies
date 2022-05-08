@@ -104,18 +104,18 @@ public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
 
     public void actualizar() {
         hover = false;
-        boolean tocando = false;
         for (int i = 0; i < transparent.size(); i++) {
             double[] posPosible = (double[]) transparent.get(i);
             if (posPosible[0] == raton.x && (posPosible[1]) == raton.y) {
-                tocando = true;
+                hover = true;
                 break;
             }
         }
-        hover = tocando;
-        if (tocando && raton.click) {
-            raton.click = false;
+
+        if (hover && raton.clicked) {
             clicked = true;
+        }else{
+            clicked=false;
         }
     }
 
@@ -208,5 +208,15 @@ public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
     public boolean isClicked() {
         return clicked;
     }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+    
+    
 
 }

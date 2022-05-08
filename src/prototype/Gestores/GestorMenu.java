@@ -18,11 +18,12 @@ import prototype.Interfaces.InterfazSeleccNiveles;
  */
 public class GestorMenu implements Gestor {
 
-    private int WIDTH;
-    private int HEIGHT;
-    private Mouse raton;
-    private Teclado teclado;
+    private final int WIDTH;
+    private final int HEIGHT;
+    private final Mouse raton;
+    private final Teclado teclado;
     private Interfaz interActual;
+    private boolean jugar;
 
     /**
      * Crea el gestor de menu, que va cambiando la forma de su gestor actual
@@ -95,6 +96,9 @@ public class GestorMenu implements Gestor {
             return;
         }
         InterfazSeleccNiveles temp = (InterfazSeleccNiveles) interActual;
+        if (temp.isJugar()) {
+            jugar=true;
+        }
         if (teclado.escape) {
             this.setMenuSaveLoad();
         }
@@ -128,5 +132,10 @@ public class GestorMenu implements Gestor {
     public void setSeleccNiveles() {
         this.interActual = (Interfaz) new InterfazSeleccNiveles(WIDTH, HEIGHT, teclado, raton);
     }
+
+    public boolean isJugar() {
+        return jugar;
+    }
+    
 
 }

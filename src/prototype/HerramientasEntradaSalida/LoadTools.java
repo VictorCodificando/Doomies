@@ -77,11 +77,11 @@ public class LoadTools {
         return c2;
     }
 
-    /*public static Tile[] loadMap(String path) {
+    public static Tile[] loadMap(String path) {
         File f = null;
         ArrayList<Tile> tiles = new ArrayList();
         Tile tilesArray[];
-        SpriteSheet hoja = SpriteSheet.MAPA_ACTUAL;
+        SpriteSheet hoja = SpriteSheet.MAPA;
         try {
             if (RUTA_ACTUAL.contains(".jar")) {
                 f = new File(path);
@@ -91,21 +91,25 @@ public class LoadTools {
             Scanner lector = new Scanner(f);
             for (int i = 0; lector.hasNext(); i++) {
                 String linea[] = lector.next().split("-");
-                for (int j = 0; j < 10; j++) {
+                for (int j = 0; j < linea.length; j++) {
+                    if (linea[j].contains("x")) {
+                        tiles.add(null);
+                        continue;
+                    }
                     int[] id_Bloque = {Integer.parseInt(linea[j].substring(0, 1)), Integer.parseInt(linea[j].substring(1))};
                     Sprite spTemp[] = {hoja.getSprite(id_Bloque[0], id_Bloque[1])};
-                    tiles.add(new Tile(1, 1, spTemp));
+                    tiles.add(new Tile(spTemp[0].getWIDTH()*j,spTemp[0].getWIDTH()*i, spTemp));
                 }
             }
         } catch (IOException e) {
             System.out.println("ERROR MAPA NO ENCONTRADO");
         } catch (Exception e) {
-            System.out.println("ERROR EN LA LECTURA DEL MAPA");
+            System.err.println("ERROR EN LA LECTURA DEL MAPA"+e);
         }
         tilesArray = new Tile[tiles.size()];
         for (int i = 0; i < tilesArray.length; i++) {
             tilesArray[i] = (Tile) tiles.get(i);
         }
         return tilesArray;
-    }*/
+    }
 }

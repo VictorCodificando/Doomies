@@ -5,7 +5,6 @@
 package prototype.Interfaces;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import prototype.HerramientasEntradaSalida.LoadTools;
@@ -17,17 +16,13 @@ import prototype.Interfaces.Elementos.Boton;
  *
  * @author Víctor Zero
  */
-public class InterfazInicio implements Interfaz {
+public class InterfazInicio extends Interfaz {
 
-    private final int WIDTH;
-    private final int HEIGHT;
     private int x = 0;
     private boolean right = true;
-    private final Font font = LoadTools.loadFont("/fonts/kongtext.ttf");
     private final BufferedImage background = LoadTools.loadImage("/images/BG.png");
     private final BufferedImage logo = LoadTools.loadImage("/images/Logo.png");
-    //private Font fuente = new Font("Arial", Font.BOLD,48);
-    private Boton botonStart;
+    private final Boton botonStart;
     private boolean start;
 
     /**
@@ -38,8 +33,7 @@ public class InterfazInicio implements Interfaz {
      * @param raton Raton que usaran los botones de la interfaz
      */
     public InterfazInicio(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
+        super(WIDTH,HEIGHT,teclado,raton);
         start = false;
         botonStart = new Boton(400, 600, 480, 84, "START", font.deriveFont(30f), Color.gray, -10, 4, raton);
     }

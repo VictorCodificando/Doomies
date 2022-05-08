@@ -23,7 +23,7 @@ public class GestorEstados implements Gestor{
     public GestorEstados(final int WIDTH, final int HEIGHT, final Teclado teclado,final Mouse raton) {
         inicio=true;
         jugando=false;
-        gestorActual=(Gestor) new GestorMenu(WIDTH,HEIGHT,teclado,raton);
+        gestorActual=(Gestor) new GestorJuego(WIDTH,HEIGHT);
     }
 
     public void dibujar(Graphics g) {

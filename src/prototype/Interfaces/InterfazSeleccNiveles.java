@@ -18,11 +18,8 @@ import prototype.Interfaces.Elementos.Boton;
  *
  * @author Víctor Zero
  */
-public class InterfazSeleccNiveles implements Interfaz {
+public class InterfazSeleccNiveles extends Interfaz {
 
-    private final int WIDTH;
-    private final int HEIGHT;
-    private final Font font = LoadTools.loadFont("/fonts/kongtext.ttf");
     private Boton botonJugar;
     private Boton botonIzquierda;
     private Boton botonDerecha;
@@ -38,9 +35,7 @@ public class InterfazSeleccNiveles implements Interfaz {
      * @param raton Raton que usaran los botones de la interfaz
      */
     public InterfazSeleccNiveles(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
-        //Introduccion de las medidas de la pantalla
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
+        super(WIDTH, HEIGHT, teclado, raton);
         //Inicializacion del label del nivel
         this.nivel = 1;
         //Creacion de botones
@@ -94,8 +89,9 @@ public class InterfazSeleccNiveles implements Interfaz {
             this.jugar = true;
         }
     }
+
     /**
-     * 
+     *
      * @return Si se ha pulsado jugar
      */
     public boolean isJugar() {

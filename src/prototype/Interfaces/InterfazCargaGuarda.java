@@ -18,13 +18,11 @@ import prototype.Interfaces.Elementos.Boton;
  *
  * @author Víctor Zero
  */
-public class InterfazCargaGuarda implements Interfaz {
+public class InterfazCargaGuarda extends Interfaz {
     /**
      * Definicion de variables
      */
-    private final int WIDTH;
-    private final int HEIGHT;
-    private final Font font = LoadTools.loadFont("/fonts/kongtext.ttf");
+    
     private final Boton botonJugar;
     private final Boton botonCargar;
     private final Boton botonGuardar;
@@ -42,8 +40,7 @@ public class InterfazCargaGuarda implements Interfaz {
      * @param raton Raton que usaran los botones de la interfaz
      */
     public InterfazCargaGuarda(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
+        super(WIDTH,HEIGHT,teclado,raton);
         botonJugar = new Boton(450, 100, 400, 70, "JUGAR", font.deriveFont(20f), Color.gray, -10, 4, raton);
         botonCargar = new Boton(450, 250, 400, 70, "CARGAR PARTIDA", font.deriveFont(20f), Color.gray, 2, 4, raton);
         botonGuardar = new Boton(450, 400, 400, 70, "GUARDAR PARTIDA", font.deriveFont(20f), Color.gray, 3, 4, raton);

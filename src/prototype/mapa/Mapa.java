@@ -17,11 +17,11 @@ public class Mapa {
     private final int SCREEN_HEIGHT;
     private final int WIDTH;
     private final int HEIGHT;
-    private SerVivo[] seres;
+    private final SerVivo[] seres;
     private BufferedImage background;
     private int x;
     private int y;
-    private double xa = 10;
+    private double xa = 30;
     private boolean right;
     private long ya;
 

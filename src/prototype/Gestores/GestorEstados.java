@@ -27,7 +27,7 @@ public class GestorEstados implements Gestor {
         this.HEIGHT = HEIGHT;
         this.teclado = teclado;
         this.raton = raton;
-        this.gestorActual = (Gestor) new GestorMenu(WIDTH, HEIGHT, teclado, raton);
+        this.gestorActual = (Gestor) new GestorMenu(WIDTH, HEIGHT, teclado, raton,0);
     }
 
     public void dibujar(Graphics g) {
@@ -35,7 +35,7 @@ public class GestorEstados implements Gestor {
     }
 
     public void actualizar() {
-//CAMBIAR TENDRA QUE SABER EN QUE MENU ESTAAAAAAAAAAAAAA
+    //CAMBIAR TENDRA QUE SABER EN QUE MENU ESTAAAAAAAAAAAAAA
         gestorActual.actualizar();
         if (this.isGestorJuego()) {
             this.opcionesJugando();
@@ -50,7 +50,8 @@ public class GestorEstados implements Gestor {
         }
         GestorMenu temp = (GestorMenu) gestorActual;
         if (temp.isJugar()) {
-            this.setGestorJuego();
+            int nivel=temp.getNivel();
+            this.setGestorJuego(nivel);
         }
     }
 
@@ -65,15 +66,15 @@ public class GestorEstados implements Gestor {
     }
 
     public void setGestorMenu() {
-        this.gestorActual = (Gestor) new GestorMenu(WIDTH, HEIGHT, teclado, raton);
+        this.gestorActual = (Gestor) new GestorMenu(WIDTH, HEIGHT, teclado, raton,2);
     }
 
     public boolean isGestorMenu() {
         return gestorActual instanceof GestorMenu;
     }
 
-    public void setGestorJuego() {
-        this.gestorActual = (Gestor) new GestorJuego(WIDTH, HEIGHT);
+    public void setGestorJuego(int ID_MAPA) {
+        this.gestorActual = (Gestor) new GestorJuego(WIDTH, HEIGHT,ID_MAPA);
     }
 
     public boolean isGestorJuego() {

@@ -32,10 +32,10 @@ public class Mapa {
      * @param width Anchura de la pantalla
      * @param height Altura de la pantalla
      */
-    public Mapa(SerVivo[] seres, final int width, final int height) {
+    public Mapa(SerVivo[] seres, final int width, final int height,int ID) {
         this.SCREEN_HEIGHT = height;
         this.SCREEN_WIDTH = width;
-        this.tiles = LoadTools.loadMap("/mapas/mapa.txt");
+        this.tiles = LoadTools.loadMap("/mapas/mapa"+ID+".txt");
         this.HEIGHT = this.tiles.length * this.tiles[this.tiles.length - 1][this.tiles[this.tiles.length - 1].length - 1].getHitbox().height;
         this.WIDTH = this.tiles[this.tiles.length - 1].length * this.tiles[this.tiles.length - 1][this.tiles[this.tiles.length - 1].length - 1].getHitbox().width;
         this.seres = seres;

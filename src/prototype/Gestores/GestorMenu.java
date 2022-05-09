@@ -24,6 +24,7 @@ public class GestorMenu implements Gestor {
     private final Teclado teclado;
     private Interfaz interActual;
     private boolean jugar;
+    private int nivel;
 
     /**
      * Crea el gestor de menu, que va cambiando la forma de su gestor actual
@@ -34,12 +35,25 @@ public class GestorMenu implements Gestor {
      * @param teclado Teclado usado
      * @param raton
      */
-    public GestorMenu(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
+    public GestorMenu(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton, int tipo) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         this.raton = raton;
         this.teclado = teclado;
-        interActual = (Interfaz) new InterfazInicio(WIDTH, HEIGHT, teclado, raton);
+        interActual = null;
+        switch (tipo) {
+            case 1:
+                interActual = (Interfaz) new InterfazCargaGuarda(WIDTH, HEIGHT, teclado, raton);
+                break;
+            case 2:
+                interActual = (Interfaz) new InterfazSeleccNiveles(WIDTH, HEIGHT, teclado, raton);
+                break;
+            default:
+                interActual = (Interfaz) new InterfazInicio(WIDTH, HEIGHT, teclado, raton);
+                break;
+
+        }
+
     }
 
     @Override
@@ -96,8 +110,9 @@ public class GestorMenu implements Gestor {
             return;
         }
         InterfazSeleccNiveles temp = (InterfazSeleccNiveles) interActual;
+        this.nivel=temp.getNivel();
         if (temp.isJugar()) {
-            jugar=true;
+            jugar = true;
         }
         if (teclado.escape) {
             this.setMenuSaveLoad();
@@ -136,6 +151,10 @@ public class GestorMenu implements Gestor {
     public boolean isJugar() {
         return jugar;
     }
-    
+
+    public int getNivel() {
+        return nivel;
+    }
+
 
 }

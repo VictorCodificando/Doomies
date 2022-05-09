@@ -97,5 +97,7 @@ public class InterfazSeleccNiveles extends Interfaz {
     public boolean isJugar() {
         return jugar;
     }
-
+    public int getNivel(){
+        return this.nivel;
+    }
 }

@@ -22,20 +22,33 @@ public class GestorEstados implements Gestor {
     private final Teclado teclado;
     private final Mouse raton;
 
+    /**
+     * Crea el gestor de estados que es aquel que segun su estado invoca todo objeto funcional del juego
+     *
+     * @param WIDTH Anchura de la pantalla
+     * @param HEIGHT Altura de la pantalla
+     * @param teclado Teclado usado por el programa
+     * @param raton Raton usado por todo el programa
+     */
     public GestorEstados(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         this.teclado = teclado;
         this.raton = raton;
-        this.gestorActual = (Gestor) new GestorMenu(WIDTH, HEIGHT, teclado, raton,0);
+        this.gestorActual = (Gestor) new GestorMenu(WIDTH, HEIGHT, teclado, raton, 0);
     }
-
+    /**
+     * Dibuja el Gestor actual
+     * 
+     * @param g Objeto Graphics que dibujara en memoria
+     */
     public void dibujar(Graphics g) {
         gestorActual.dibujar(g);
     }
-
+    /**
+     * Actualiza el gestorActual
+     */
     public void actualizar() {
-    //CAMBIAR TENDRA QUE SABER EN QUE MENU ESTAAAAAAAAAAAAAA
         gestorActual.actualizar();
         if (this.isGestorJuego()) {
             this.opcionesJugando();
@@ -50,7 +63,7 @@ public class GestorEstados implements Gestor {
         }
         GestorMenu temp = (GestorMenu) gestorActual;
         if (temp.isJugar()) {
-            int nivel=temp.getNivel();
+            int nivel = temp.getNivel();
             this.setGestorJuego(nivel);
         }
     }
@@ -65,18 +78,34 @@ public class GestorEstados implements Gestor {
         }
     }
 
+    /**
+     * Cambia el menu al Gestor de Menu
+     */
     public void setGestorMenu() {
-        this.gestorActual = (Gestor) new GestorMenu(WIDTH, HEIGHT, teclado, raton,2);
+        this.gestorActual = (Gestor) new GestorMenu(WIDTH, HEIGHT, teclado, raton, 2);
     }
 
+    /**
+     *
+     * @return Si el gestor actual es el gestor de los menus
+     */
     public boolean isGestorMenu() {
         return gestorActual instanceof GestorMenu;
     }
 
+    /**
+     *
+     * @param ID_MAPA Introduce el nivel/ID_mapa que se necesita para iniciar el
+     * juego
+     */
     public void setGestorJuego(int ID_MAPA) {
-        this.gestorActual = (Gestor) new GestorJuego(WIDTH, HEIGHT,ID_MAPA);
+        this.gestorActual = (Gestor) new GestorJuego(WIDTH, HEIGHT, ID_MAPA);
     }
 
+    /**
+     *
+     * @return Si el gestor actual es el gestor de juego
+     */
     public boolean isGestorJuego() {
         return gestorActual instanceof GestorJuego;
     }

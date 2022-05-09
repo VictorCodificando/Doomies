@@ -19,7 +19,7 @@ public class GestorJuego implements Gestor {
     private Mapa mapa;
     private boolean pausa;
     private boolean jugando;
-
+    
     public GestorJuego(int width, int height,int ID_MAPA) {
         mapa = new Mapa(null, width, height,ID_MAPA);
         Teclado teclado = null;

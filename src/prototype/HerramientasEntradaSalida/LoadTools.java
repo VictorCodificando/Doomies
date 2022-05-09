@@ -13,10 +13,12 @@ import java.awt.image.BufferedImage;
 import java.awt.Font;
 import java.awt.Transparency;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import prototype.Prototype;
 import prototype.Visual.Sprite;
 import prototype.Visual.SpriteSheet;
+import prototype.mapa.Mapa;
 import prototype.mapa.Tile;
 
 public class LoadTools {
@@ -77,39 +79,52 @@ public class LoadTools {
         return c2;
     }
 
-    public static Tile[] loadMap(String path) {
+    public static Tile[][] loadMap(String path) {
         File f = null;
         ArrayList<Tile> tiles = new ArrayList();
-        Tile tilesArray[];
+        Tile tilesArray[][]=null;
+        String mapa = "";
         SpriteSheet hoja = SpriteSheet.MAPA;
         try {
+            Scanner lector;
             if (RUTA_ACTUAL.contains(".jar")) {
-                f = new File(path);
+                InputStream inputStream = LoadTools.class.getResourceAsStream(path);
+                lector = new Scanner(inputStream);
             } else {
                 f = new File(RUTA_ACTUAL + path);
+                lector = new Scanner(f);
             }
-            Scanner lector = new Scanner(f);
             for (int i = 0; lector.hasNext(); i++) {
-                String linea[] = lector.next().split("-");
-                for (int j = 0; j < linea.length; j++) {
-                    if (linea[j].contains("x")) {
-                        tiles.add(null);
-                        continue;
-                    }
-                    int[] id_Bloque = {Integer.parseInt(linea[j].substring(0, 1)), Integer.parseInt(linea[j].substring(1))};
-                    Sprite spTemp[] = {hoja.getSprite(id_Bloque[0], id_Bloque[1])};
-                    tiles.add(new Tile(spTemp[0].getWIDTH()*j,spTemp[0].getWIDTH()*i, spTemp));
-                }
+                mapa += lector.next() + ";";
             }
+            tilesArray=loadTile(mapa);
         } catch (IOException e) {
-            System.out.println("ERROR MAPA NO ENCONTRADO");
+            System.out.println(RUTA_ACTUAL.replaceAll("Prototype.jar", "") + path);
+            System.out.println("ERROR MAPA NO ENCONTRADO" + e);
         } catch (Exception e) {
-            System.err.println("ERROR EN LA LECTURA DEL MAPA"+e);
-        }
-        tilesArray = new Tile[tiles.size()];
-        for (int i = 0; i < tilesArray.length; i++) {
-            tilesArray[i] = (Tile) tiles.get(i);
+            System.err.println("ERROR EN LA LECTURA DEL MAPA" + e);
         }
         return tilesArray;
+    }
+
+    private static Tile[][] loadTile(String in) {
+        String [] inSplitted=in.split(";");
+        String mapa[][]=new String[inSplitted.length][];
+        for (int i = 0; i < inSplitted.length; i++) {
+            mapa[i]=inSplitted[i].split("-");
+        }
+        Tile[][] tiles = new Tile[mapa.length][];
+        for (int i = 0; i < mapa.length; i++) {
+            tiles[i] = new Tile[mapa[i].length];
+            for (int j = 0; j < mapa[i].length; j++) {
+                if (mapa[i][j].contains("x")) {
+                    tiles[i][j]=null;
+                    continue;
+                }
+                Sprite actual[]= {SpriteSheet.MAPA.getSprite(Integer.parseInt(mapa[i][j].substring(0, 1)),Integer.parseInt(mapa[i][j].substring(1)))};
+                tiles[i][j] = new Tile(actual[0].getWIDTH()*j,actual[0].getHEIGHT()*i,actual);
+            }
+        }
+        return tiles;
     }
 }

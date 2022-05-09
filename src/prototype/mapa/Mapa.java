@@ -12,38 +12,45 @@ import prototype.HerramientasEntradaSalida.LoadTools;
  */
 public class Mapa {
 
-    private final Tile[] tiles;
+    private final Tile[][] tiles;
     private final int SCREEN_WIDTH;
     private final int SCREEN_HEIGHT;
+    private final int WIDTH;
+    private final int HEIGHT;
     private SerVivo[] seres;
     private BufferedImage background;
-    private double x;
+    private int x;
     private int y;
-    private double xa = 0.009;
+    private double xa = 10;
+    private boolean right;
     private long ya;
 
     /**
-     * Crea el mapa teniendo los tiles y los seres que componen el mapa
-     *
-     * @param tiles Los tiles que representan los mapas
-     * @param seres Los seres, enemigos... que estan representados en el mapa
+     * Crea el mapa
+     * 
+     * @param seres Seres que estan en el mapa
+     * @param width Anchura de la pantalla
+     * @param height Altura de la pantalla
      */
     public Mapa(SerVivo[] seres, final int width, final int height) {
         this.SCREEN_HEIGHT = height;
         this.SCREEN_WIDTH = width;
         this.tiles = LoadTools.loadMap("/mapas/mapa.txt");
+        this.HEIGHT = this.tiles.length * this.tiles[this.tiles.length - 1][this.tiles[this.tiles.length - 1].length - 1].getHitbox().height;
+        this.WIDTH = this.tiles[this.tiles.length - 1].length * this.tiles[this.tiles.length - 1][this.tiles[this.tiles.length - 1].length - 1].getHitbox().width;
         this.seres = seres;
     }
 
     public void dibujar(Graphics g) {
         //Dibujamos los tiles
         for (int i = 0; i < tiles.length; i++) {
-            if (tiles[i] == null) {
-                continue;
+            for (int j = 0; j < tiles[i].length; j++) {
+                if (tiles[i][j] == null) {
+                    continue;
+                }
+                tiles[i][j].dibujar(g);
             }
-            if (tiles[i].isVisible()) {
-                tiles[i].dibujar(g);
-            }
+
         }
         //Dibujamos los seres
         /*for (int i = 0; i < seres.length; i++) {
@@ -57,20 +64,31 @@ public class Mapa {
      * Actualizamos la posicion actual del mapa
      */
     public void actualizar() {
-        x += xa;
-        y += ya;
+        if (x <= 0) {
+            right = true;
+        } else if (x+SCREEN_WIDTH >= WIDTH) {
+            right = false;
+        }
+        if (right) {
+            x += xa;
+        } else {
+            x -= xa;
+        }
         for (int i = 0; i < tiles.length; i++) {
-            if (tiles[i] == null) {
-                continue;
+            for (int j = 0; j < tiles[i].length; j++) {
+                if (tiles[i][j] == null) {
+                    continue;
+                }
+                tiles[i][j].actualizar();
+                if (!new Rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT).intersects(tiles[i][j].getHitbox())) {
+                    tiles[i][j].setVisible(false);
+                } else {
+                    tiles[i][j].setVisible(true);
+                }
+                int variacionActual = (0 - x);
+                tiles[i][j].setX(variacionActual + (j * tiles[i][j].WIDTH));
             }
-            tiles[i].actualizar();
-            if (!new Rectangle(0,0,SCREEN_WIDTH,SCREEN_HEIGHT).intersects(tiles[i].getHitbox())) {
-                tiles[i].setVisible(false);
-            }else{
-                tiles[i].setVisible(true);
-                
-            }
-            tiles[i].setX(tiles[i].getX() + (0 - (int) x));
+
         }
     }
 

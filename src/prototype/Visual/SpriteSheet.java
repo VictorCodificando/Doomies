@@ -19,6 +19,10 @@ public class SpriteSheet {
     public static final SpriteSheet PERSONAJE = new SpriteSheet(320, 320, 30, 100, "/spritesSheet/PersonajePrueba.png");
     public static SpriteSheet MAPA = new SpriteSheet(448, 384, 64, 64, "/spritesSheet/Mapa.png");
     public static SpriteSheet IMP = new SpriteSheet(96,195, 48, 48, "/spritesSheet/Imp.png");
+    public static SpriteSheet PINKIE = new SpriteSheet(96,195, 48, 48, "/spritesSheet/Pinkie.png");
+    public static SpriteSheet CACODEMON = new SpriteSheet(96,192, 48, 48, "/spritesSheet/Cacodemon.png");
+    public static SpriteSheet SOUL = new SpriteSheet(64,96, 32, 32, "/spritesSheet/Soul.png");
+    public static SpriteSheet BARON = new SpriteSheet(96,296, 48, 74, "/spritesSheet/Baron.png");
 
     /**
      * Crea la hoja de sprite, siendo sprites de un ancho y un alto diferente

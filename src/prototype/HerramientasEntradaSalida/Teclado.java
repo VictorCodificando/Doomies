@@ -17,6 +17,7 @@ public class Teclado implements KeyListener {
     public boolean running;
     public boolean jumping;
     public boolean shooting;
+    public boolean escape;
 
     public Teclado() {//se inicializan todas en false
         left = false;
@@ -24,6 +25,7 @@ public class Teclado implements KeyListener {
         running = false;
         jumping = false;
         shooting = false;
+        escape = false;
     }
 
     @Override
@@ -69,6 +71,18 @@ public class Teclado implements KeyListener {
             case KeyEvent.VK_C:
                 shooting = false;
                 break;
+            case KeyEvent.VK_ESCAPE:
+                escape = true;
+                break;
         }
+    }
+
+    public void resetKeys() {
+        left = false;
+        right = false;
+        running = false;
+        jumping = false;
+        shooting = false;
+        escape = false;
     }
 }

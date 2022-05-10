@@ -10,7 +10,11 @@ import javax.swing.JFrame;
  * @author Víctor Zero
  */
 public class Ventana extends JFrame {
-
+    /**
+     * Crea el frame personalizado para nuestro proyecto
+     * 
+     * @param canvas El lienzo que va ser añadido al frame
+     */
     public Ventana(final Lienzo canvas) {//Declaracion principal del Frame
         setTitle("Prototype");//PONEMOS EL TITULO(LO QUE SE VE ARRIBA)
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//Si le das a cerrar que se acabe la ejecucion

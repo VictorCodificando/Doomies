@@ -9,6 +9,8 @@ import prototype.HerramientasEntradaSalida.Mouse;
 import prototype.HerramientasEntradaSalida.Teclado;
 import prototype.Interfaces.Interfaz;
 import prototype.Interfaces.InterfazCargaGuarda;
+import prototype.Interfaces.InterfazCargar;
+import prototype.Interfaces.InterfazGuardar;
 import prototype.Interfaces.InterfazInicio;
 import prototype.Interfaces.InterfazSeleccNiveles;
 
@@ -23,8 +25,15 @@ public class GestorMenu implements Gestor {
     private final Mouse raton;
     private final Teclado teclado;
     private Interfaz interActual;
+    //niveles
     private boolean jugar;
     private int nivel;
+    //cargar
+    private boolean cargar;
+    private int partidas;
+    //guardar
+    private boolean guardar;
+    private int partidasGuardadas;
 
     /**
      * Crea el gestor de menu, que va cambiando la forma de su gestor actual
@@ -33,7 +42,8 @@ public class GestorMenu implements Gestor {
      * @param WIDTH Anchura en pantalla
      * @param HEIGHT Altura en pantalla
      * @param teclado Teclado usado
-     * @param raton
+     * @param raton Raton que usa el gestor
+     * @param tipo tipo que define que tipo de menu aparece primero
      */
     public GestorMenu(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton, int tipo) {
         this.WIDTH = WIDTH;
@@ -65,6 +75,10 @@ public class GestorMenu implements Gestor {
             this.opcionesCargaGuardado();
         } else if (this.isSeleccNiveles()) {
             this.opcionesSeleccionNivel();
+        } else if (this.isMenuLoad()) {
+            this.opcionesMenuCarga();
+        } else if (this.isMenuSave()) {
+            this.opcionesMenuGuardar();
         }
     }
 
@@ -94,9 +108,9 @@ public class GestorMenu implements Gestor {
         if (temp.isJugar()) {
             this.setSeleccNiveles();
         } else if (temp.isCargar()) {
-
+            this.setMenuLoad();
         } else if (temp.isGuardar()) {
-
+            this.setMenuSave();
         } else if (teclado.escape) {
             this.setInicio();
         }
@@ -110,9 +124,38 @@ public class GestorMenu implements Gestor {
             return;
         }
         InterfazSeleccNiveles temp = (InterfazSeleccNiveles) interActual;
-        this.nivel=temp.getNivel();
+        this.nivel = temp.getNivel();
         if (temp.isJugar()) {
             jugar = true;
+        }
+        if (teclado.escape) {
+            this.setMenuSaveLoad();
+        }
+    }
+
+    //Solo se podra llamar si la interfaz actual es de cargar partida
+    private void opcionesMenuCarga() {
+        if (!this.isMenuLoad()) {
+            return;
+        }
+        InterfazCargar temp = (InterfazCargar) interActual;
+        this.partidas = temp.getPartida();
+        if (temp.isCargar()) {
+            cargar = true;
+        }
+        if (teclado.escape) {
+            this.setMenuSaveLoad();
+        }
+    }
+
+    private void opcionesMenuGuardar() {
+        if (!this.isMenuSave()) {
+            return;
+        }
+        InterfazGuardar temp = (InterfazGuardar) interActual;
+        this.partidasGuardadas = temp.getPartidasGuardadas();
+        if (temp.isGuardar()) {
+            guardar = true;
         }
         if (teclado.escape) {
             this.setMenuSaveLoad();
@@ -140,6 +183,22 @@ public class GestorMenu implements Gestor {
         this.interActual = (Interfaz) new InterfazCargaGuarda(WIDTH, HEIGHT, teclado, raton);
     }
 
+    public boolean isMenuLoad() {
+        return interActual instanceof InterfazCargar;
+    }
+
+    public void setMenuLoad() {
+        this.interActual = (Interfaz) new InterfazCargar(WIDTH, HEIGHT, teclado, raton);
+    }
+
+    public boolean isMenuSave() {
+        return interActual instanceof InterfazGuardar;
+    }
+
+    public void setMenuSave() {
+        this.interActual = (Interfaz) new InterfazGuardar(WIDTH, HEIGHT, teclado, raton);
+    }
+
     public boolean isSeleccNiveles() {
         return interActual instanceof InterfazSeleccNiveles;
     }
@@ -148,13 +207,34 @@ public class GestorMenu implements Gestor {
         this.interActual = (Interfaz) new InterfazSeleccNiveles(WIDTH, HEIGHT, teclado, raton);
     }
 
+    //niveles
     public boolean isJugar() {
         return jugar;
     }
 
+    //niveles
     public int getNivel() {
         return nivel;
     }
 
+    //cargar
+    public boolean isCargar() {
+        return cargar;
+    }
+
+    //cargar
+    public int getPartida() {
+        return this.partidas;
+    }
+
+    //guardar
+    public boolean isGuardar() {
+        return guardar;
+    }
+
+    //guardar
+    public int getPartidasGuardadas() {
+        return partidasGuardadas;
+    }
 
 }

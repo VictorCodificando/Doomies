@@ -24,8 +24,8 @@ public class InterfazSeleccNiveles extends Interfaz {
     private Boton botonIzquierda;
     private Boton botonDerecha;
     private boolean jugar;
-    private int nivel;
-    private final int LVL_MAX = 10;
+    private static int nivel=1;
+    private final static int LVL_MAX = LoadTools.countFiles(".txt", "/mapas/");
 
     /**
      *
@@ -36,8 +36,6 @@ public class InterfazSeleccNiveles extends Interfaz {
      */
     public InterfazSeleccNiveles(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
         super(WIDTH, HEIGHT, teclado, raton);
-        //Inicializacion del label del nivel
-        this.nivel = 1;
         //Creacion de botones
         botonJugar = new Boton(((WIDTH / 2) - 137), 550, 275, 100, "JUGAR", font.deriveFont(46f), Color.GRAY, 8, 3, raton);
         botonJugar.setFormat(10);
@@ -97,7 +95,8 @@ public class InterfazSeleccNiveles extends Interfaz {
     public boolean isJugar() {
         return jugar;
     }
-    public int getNivel(){
+
+    public int getNivel() {
         return this.nivel;
     }
 }

@@ -15,13 +15,13 @@ import java.awt.Frame;
 import java.awt.Transparency;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import prototype.Prototype;
 import prototype.Visual.Sprite;
 import prototype.Visual.SpriteSheet;
 import prototype.mapa.Tile;
-
 
 public class LoadTools {
 
@@ -72,7 +72,7 @@ public class LoadTools {
                 font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File(RUTA_ACTUAL + path))).deriveFont(15f);//Cargo la imagen
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(new Frame(), "ERROR CARGANDO LA FUENTE EN LA RUTA\n" + path);
+            JOptionPane.showMessageDialog(new Frame(), "ERROR CARGANDO LA FUENTE EN LA RUTA\n" + path, "ERROR", 2);
             System.exit(0);
         }
         return font;
@@ -136,10 +136,10 @@ public class LoadTools {
             }
             tilesArray = loadTile(mapa);
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(new Frame(), "ERROR MAPA NO ENCONTRADO\n" + path);
+            JOptionPane.showMessageDialog(new Frame(), "ERROR MAPA NO ENCONTRADO\n" + path, "ERROR", 2);
             System.exit(0);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(new Frame(), "ERROR EN LA LECTURA DEL MAPA\n" + e);
+            JOptionPane.showMessageDialog(new Frame(), "ERROR EN LA LECTURA DEL MAPA\n" + e, "ERROR", 2);
             System.exit(0);
         }
         return tilesArray;
@@ -171,5 +171,31 @@ public class LoadTools {
             }
         }
         return tiles;
+    }
+
+    public static int countFiles(String type, String foldPath) {
+        File f = null;
+        if (RUTA_ACTUAL.contains(".jar")) {
+            InputStream inputStream = LoadTools.class.getResourceAsStream(foldPath);
+            Scanner lector = new Scanner(inputStream);
+            while(lector.hasNext()){
+                System.out.println(lector.next());
+            }
+        } else {
+            f = new File(RUTA_ACTUAL + foldPath);
+        }
+
+        int count = 0;
+        if (!f.exists()) {
+            JOptionPane.showMessageDialog(new Frame(), "ERROR EN LA LECTURA DEL DIRECTORIO:\n" + foldPath, "ERROR", 2);
+            System.exit(0);
+        }
+        String[] archivos = f.list();
+        for (int i = 0; i < archivos.length; i++) {
+            if (archivos[i].contains(type)) {
+                count++;
+            }
+        }
+        return count;
     }
 }

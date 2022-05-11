@@ -15,6 +15,7 @@ public class Jugador extends SerVivo {
     private int cooldownBalas;
     public Teclado teclado;
     private final Sprite[] sprites;
+    public Rectangle enemyDir;
 
     /**
      * Crea el jugador
@@ -50,6 +51,7 @@ public class Jugador extends SerVivo {
         this.disparar();
         this.definirEstado();
         super.actualizar();
+        this.enemyDir();
     }
 
     protected void definirEstado() {
@@ -133,4 +135,10 @@ public class Jugador extends SerVivo {
             this.animacion = 0;
         }
     }
+    
+    public void enemyDir () {
+        xPlayer = this.getX();
+    }
+    
+    
 }

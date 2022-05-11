@@ -3,6 +3,7 @@ package prototype.Entes;
 import java.awt.Graphics;
 import prototype.Visual.Sprite;
 import java.awt.Rectangle;
+import prototype.Entes.Seres.Enemigo;
 
 public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta sometido a una gravedad
 
@@ -10,6 +11,8 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
     protected int y;
     protected int xa;
     protected int ya;
+    //variable en la que guardo la posicion del jugador
+    public static int xPlayer;
     //Variables de velocidad
     protected int Speed;
     //Colisiona por X o por Y
@@ -136,5 +139,8 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
 
     public void setContGravedad(final int contGravedad) {
         this.contGravedad = contGravedad;
+    }
+    //funcion para cambiar de sentido al enemigo
+    public void enemyDir(){
     }
 }

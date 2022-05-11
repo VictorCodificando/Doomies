@@ -79,6 +79,7 @@ public class Enemigo extends SerVivo {
             case 2:
                 this.Speed = 5;
                 this.vida = 8;
+                this.hitbox.y = this.hitbox.y -100;
                 if ((this.x-xPlayer<=400 || xPlayer-this.x<=400)){
                   this.Speed = 6;  
                 }
@@ -87,6 +88,7 @@ public class Enemigo extends SerVivo {
             case 3:
                 this.Speed = 4;
                 this.vida = 18;
+                this.hitbox.y = this.hitbox.y -100;
                 break;
             //BARON
             case 4:
@@ -107,9 +109,6 @@ public class Enemigo extends SerVivo {
         }
         this.xa = 0;
         this.contadorAnimacion();
-        if (!this.falling) {
-            this.jump();
-        }
     }
     
     

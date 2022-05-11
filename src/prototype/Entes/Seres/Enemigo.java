@@ -65,10 +65,12 @@ public class Enemigo extends SerVivo {
             //IMP
             case 0:
                 this.Speed = 4;
+                this.vida = 10;
                 break;
             //PINKIE
             case 1:
                 this.Speed = 5;
+                this.vida = 12;
                 if ((this.x-xPlayer<=200 || xPlayer-this.x<=200)){
                   this.Speed = 7;  
                 }
@@ -76,18 +78,28 @@ public class Enemigo extends SerVivo {
             //SOUL
             case 2:
                 this.Speed = 5;
+                this.vida = 8;
+                if ((this.x-xPlayer<=400 || xPlayer-this.x<=400)){
+                  this.Speed = 6;  
+                }
                 break;
             //CACODEMON
             case 3:
                 this.Speed = 4;
+                this.vida = 18;
                 break;
             //BARON
             case 4:
                 this.Speed = 2;
+                this.vida = 30;
                 break;
             default:
                 break;
         }
+        if (!this.collidingY) {//Si esta cayendo
+            this.falling = true;
+        }
+        //ajuste de direccion
         if(xPlayer>this.x){
             this.dir = "R";
         } else {

@@ -4,7 +4,9 @@
  */
 package prototype.Gestores;
 
+import java.awt.Frame;
 import java.awt.Graphics;
+import javax.swing.JOptionPane;
 import prototype.HerramientasEntradaSalida.Mouse;
 import prototype.HerramientasEntradaSalida.Teclado;
 import prototype.Interfaces.Interfaz;
@@ -141,7 +143,9 @@ public class GestorMenu implements Gestor {
         InterfazCargar temp = (InterfazCargar) interActual;
         this.partidas = temp.getPartida();
         if (temp.isCargar()) {
+            JOptionPane.showMessageDialog(new Frame(), "Selecciona el nivel\n");
             cargar = true;
+            this.setMenuSaveLoad();
         }
         if (teclado.escape) {
             this.setMenuSaveLoad();

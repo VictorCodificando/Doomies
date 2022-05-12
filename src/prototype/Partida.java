@@ -34,6 +34,7 @@ public class Partida {
      */
     public Partida(String nombre) {
         this.nombre = nombre;
+        this.nivelesDesbloqueados.add(true);
     }
 
     /**
@@ -45,9 +46,8 @@ public class Partida {
     public boolean isDesbloqueado(int nivel) {//Te dice si el nivel esta desbloqueado, si no esta en el array, quiere decir que esta bloqueado.
         boolean desbloqueado = false;
         try {
-            desbloqueado = nivelesDesbloqueados.get(nivel);
+            desbloqueado = nivelesDesbloqueados.get(nivel-1);
         } catch (Exception e) {
-
         }
         return desbloqueado;
     }
@@ -79,8 +79,9 @@ public class Partida {
 
     /**
      * Cambia los niveles desbloqueados en una partida
-     * 
-     * @param nivelesDesbloqueados ArrayList de booleans con los niveles desbloqueados
+     *
+     * @param nivelesDesbloqueados ArrayList de booleans con los niveles
+     * desbloqueados
      */
     public void setNivelesDesbloqueados(ArrayList<Boolean> nivelesDesbloqueados) {
         this.nivelesDesbloqueados = nivelesDesbloqueados;

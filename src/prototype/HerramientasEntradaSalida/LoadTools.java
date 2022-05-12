@@ -13,9 +13,12 @@ import java.awt.image.BufferedImage;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Transparency;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import prototype.Prototype;
@@ -175,17 +178,32 @@ public class LoadTools {
 
     public static int countFiles(String type, String foldPath) {
         File f = null;
+        int count = 0;
         if (RUTA_ACTUAL.contains(".jar")) {
-            InputStream inputStream = LoadTools.class.getResourceAsStream(foldPath);
-            Scanner lector = new Scanner(inputStream);
-            while(lector.hasNext()){
-                System.out.println(lector.next());
+            final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            try {
+                int hasMoreFiles = 0;
+                //Se hara referencia a mapa
+                for (int i = 1; hasMoreFiles < 1; i++) {
+                    try {
+                        InputStream inputStream = LoadTools.class.getResourceAsStream(foldPath + "/mapa" + i + ".txt");
+                        if (inputStream != null) {
+                            count++;
+                        } else {
+                            hasMoreFiles = 1;
+                        }
+                    } catch (Exception e) {
+                        hasMoreFiles = 1;
+                        break;
+                    }
+                }
+                return count;
+            } catch (Exception e) {
+                System.out.println(e);
             }
         } else {
             f = new File(RUTA_ACTUAL + foldPath);
         }
-
-        int count = 0;
         if (!f.exists()) {
             JOptionPane.showMessageDialog(new Frame(), "ERROR EN LA LECTURA DEL DIRECTORIO:\n" + foldPath, "ERROR", 2);
             System.exit(0);

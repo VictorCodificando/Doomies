@@ -26,7 +26,8 @@ public class Pantalla {//Clase donde ocurre todo en la pantalla
     public void dibujar(final Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, this.WIDTH, this.HEIGHT);
+        g.setColor(Color.WHITE);
         ge.dibujar(g);
-
     }
+
 }

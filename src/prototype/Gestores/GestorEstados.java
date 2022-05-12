@@ -35,6 +35,7 @@ public class GestorEstados implements Gestor {
         this.HEIGHT = HEIGHT;
         this.teclado = teclado;
         this.raton = raton;
+        partida=new Partida("default");
         this.gestorActual = (Gestor) new GestorMenu(WIDTH, HEIGHT, teclado, raton, 0);
     }
     /**

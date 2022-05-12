@@ -5,10 +5,13 @@
 package prototype.Interfaces;
 
 import java.awt.Color;
-import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import javax.swing.JOptionPane;
+import prototype.Gestores.GestorEstados;
 import prototype.HerramientasEntradaSalida.LoadTools;
 import prototype.HerramientasEntradaSalida.Mouse;
 import prototype.HerramientasEntradaSalida.Teclado;
@@ -23,9 +26,11 @@ public class InterfazSeleccNiveles extends Interfaz {
     private Boton botonJugar;
     private Boton botonIzquierda;
     private Boton botonDerecha;
+    private final BufferedImage unlocked = LoadTools.loadImage("/images/lock1.png");
+    private final BufferedImage locked = LoadTools.loadImage("/images/lock0.png");
     private boolean jugar;
-    private static int nivel=1;
-    private final static int LVL_MAX = LoadTools.countFiles(".txt", "/mapas/");
+    private static int nivel = 1;
+    private final static int LVL_MAX = LoadTools.countFiles(".txt", "/mapas");
 
     /**
      *
@@ -60,9 +65,12 @@ public class InterfazSeleccNiveles extends Interfaz {
         g.setFont(g.getFont().deriveFont(55f));
         g.drawString("SELECTOR DE NIVELES", ((WIDTH / 2) - (g.getFont().getSize() * (("SELECTOR DE NIVELES").length() / 2))), 100);
         //Nivel
-        g.setColor(Color.WHITE);
-        g.setFont(g.getFont().deriveFont(120f));
-        g.drawString(nivel + "", (int) ((WIDTH / 2) - (g.getFont().getSize() * ((nivel + "").length() / 2) * 0.5) - 46), (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80);
+        if (GestorEstados.partida.isDesbloqueado(nivel)) {
+            mostrarNivelDesbloqueado(g);
+        } else {
+            mostrarNivelBloqueado(g);
+        }
+
         //Botones
         botonJugar.dibujar(g);
         botonIzquierda.dibujar(g);
@@ -83,9 +91,26 @@ public class InterfazSeleccNiveles extends Interfaz {
             }
         }
         //Jugar
-        if (botonJugar.isClicked()) {
+        if (botonJugar.isClicked() && GestorEstados.partida.isDesbloqueado(nivel)) {
             this.jugar = true;
+        } else if (botonJugar.isClicked()) {
+            JOptionPane.showMessageDialog(new Frame(), "Nivel bloqueado, juega el nivel anterior para continuar", "ERROR", 2);
+
         }
+    }
+
+    private void mostrarNivelBloqueado(Graphics g) {
+        g.setColor(LoadTools.brighter(Color.GRAY, 20));
+        g.setFont(g.getFont().deriveFont(120f));
+        g.drawString(nivel + "", (int) ((WIDTH / 2) - (g.getFont().getSize() * ((nivel + "").length() / 2) * 0.5) - 46), (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80);
+        g.drawImage(locked, (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80, (int) ((WIDTH / 2) + (g.getFont().getSize() * ((nivel + "").length() / 2) * 0.5) - 46), null);
+    }
+
+    private void mostrarNivelDesbloqueado(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.setFont(g.getFont().deriveFont(120f));
+        g.drawString(nivel + "", (int) ((WIDTH / 2) - (g.getFont().getSize() * ((nivel + "").length() / 2) * 0.5) - 46), (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80);
+        g.drawImage(unlocked, (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80, (int) ((WIDTH / 2) + (g.getFont().getSize() * ((nivel + "").length() / 2) * 0.5) - 46), null);
     }
 
     /**

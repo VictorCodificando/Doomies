@@ -20,7 +20,7 @@ public class InterfazInicio extends Interfaz {
 
     private int x = 0;
     private boolean right = true;
-    private final BufferedImage background = LoadTools.loadImage("/images/BG.png");
+    private final BufferedImage background = LoadTools.loadImage("/images/BG_0.png");
     private final BufferedImage logo = LoadTools.loadImage("/images/Logo.png");
     private final Boton botonStart;
     private boolean start;

@@ -35,6 +35,11 @@ public class Partida {
     public Partida(String nombre) {
         this.nombre = nombre;
         this.nivelesDesbloqueados.add(true);
+        //BORRAR
+        this.nivelesDesbloqueados.add(true);
+        this.nivelesDesbloqueados.add(true);
+        this.nivelesDesbloqueados.add(true);
+        this.nivelesDesbloqueados.add(true);
     }
 
     /**

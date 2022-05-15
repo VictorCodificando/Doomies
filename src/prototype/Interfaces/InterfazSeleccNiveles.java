@@ -30,7 +30,7 @@ public class InterfazSeleccNiveles extends Interfaz {
     private final BufferedImage locked = LoadTools.loadImage("/images/lock0.png");
     private boolean jugar;
     private static int nivel = 1;
-    private final static int LVL_MAX = LoadTools.countFiles(".txt", "/mapas");
+    private final static int LVL_MAX = LoadTools.countMap("/mapas");
 
     /**
      *

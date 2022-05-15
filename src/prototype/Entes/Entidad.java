@@ -137,4 +137,8 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
     public void setContGravedad(final int contGravedad) {
         this.contGravedad = contGravedad;
     }
+//funcion para cambiar de sentido al enemigo
+
+    public void enemyDir() {
+    }
 }

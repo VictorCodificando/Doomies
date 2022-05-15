@@ -13,12 +13,8 @@ import java.awt.image.BufferedImage;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Transparency;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import prototype.Prototype;
@@ -137,6 +133,7 @@ public class LoadTools {
             for (int i = 0; lector.hasNext(); i++) {
                 mapa += lector.next() + ";";
             }
+            lector.close();
             tilesArray = loadTile(mapa);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(new Frame(), "ERROR MAPA NO ENCONTRADO\n" + path, "ERROR", 2);
@@ -145,6 +142,7 @@ public class LoadTools {
             JOptionPane.showMessageDialog(new Frame(), "ERROR EN LA LECTURA DEL MAPA\n" + e, "ERROR", 2);
             System.exit(0);
         }
+        
         return tilesArray;
     }
 
@@ -159,24 +157,26 @@ public class LoadTools {
         String[] inSplitted = in.split(";");
         String mapa[][] = new String[inSplitted.length][];
         for (int i = 0; i < inSplitted.length; i++) {
+            System.out.println(inSplitted[i]);
             mapa[i] = inSplitted[i].split("-");
         }
         Tile[][] tiles = new Tile[mapa.length][];
         for (int i = 0; i < mapa.length; i++) {
             tiles[i] = new Tile[mapa[i].length];
             for (int j = 0; j < mapa[i].length; j++) {
+                //System.out.println(mapa[i][j]);
                 if (mapa[i][j].contains("x")) {
                     tiles[i][j] = null;
                     continue;
                 }
-                Sprite actual[] = {SpriteSheet.MAPA.getSprite(Integer.parseInt(mapa[i][j].substring(0, 1)), Integer.parseInt(mapa[i][j].substring(1)))};
+                Sprite actual[] = {SpriteSheet.MAPA.getSprite(Integer.parseInt(mapa[i][j].substring(0, 1)), Integer.parseInt(mapa[i][j].substring(1, 2)))};
                 tiles[i][j] = new Tile(actual[0].getWIDTH() * j, actual[0].getHEIGHT() * i, actual);
             }
         }
         return tiles;
     }
 
-    public static int countFiles(String type, String foldPath) {
+    public static int countMap(String foldPath) {
         File f = null;
         int count = 0;
         if (RUTA_ACTUAL.contains(".jar")) {
@@ -199,7 +199,8 @@ public class LoadTools {
                 }
                 return count;
             } catch (Exception e) {
-                System.out.println(e);
+                JOptionPane.showMessageDialog(new Frame(), "ERROR EN LA LECTURA DEL DIRECTORIO DENTRO DEL JAR:\n" + foldPath, "ERROR", 2);
+                System.exit(0);
             }
         } else {
             f = new File(RUTA_ACTUAL + foldPath);
@@ -210,9 +211,7 @@ public class LoadTools {
         }
         String[] archivos = f.list();
         for (int i = 0; i < archivos.length; i++) {
-            if (archivos[i].contains(type)) {
-                count++;
-            }
+            count++;
         }
         return count;
     }

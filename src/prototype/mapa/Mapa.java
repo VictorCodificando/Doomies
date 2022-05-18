@@ -26,9 +26,11 @@ public class Mapa {
     private int bg_x;
     private int x;
     private int y;
-    private int xa = 15;
-    private int ya = 15;
+    private int xa;
+    private int ya;
     private boolean right;
+    private boolean limit;
+    private boolean limit_fin;
     private boolean up;
     public ArrayList<Entidad> entesEnMapa = new ArrayList<Entidad>();
 
@@ -42,11 +44,12 @@ public class Mapa {
     public Mapa(SerVivo[] seres, final int width, final int height, int ID) {
         this.SCREEN_HEIGHT = height;
         this.SCREEN_WIDTH = width;
-        this.tiles = LoadTools.loadMap("./mapas/mapa" + ID + ".txt");
-        this.background = LoadTools.loadImage("./images/BG_" + ID + ".png");
+        this.tiles = LoadTools.loadMap("/mapas/mapa" + ID + ".txt");
+        this.background = LoadTools.loadImage("/images/BG_" + ID + ".png");
         this.HEIGHT = this.tiles.length * this.tiles[this.tiles.length - 1][this.tiles[this.tiles.length - 1].length - 1].getHitbox().height;
         this.WIDTH = this.tiles[this.tiles.length - 1].length * this.tiles[this.tiles.length - 1][this.tiles[this.tiles.length - 1].length - 1].getHitbox().width;
         this.seres = seres;
+
         //Añadimos los tiles
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
@@ -66,68 +69,112 @@ public class Mapa {
     }
 
     public void dibujar(Graphics g) {
-        g.drawImage(background, (int) bg_x, -Math.abs(SCREEN_HEIGHT-this.background.getHeight()), null);
-        //Dibujamos todos los entes
-        for (int i = 0; i < entesEnMapa.size(); i++) {
-            entesEnMapa.get(i).dibujar(g);
-        }
+        g.drawImage(background, (int) bg_x, -Math.abs(SCREEN_HEIGHT - this.background.getHeight()), null);
     }
 
     /**
      * Actualizamos la posicion actual del mapa
      */
-    public void actualizar() {  
+    public void actualizar() {
         //Ha llegado al final
-        if (SCREEN_WIDTH > x + WIDTH) {
-            right = true;
-        } else if (0 < x) {
-            right = false;
-        }
-        //Ha llegado al final
-        if (SCREEN_HEIGHT > y + HEIGHT) {
-            up = false;
-        } else if (0 < y) {
-            up = true;
-        }
-        //Cambio de la velocidad segun el eje
-        //X
-        if (right) {
-            xa = Math.abs(xa);
+        if (0 <= x) {
+            limit = true;
+            limit_fin = false;
+        } else if (SCREEN_WIDTH >= x + WIDTH) {
+            limit = false;
+            limit_fin = true;
         } else {
-            xa = Math.abs(xa) * -1;
+            limit = false;
         }
-        //Y
-        if (up) {
-            ya = Math.abs(ya) * -1;
-
-        } else {
-            ya = Math.abs(ya);
-        }
-
-        x += xa;
-        bg_x = (int)((this.background.getWidth()-SCREEN_WIDTH) * ((float) (x) / WIDTH));
-        // y += ya;
-        for (int i = 0; i < entesEnMapa.size(); i++) {
-            if (entesEnMapa.get(i) == null || entesEnMapa.get(i) instanceof Jugador) {
-                continue;
-            }
-            entesEnMapa.get(i).actualizar();
-            if (isOutSideScreen(entesEnMapa.get(i).getHitbox())) {
-                entesEnMapa.get(i).setVisible(false);
-            } else {
-                entesEnMapa.get(i).setVisible(true);
-            }
-            entesEnMapa.get(i).setX(entesEnMapa.get(i).getX() + xa);
-            //tiles[i][j].setY(tiles[i][j].getY() + ya);
-        }
+        x -= xa;
+        bg_x = (int) ((this.background.getWidth() - SCREEN_WIDTH) * ((float) (x) / WIDTH));
+        y += ya;
 
     }
 
-    public boolean isOutSideScreen(Rectangle rect) {
-        if (SCREEN_WIDTH > rect.x || SCREEN_HEIGHT > rect.y || rect.x + rect.width < 0 || rect.y + rect.height < 0) {
-            return false;
-        }
-        return true;
+    public BufferedImage getBackground() {
+        return background;
     }
+
+    public void setBackground(BufferedImage background) {
+        this.background = background;
+    }
+
+    public int getBg_x() {
+        return bg_x;
+    }
+
+    public void setBg_x(int bg_x) {
+        this.bg_x = bg_x;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getXa() {
+        return xa;
+    }
+
+    public void setXa(int xa) {
+        this.xa = xa;
+    }
+
+    public int getYa() {
+        return ya;
+    }
+
+    public void setYa(int ya) {
+        this.ya = ya;
+    }
+
+    public boolean isRight() {
+        return right;
+    }
+
+    public void setRight(boolean right) {
+        this.right = right;
+    }
+
+    public boolean isUp() {
+        return up;
+    }
+
+    public void setUp(boolean up) {
+        this.up = up;
+    }
+
+    public ArrayList<Entidad> getEntesEnMapa() {
+        return entesEnMapa;
+    }
+
+    public void setEntesEnMapa(ArrayList<Entidad> entesEnMapa) {
+        this.entesEnMapa = entesEnMapa;
+    }
+
+    public boolean isLimit() {
+        return limit;
+    }
+
+    public void setLimit(boolean limit) {
+        this.limit = limit;
+    }
+
+    public boolean isLimit_fin() {
+        return limit_fin;
+    }
+    
 
 }

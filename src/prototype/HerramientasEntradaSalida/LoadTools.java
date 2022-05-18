@@ -37,6 +37,7 @@ public class LoadTools {
         Image img = null;//La imagen es nula por defecto para que no nos de error
         try {
             if (RUTA_ACTUAL.contains(".jar")) {
+                System.out.println("error aqui");
                 img = ImageIO.read(LoadTools.class.getResourceAsStream(path));//Cargo la imagen
             } else {
                 img = ImageIO.read(new File(RUTA_ACTUAL + path));//Cargo la imagen
@@ -142,7 +143,7 @@ public class LoadTools {
             JOptionPane.showMessageDialog(new Frame(), "ERROR EN LA LECTURA DEL MAPA\n" + e, "ERROR", 2);
             System.exit(0);
         }
-        
+
         return tilesArray;
     }
 
@@ -157,7 +158,6 @@ public class LoadTools {
         String[] inSplitted = in.split(";");
         String mapa[][] = new String[inSplitted.length][];
         for (int i = 0; i < inSplitted.length; i++) {
-            System.out.println(inSplitted[i]);
             mapa[i] = inSplitted[i].split("-");
         }
         Tile[][] tiles = new Tile[mapa.length][];
@@ -215,4 +215,6 @@ public class LoadTools {
         }
         return count;
     }
+
+    
 }

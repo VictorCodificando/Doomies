@@ -14,7 +14,6 @@ public class Jugador extends SerVivo {
     public ArrayList<Bala> balas;
     private int cooldownBalas;
     public Teclado teclado;
-    private final Sprite[] sprites;
 
     /**
      * Crea el jugador
@@ -28,7 +27,9 @@ public class Jugador extends SerVivo {
     public Jugador(final int x, final int y, final int HEIGHT, final int WIDTH, final Teclado teclado) {
         super(new Sprite[4], 100, 30);
         this.balas = new ArrayList<Bala>();
-        this.sprites = new Sprite[]{SpriteSheet.PERSONAJE.getSprite(0, 0), SpriteSheet.PERSONAJE.getSprite(0, 1), SpriteSheet.PERSONAJE.getSprite(0, 2), SpriteSheet.PERSONAJE.getSprite(0, 3)};
+        this.sprites = new Sprite[]{(Sprite) SpriteSheet.PERSONAJE.getSprite(0, 0), SpriteSheet.PERSONAJE.getSprite(0, 1),
+            SpriteSheet.PERSONAJE.getSprite(1, 0), SpriteSheet.PERSONAJE.getSprite(1, 1),
+            SpriteSheet.PERSONAJE.getSprite(2, 0), SpriteSheet.PERSONAJE.getSprite(2, 1)};
         this.hitbox = new Rectangle(x, y, WIDTH, HEIGHT);
         this.teclado = teclado;
     }
@@ -44,12 +45,7 @@ public class Jugador extends SerVivo {
     }
 
     public void actualizar() {
-        this.direction();
-        this.comprobarBalas();
-        this.moverJugador();
-        this.disparar();
-        this.definirEstado();
-        super.actualizar();
+        this.mover();
     }
 
     protected void definirEstado() {
@@ -65,9 +61,17 @@ public class Jugador extends SerVivo {
             this.stay = true;
             this.walking = false;
         }
-        if (!this.collidingY) {//Si esta cayendo
+        if (!this.collidingYDown) {//Si esta cayendo
             this.falling = true;
         }
+    }
+
+    public void mover() {
+        if (collidingYDown && this.teclado.jumping) {
+            this.jump();
+        }
+        super.mover();
+
     }
 
     protected void disparar() {
@@ -88,7 +92,7 @@ public class Jugador extends SerVivo {
         this.xa = 0;
         this.contadorAnimacion();
         this.Speed *= (this.teclado.running ? 2 : 1);
-        this.xa -= ((this.teclado.left || this.teclado.right) ? (this.teclado.left ? this.Speed : (-this.Speed)) : 0);
+        this.xa -= (((this.teclado.left || this.teclado.right)) ? (this.teclado.left ? this.Speed : (-this.Speed)) : 0);
         if (!this.falling && this.teclado.jumping) {
             this.jump();
         }
@@ -116,6 +120,14 @@ public class Jugador extends SerVivo {
             this.cooldownBalas++;
         } else if (this.cooldownBalas == 10) {
             this.cooldownBalas = 0;
+        }
+    }
+
+    public void setStates(boolean run, boolean walking, boolean fall) {
+        running = run;
+        this.walking = walking;
+        if (!this.collidingYDown) {//Si esta cayendo
+            this.falling = true;
         }
     }
 

@@ -3,6 +3,8 @@ package prototype.Entes;
 import java.awt.Graphics;
 import prototype.Visual.Sprite;
 import java.awt.Rectangle;
+import java.awt.geom.Line2D;
+import javax.sound.sampled.Line;
 
 public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta sometido a una gravedad
 
@@ -13,15 +15,17 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
     //Variables de velocidad
     protected int Speed;
     //Colisiona por X o por Y
-    protected boolean collidingY;
-    protected boolean collidingX;
+    protected boolean collidingYUp;
+    protected boolean collidingXRight;
+    protected boolean collidingYDown;
+    protected boolean collidingXLeft;
     //Dimensiones
     public final int WIDTH;
     public final int HEIGHT;
     protected Rectangle hitbox;
     protected boolean visible;
     protected int contGravedad;
-    protected final Sprite[] sprites;
+    protected Sprite[] sprites;
 
     public abstract void dibujar(final Graphics g);
 
@@ -29,8 +33,10 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
 
     public Entidad(final Sprite[] sprite, final int WIDTH, final int HEIGHT) {
         this.Speed = 4;
-        this.collidingY = false;
-        this.collidingX = false;
+        collidingYUp = false;
+        collidingXRight = false;
+        collidingYDown = false;
+        collidingXLeft = false;
         this.visible = true;
         this.sprites = sprite;
         this.WIDTH = WIDTH;
@@ -47,15 +53,38 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
         }
     }
 
-    public void ajustarHitbox(final Rectangle limit) {//Arregla glitchs visuales
-        if (this.collidingY) {
-            this.hitbox.y = limit.y - this.hitbox.height;
+    public void ajustarHitboxinX(final Rectangle limit, final Rectangle next) {//Arregla glitchs visuales
+        if (limit.x > next.x && limit.x < next.x + next.width && xa != 0) {
+            collidingXLeft = true;
+            hitbox.x = limit.x - hitbox.width-8;
+
+        } else if (limit.x < next.x && limit.x + limit.width > next.x && xa != 0) {
+            collidingXRight = true;
+            hitbox.x = limit.x + limit.width+8;
         }
     }
 
-    public void setColliding(final boolean x, final boolean y) {//Sets de las colisiones
-        this.collidingX = x;
-        this.collidingY = y;
+    public void ajustarHitboxinY(final Rectangle limit, final Rectangle next) {
+        if (limit.y > next.y && limit.y < next.y + next.height) {
+            collidingYDown = true;
+            ya = 0;
+           hitbox.y = limit.y - hitbox.height;
+        } else if (limit.y < next.y && limit.y + limit.height > next.y) {
+            collidingYUp = true;
+            ya = 0;
+           hitbox.y = limit.y + limit.height;
+        }
+    }
+
+    public void isGoingToCollide(Rectangle estatico) {
+        Rectangle nextHitboxinX = new Rectangle(hitbox.x + xa, hitbox.y, hitbox.width, hitbox.height);
+        Rectangle nextHitboxinY = new Rectangle(hitbox.x, hitbox.y + ya, hitbox.width, hitbox.height);
+        if (estatico.intersects(nextHitboxinY)) {
+            this.ajustarHitboxinY(estatico, nextHitboxinY);
+        }
+        if (estatico.intersects(nextHitboxinX)) {
+            this.ajustarHitboxinX(estatico, nextHitboxinX);
+        }
     }
 
     public int getX() {
@@ -98,22 +127,6 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
         this.Speed = Speed;
     }
 
-    public boolean isCollidingY() {
-        return this.collidingY;
-    }
-
-    public void setCollidingY(final boolean collidingY) {
-        this.collidingY = collidingY;
-    }
-
-    public boolean isCollidingX() {
-        return this.collidingX;
-    }
-
-    public void setCollidingX(final boolean collidingX) {
-        this.collidingX = collidingX;
-    }
-
     public Rectangle getHitbox() {
         return this.hitbox;
     }
@@ -141,4 +154,37 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
 
     public void enemyDir() {
     }
+
+    public boolean isCollidingYUp() {
+        return collidingYUp;
+    }
+
+    public void setCollidingYUp(boolean collidingYUp) {
+        this.collidingYUp = collidingYUp;
+    }
+
+    public boolean isCollidingXRight() {
+        return collidingXRight;
+    }
+
+    public void setCollidingXRight(boolean collidingXRight) {
+        this.collidingXRight = collidingXRight;
+    }
+
+    public boolean isCollidingYDown() {
+        return collidingYDown;
+    }
+
+    public void setCollidingYDown(boolean collidingYDown) {
+        this.collidingYDown = collidingYDown;
+    }
+
+    public boolean isCollidingXLeft() {
+        return collidingXLeft;
+    }
+
+    public void setCollidingXLeft(boolean collidingXLeft) {
+        this.collidingXLeft = collidingXLeft;
+    }
+
 }

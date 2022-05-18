@@ -23,7 +23,8 @@ public class GestorEstados implements Gestor {
     private final Mouse raton;
 
     /**
-     * Crea el gestor de estados que es aquel que segun su estado invoca todo objeto funcional del juego
+     * Crea el gestor de estados que es aquel que segun su estado invoca todo
+     * objeto funcional del juego
      *
      * @param WIDTH Anchura de la pantalla
      * @param HEIGHT Altura de la pantalla
@@ -35,17 +36,19 @@ public class GestorEstados implements Gestor {
         this.HEIGHT = HEIGHT;
         this.teclado = teclado;
         this.raton = raton;
-        partida=new Partida("default");
+        partida = new Partida("default");
         this.gestorActual = (Gestor) new GestorMenu(WIDTH, HEIGHT, teclado, raton, 0);
     }
+
     /**
      * Dibuja el Gestor actual
-     * 
+     *
      * @param g Objeto Graphics que dibujara en memoria
      */
     public void dibujar(Graphics g) {
         gestorActual.dibujar(g);
     }
+
     /**
      * Actualiza el gestorActual
      */
@@ -100,7 +103,7 @@ public class GestorEstados implements Gestor {
      * juego
      */
     public void setGestorJuego(int ID_MAPA) {
-        this.gestorActual = (Gestor) new GestorJuego(WIDTH, HEIGHT, ID_MAPA);
+        this.gestorActual = (Gestor) new GestorJuego(WIDTH, HEIGHT, ID_MAPA, teclado);
     }
 
     /**

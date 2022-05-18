@@ -21,8 +21,9 @@ public class SerVivo extends Entidad {
 
     /*
     Distribucion de sprites PARA SERES:
-       y=0 no move izq| no move der| walking izq| walking der|falling izq| falling der|
-       y=1 LO MISMO QUE FILA DE ARRIBA PERO DISPARANDO
+        ID_STAY=0
+        ID_WALK=2
+        ID_FALLING=4
      */
     public SerVivo(final Sprite[] sprite, final int WIDTH, final int HEIGHT) {
         super(sprite, WIDTH, HEIGHT);
@@ -45,14 +46,14 @@ public class SerVivo extends Entidad {
     }
 
     protected void jump() {
-        this.ya = -10;
+        this.ya = -13;
     }
 
     protected void mover() {// mueve las variables de posicion
-        this.caer();
-        hitbox.x += (this.collidingX ? 0 : this.xa);//aumenta la x a la velocidad que debia
-        hitbox.y += (this.collidingY ? 0 : this.ya);//aumenta la y a la velocidad que debia
-        if (this.collidingY) {// Si esta colisionando en Y, no puede estar cayendo
+        //this.caer();
+        hitbox.x += this.xa;//aumenta la x a la velocidad que debia
+        hitbox.y += this.ya;//aumenta la y a la velocidad que debia
+        if (this.collidingYDown) {// Si esta colisionando en Y, no puede estar cayendo
             this.falling = false;
             this.contGravedad = 0;//Reseteo de contador
         }
@@ -81,9 +82,9 @@ public class SerVivo extends Entidad {
             this.spriteActual = ((animNum == 1) ? 0 : ((animNum == 2) ? 2 : 2));
         }
         if (this.dir.equalsIgnoreCase("R")) {//Si es derecha
-            this.spriteActual += 0;
+            this.spriteActual += 1;
         } else if (this.dir.equalsIgnoreCase("L")) {//Si es izquierda
-            ++this.spriteActual;
+            this.spriteActual += 0;
         }
     }
 }

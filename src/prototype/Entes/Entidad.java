@@ -56,11 +56,11 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
     public void ajustarHitboxinX(final Rectangle limit, final Rectangle next) {//Arregla glitchs visuales
         if (limit.x > next.x && limit.x < next.x + next.width && xa != 0) {
             collidingXLeft = true;
-            hitbox.x = limit.x - hitbox.width-8;
+            hitbox.x = limit.x - hitbox.width - ((Math.abs(xa)==4)? 4:8);
 
         } else if (limit.x < next.x && limit.x + limit.width > next.x && xa != 0) {
             collidingXRight = true;
-            hitbox.x = limit.x + limit.width+8;
+            hitbox.x = limit.x + limit.width + ((Math.abs(xa)==4)? 4:8);
         }
     }
 
@@ -68,11 +68,11 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
         if (limit.y > next.y && limit.y < next.y + next.height) {
             collidingYDown = true;
             ya = 0;
-           hitbox.y = limit.y - hitbox.height;
+            hitbox.y = limit.y - hitbox.height;
         } else if (limit.y < next.y && limit.y + limit.height > next.y) {
             collidingYUp = true;
             ya = 0;
-           hitbox.y = limit.y + limit.height;
+            hitbox.y = limit.y + limit.height;
         }
     }
 

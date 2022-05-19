@@ -77,7 +77,7 @@ public class GestorEstados implements Gestor {
             return;
         }
         GestorJuego temp = (GestorJuego) gestorActual;
-        if (teclado.escape) {
+        if (temp.isSalir()) {
             this.setGestorMenu();
         }
     }
@@ -103,7 +103,7 @@ public class GestorEstados implements Gestor {
      * juego
      */
     public void setGestorJuego(int ID_MAPA) {
-        this.gestorActual = (Gestor) new GestorJuego(WIDTH, HEIGHT, ID_MAPA, teclado);
+        this.gestorActual = (Gestor) new GestorJuego(WIDTH, HEIGHT, ID_MAPA, teclado,raton);
     }
 
     /**

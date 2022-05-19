@@ -9,7 +9,10 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import prototype.Entes.Entidad;
 import prototype.Entes.Seres.Jugador;
+import prototype.HerramientasEntradaSalida.Mouse;
 import prototype.HerramientasEntradaSalida.Teclado;
+import prototype.Interfaces.Interfaz;
+import prototype.Interfaces.InterfazPausa;
 import prototype.mapa.Mapa;
 import prototype.mapa.Tile;
 
@@ -30,13 +33,19 @@ public class GestorJuego implements Gestor {
     private final int HEIGHT;
     private ArrayList<Entidad> entesEnMapa = new ArrayList();
     private Teclado teclado;
+    private Mouse raton;
     private int Speed = 4;
+    private boolean salir;
+    private InterfazPausa interfaz = null;
 
-    public GestorJuego(int width, int height, int ID_MAPA, Teclado teclado) {
+    public GestorJuego(int width, int height, int ID_MAPA, Teclado teclado, Mouse raton) {
         mapa = new Mapa(null, width, height, ID_MAPA);
         this.WIDTH = width;
         this.HEIGHT = height;
         this.teclado = teclado;
+        interfaz = null;
+        this.raton = raton;
+        this.salir=false;
         entesEnMapa = mapa.entesEnMapa;
         this.jugador = new Jugador(100, 100, 107, 69, teclado);
         entesEnMapa.add(jugador);
@@ -45,10 +54,25 @@ public class GestorJuego implements Gestor {
     @Override
     public void actualizar() {
         //Comprobamos los controles y determinamos la velocidad DE CADA OBJETO
+        if (teclado.escape) {
+            interfaz = new InterfazPausa(WIDTH, HEIGHT, teclado, raton);
+        }
+        if (interfaz != null) {
+            interfaz.actualizar();
+            if (interfaz.isSalir()) {
+                salir=true;
+            }
+            if (interfaz.isJugar()) {
+                interfaz=null;
+            }
+            return;
+        }
+
         detMovimientoJugador();
         actualizarColisiones();
         cancelarMovimiento();
         mover();
+
     }
 
     @Override
@@ -58,8 +82,11 @@ public class GestorJuego implements Gestor {
         for (int i = 0; i < entesEnMapa.size(); i++) {
             entesEnMapa.get(i).dibujar(g);
         }
+        if (interfaz != null) {
+            interfaz.dibujar(g);
+        }
     }
-    
+
     public void detMovimientoJugador() {
         xa = 0;
         jugador.caer();
@@ -139,4 +166,9 @@ public class GestorJuego implements Gestor {
         }
         return true;
     }
+
+    public boolean isSalir() {
+        return salir;
+    }
+    
 }

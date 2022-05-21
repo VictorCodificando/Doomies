@@ -14,6 +14,7 @@ public class Jugador extends SerVivo {
     public ArrayList<Bala> balas;
     private int cooldownBalas;
     public Teclado teclado;
+
     /**
      * Crea el jugador
      *
@@ -24,11 +25,14 @@ public class Jugador extends SerVivo {
      * @param teclado El teclado que controla el personaje
      */
     public Jugador(final int x, final int y, final int HEIGHT, final int WIDTH, final Teclado teclado) {
-        super(new Sprite[4], 100, 30);
+        super(new Sprite[4], 100, 30, 3);
         this.balas = new ArrayList<Bala>();
         this.sprites = new Sprite[]{(Sprite) SpriteSheet.PERSONAJE.getSprite(0, 0), SpriteSheet.PERSONAJE.getSprite(0, 1),
             SpriteSheet.PERSONAJE.getSprite(1, 0), SpriteSheet.PERSONAJE.getSprite(1, 1),
-            SpriteSheet.PERSONAJE.getSprite(2, 0), SpriteSheet.PERSONAJE.getSprite(2, 1)};
+            SpriteSheet.PERSONAJE.getSprite(2, 0), SpriteSheet.PERSONAJE.getSprite(2, 1),
+            SpriteSheet.PERSONAJE.getSprite(3, 0), SpriteSheet.PERSONAJE.getSprite(3, 1),
+            SpriteSheet.PERSONAJE.getSprite(4, 0), SpriteSheet.PERSONAJE.getSprite(4, 1),
+            SpriteSheet.PERSONAJE.getSprite(5, 0), SpriteSheet.PERSONAJE.getSprite(5, 1)};
         this.hitbox = new Rectangle(x, y, WIDTH, HEIGHT);
         this.teclado = teclado;
     }
@@ -47,23 +51,6 @@ public class Jugador extends SerVivo {
         super.actualizar();
     }
 
-    protected void definirEstado() {
-        if (this.xa != 0) {//Si se esta moviendo en el eje X
-            if (this.teclado.left) {//Si anda a la izquierda
-                this.walking = true;
-                this.dir = "L";
-            } else if (this.teclado.right) {//Si anda a la derecha
-                this.walking = true;
-                this.dir = "R";
-            }
-        } else {//Si no se esta moviendo
-            this.stay = true;
-            this.walking = false;
-        }
-        if (!this.collidingYDown) {//Si esta cayendo
-            this.falling = true;
-        }
-    }
 
     public void mover() {
         if (collidingYDown && this.teclado.jumping) {
@@ -131,7 +118,7 @@ public class Jugador extends SerVivo {
 
     public void addBalasAsEntidadtidad(final ArrayList entes) {
         for (int i = 0; i < this.balas.size(); i++) {
-            if (balas.get(i)==null) {
+            if (balas.get(i) == null) {
                 continue;
             }
             entes.add(this.balas.get(i));
@@ -146,4 +133,11 @@ public class Jugador extends SerVivo {
             this.animacion = 0;
         }
     }
+
+    public void resetPos() {
+        this.ya = 0;
+        this.hitbox.x = 100;
+        this.hitbox.y = 100;
+    }
+
 }

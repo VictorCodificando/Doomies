@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import prototype.Entes.Entidad;
+import prototype.Entes.Seres.Enemigo;
 import prototype.Entes.Seres.Jugador;
 import prototype.Entes.Seres.SerVivo;
 import prototype.HerramientasEntradaSalida.LoadTools;
@@ -59,6 +60,7 @@ public class Mapa {
                 entesEnMapa.add(tiles[i][j]);
             }
         }
+        
         //Añadimos los seres
         /*for (int i = 0; i < seres.length; i++) {
             if (seres[i]==null) {
@@ -77,7 +79,7 @@ public class Mapa {
      */
     public void actualizar() {
         //Ha llegado al final
-        System.out.println(x);
+        //System.out.println(x);
         if (0 <= x) {
 //            System.out.println("limite izq");
             limit = true;

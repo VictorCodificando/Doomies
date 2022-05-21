@@ -15,14 +15,13 @@ import prototype.Visual.SpriteSheet;
  */
 public class Enemigo extends SerVivo {
 
-    private final Sprite[] sprites;
     private int enemyType;
 
     public Enemigo(final int x, final int y, final int HEIGHT, final int WIDTH, int type) {
-        super(new Sprite[8], WIDTH, HEIGHT);
+        super(new Sprite[8], WIDTH, HEIGHT, 5);
         switch (type) {
             case 0:
-                this.sprites = new Sprite[]{SpriteSheet.IMP.getSprite(0, 0), SpriteSheet.IMP.getSprite(0, 1), SpriteSheet.IMP.getSprite(1, 0), SpriteSheet.IMP.getSprite(1, 1), SpriteSheet.IMP.getSprite(2, 0), SpriteSheet.IMP.getSprite(2, 1), SpriteSheet.IMP.getSprite(2, 2), SpriteSheet.IMP.getSprite(3, 0), SpriteSheet.IMP.getSprite(3, 1)};
+                this.sprites = new Sprite[]{SpriteSheet.IMP.getSprite(0, 0), SpriteSheet.IMP.getSprite(0, 1), SpriteSheet.IMP.getSprite(1, 0), SpriteSheet.IMP.getSprite(1, 1), SpriteSheet.IMP.getSprite(2, 0), SpriteSheet.IMP.getSprite(2, 1), SpriteSheet.IMP.getSprite(3, 0), SpriteSheet.IMP.getSprite(3, 1)};
                 this.enemyType = 0;
                 break;
             case 1:
@@ -34,17 +33,16 @@ public class Enemigo extends SerVivo {
                 this.enemyType = 2;
                 break;
             case 3:
-                this.sprites = new Sprite[]{SpriteSheet.CACODEMON.getSprite(0, 0), SpriteSheet.CACODEMON.getSprite(0, 1), SpriteSheet.CACODEMON.getSprite(1, 0), SpriteSheet.CACODEMON.getSprite(1, 1), SpriteSheet.CACODEMON.getSprite(2, 0), SpriteSheet.CACODEMON.getSprite(2, 1), SpriteSheet.CACODEMON.getSprite(2, 2), SpriteSheet.CACODEMON.getSprite(3, 0), SpriteSheet.CACODEMON.getSprite(3, 1)};
+                this.sprites = new Sprite[]{SpriteSheet.CACODEMON.getSprite(0, 0), SpriteSheet.CACODEMON.getSprite(0, 1), SpriteSheet.CACODEMON.getSprite(1, 0), SpriteSheet.CACODEMON.getSprite(1, 1), SpriteSheet.CACODEMON.getSprite(2, 0), SpriteSheet.CACODEMON.getSprite(2, 1), SpriteSheet.CACODEMON.getSprite(3, 0), SpriteSheet.CACODEMON.getSprite(3, 1)};
                 this.enemyType = 3;
                 break;
             case 4:
-                this.sprites = new Sprite[]{SpriteSheet.BARON.getSprite(0, 0), SpriteSheet.BARON.getSprite(0, 1), SpriteSheet.BARON.getSprite(1, 0), SpriteSheet.BARON.getSprite(1, 1), SpriteSheet.BARON.getSprite(2, 0), SpriteSheet.BARON.getSprite(2, 1), SpriteSheet.BARON.getSprite(2, 2), SpriteSheet.BARON.getSprite(3, 0), SpriteSheet.BARON.getSprite(3, 1)};
+                this.sprites = new Sprite[]{SpriteSheet.BARON.getSprite(0, 0), SpriteSheet.BARON.getSprite(0, 1), SpriteSheet.BARON.getSprite(1, 0), SpriteSheet.BARON.getSprite(1, 1), SpriteSheet.BARON.getSprite(2, 0), SpriteSheet.BARON.getSprite(2, 1), SpriteSheet.BARON.getSprite(3, 0), SpriteSheet.BARON.getSprite(3, 1)};
                 this.enemyType = 4;
                 break;
             default:
                 sprites = null;
         }
-
         this.hitbox = new Rectangle(x, y, WIDTH, HEIGHT);
     }
 

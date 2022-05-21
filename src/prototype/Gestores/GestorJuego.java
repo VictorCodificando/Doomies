@@ -6,10 +6,13 @@ package prototype.Gestores;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import prototype.Entes.Entidad;
 import prototype.Entes.Objetos.Bala;
+import prototype.Entes.Seres.Enemigo;
 import prototype.Entes.Seres.Jugador;
+import prototype.HerramientasEntradaSalida.LoadTools;
 import prototype.HerramientasEntradaSalida.Mouse;
 import prototype.HerramientasEntradaSalida.Teclado;
 import prototype.Interfaces.InterfazPausa;
@@ -28,8 +31,13 @@ public class GestorJuego implements Gestor {
     private int xa;
     private int ya;
     private boolean pausa;
+    private int vidas;
+    private boolean gameOver;
     private boolean jugando;
     private final int WIDTH;
+    private final BufferedImage HEART = LoadTools.loadImage("/images/heart.png");
+    private final BufferedImage HEART_BROKEN = LoadTools.loadImage("/images/heart_broken.png");
+    private final BufferedImage PANTALLA_GAMEOVER = LoadTools.loadImage("/images/gameOver.png");
     private final int HEIGHT;
     private ArrayList<Entidad> entesEnMapa = new ArrayList();
     private Teclado teclado;
@@ -40,6 +48,7 @@ public class GestorJuego implements Gestor {
     private boolean mapaMoving = false;
 
     public GestorJuego(int width, int height, int ID_MAPA, Teclado teclado, Mouse raton) {
+
         mapa = new Mapa(null, width, height, ID_MAPA);
         this.WIDTH = width;
         this.HEIGHT = height;
@@ -49,7 +58,9 @@ public class GestorJuego implements Gestor {
         this.salir = false;
         entesEnMapa = mapa.entesEnMapa;
         this.jugador = new Jugador(100, 100, 107, 69, teclado);
+        entesEnMapa.add(new Enemigo(200, 200, 117, 129, 0));
         entesEnMapa.add(jugador);
+
     }
 
     @Override
@@ -57,12 +68,28 @@ public class GestorJuego implements Gestor {
         if (cambiarAInterfazPausa()) {
             return;
         }
+        if (gameOver) {
+            waitGameOver();
+            return;
+        }
         detMovimientoJugador();
         actualizarColisiones();
         cancelarMovimiento();
         actualizarJugador();
         mover();
+        if (jugador.isDead()) {
+            this.gameOver = true;
+        }
 
+    }
+
+    private void waitGameOver() {
+        long tiempoActual = System.nanoTime();
+        long tiempoFinal = System.nanoTime();
+        while ((tiempoFinal - tiempoActual) < 1000000000) {
+            tiempoFinal = System.nanoTime();
+        }
+        salir = true;
     }
 
     private boolean cambiarAInterfazPausa() {
@@ -85,6 +112,10 @@ public class GestorJuego implements Gestor {
 
     @Override
     public void dibujar(Graphics g) {
+        if (gameOver) {
+            this.DibujarGameOver(g);
+            return;
+        }
         mapa.dibujar(g);
         //Dibujamos todos los entes
         for (int i = 0; i < entesEnMapa.size(); i++) {
@@ -93,6 +124,7 @@ public class GestorJuego implements Gestor {
         if (interfaz != null) {
             interfaz.dibujar(g);
         }
+        dibujarVidas(g);
     }
 
     public void detMovimientoJugador() {
@@ -160,7 +192,6 @@ public class GestorJuego implements Gestor {
         if ((jugador.isCollidingXRight() && xa > 0) || (jugador.isCollidingXLeft() && xa < 0)) {
             xa = 0;
         }
-
     }
 
     private void mover() {
@@ -168,7 +199,7 @@ public class GestorJuego implements Gestor {
             if (entesEnMapa.get(i) instanceof Jugador) {
                 continue;
             }
-            if (entesEnMapa.get(i) instanceof Tile && !mapaMoving) {
+            if (!mapaMoving) {
                 entesEnMapa.get(i).setXa(0);
                 mapa.setXa(0);
                 entesEnMapa.get(i).actualizar();
@@ -186,7 +217,7 @@ public class GestorJuego implements Gestor {
 
     private void actualizarJugador() {
         mapaMoving = false;
-        System.out.println(xa);
+        //System.out.println(xa);
         int middleScreenPos = WIDTH / 2 - jugador.getHitbox().width;
 
         if (mapa.isLimit() && xa != 0) {
@@ -213,12 +244,12 @@ public class GestorJuego implements Gestor {
                 jugador.setXa(0);
                 mapaMoving = true;
             }
-        } else if (xa != 0 && middleScreenPos != jugador.getHitbox().x) {
+        } else if (xa != 0 && (middleScreenPos + 10 > jugador.getHitbox().x && middleScreenPos - 10 < jugador.getHitbox().x)) {
 //            System.out.println("pasa por aqui?");
             //Se mueve todo
-            if (jugador.isCollidingXRight() && xa < 0) {
+            if (jugador.isCollidingXRight() && xa > 0) {
                 xa = 0;
-            } else if (jugador.isCollidingXRight() && xa > 0) {
+            } else if (jugador.isCollidingXLeft() && xa < 0) {
                 xa = 0;
             } else {
                 jugador.setXa(0);
@@ -227,6 +258,30 @@ public class GestorJuego implements Gestor {
         }
         System.out.println("limite derecho mapa: " + mapa.isLimit_fin() + "\nLimite izquierdo mapa: " + mapa.isLimit());
         jugador.actualizar();
+        if (fallOutSideMap()) {
+            jugador.resetPos();
+            jugador.setVida(jugador.getVida() - 1);
+        }
+        this.definirEstadoJugador();
+        jugador.actualizarSprite();
+    }
+
+    public void definirEstadoJugador() {
+        if (this.xa != 0) {//Si se esta moviendo en el eje X
+            if (this.teclado.left) {//Si anda a la izquierda
+                jugador.setWalking(true);
+                jugador.setDir("L");
+            } else if (this.teclado.right) {//Si anda a la derecha
+                jugador.setWalking(true);
+                jugador.setDir("R");
+            }
+        } else {//Si no se esta moviendo
+            jugador.setStay(true);
+            jugador.setWalking(false);
+        }
+        if (!jugador.isCollidingYDown()) {//Si esta cayendo
+            jugador.setFalling(true);
+        }
     }
 
     public boolean colisionX(Rectangle r1, Rectangle r2) {
@@ -243,8 +298,32 @@ public class GestorJuego implements Gestor {
         return true;
     }
 
+    public boolean fallOutSideMap() {
+        if (jugador.getHitbox().y > HEIGHT) {
+            return true;
+        }
+        return false;
+    }
+
     public boolean isSalir() {
         return salir;
     }
 
+    private void DibujarGameOver(Graphics g) {
+        g.drawImage(PANTALLA_GAMEOVER, 0, 0, null);
+    }
+
+    public void dibujarVidas(Graphics g) {
+        int posInicialX = 50;
+        int posInicialY = 20;
+        int separacion = 10 + (HEART.getWidth());
+        int vidas = jugador.getVida() - 1;
+        for (int i = 0; i < 3; i++) {
+            if (i > vidas) {
+                g.drawImage(HEART_BROKEN, posInicialX + (separacion * i), posInicialY, null);
+            } else {
+                g.drawImage(HEART, posInicialX + (separacion * i), posInicialY, null);
+            }
+        }
+    }
 }

@@ -218,6 +218,8 @@ public class GestorJuego implements Gestor {
             //Se mueve todo
             if (jugador.isCollidingXRight() && xa < 0) {
                 xa = 0;
+            } else if (jugador.isCollidingXRight() && xa > 0) {
+                xa = 0;
             } else {
                 jugador.setXa(0);
                 mapaMoving = true;

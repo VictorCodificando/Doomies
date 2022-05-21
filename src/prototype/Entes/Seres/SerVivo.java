@@ -45,9 +45,9 @@ public class SerVivo extends Entidad {
         this.mover();
         this.actualizarSprite();
     }
-
+    //Salto
     protected void jump() {
-        this.ya = -13;
+        this.ya = -10;
     }
 
     protected void mover() {// mueve las variables de posicion

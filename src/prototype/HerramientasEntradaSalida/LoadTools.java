@@ -216,5 +216,78 @@ public class LoadTools {
         return count;
     }
 
-    
+    public static String reemplazarANull(String a) {
+        if ((a.length() + 1) % 3 != 0) {//tiene que ser divisible entre 3 para que este el formato bien porque coje xx- y es +1 porque los ultimos 2 no acaban en -
+            System.err.println("DA ERROR");
+            System.exit(0);
+        }
+        for (int i = 0; i < a.length(); i += 3) {//Se hace un for para comprobar que lo que se meten son parejas de xx o de numeros y no otra cosa
+            if (a.substring(i, i + 2).equals("xx")) {//Se comprueba que lo que se mete es una pareja de xx y no otras letras.
+            } else {
+                try {
+                    int block = Integer.parseInt(a.substring(i, i + 2));//Se comprueba que lo que se mete es una pareja de numeros y no otras cosas
+                } catch (Exception e) {
+                    System.err.println("DA ERROR");
+                    System.exit(0);
+                }
+            }
+            if (i == a.length() - 2) {//Si son los 2 ultimos se los salta y continua
+                continue;
+            }
+            if (!a.substring(i + 2, i + 3).equals("-")) {//Se comprueba que en cada 3 posicion haya un - , sino da un error
+                System.err.println("DA ERROR");
+                System.exit(0);
+            }
+        }
+        a = a.replace("xx", "");//Se remplazan las xx por espacios vacios para optimizar espacio
+        return a;
+
+    }
+
+    public static String reemplazarAX(String c) {
+        int i = 0;
+        if (!c.substring(i, i + 1).equals("-")) {//Se comprueba que lo que esta en primera posicion sea distinto de "-"
+
+            try {
+                int block = Integer.parseInt(c.substring(0, 2));//Se comprueba si lo que se mete al principio es una pareja de numeros y no otras cosas
+                i += 2;//Se salta 2 para que no se vuelva a comprobar 
+            } catch (Exception e) {//si lo primero no son numeros se pone i = 0 para que se empieze a comprobar desde el principio
+                i = 0;
+            }
+        }
+        while (i < c.length()) {
+            if (!c.substring(i, i + 1).equals("-")) {//Se comprueba que la primera posicion es distinta a "-", si es distinta da un error porque ya se habia comprobado antes si era un numero
+                System.err.println("DA ERROR");//
+                System.exit(0);
+            } else if ((c.length() - 2) > (i) && c.substring(i + 1, i + 2).equals("-")) {//Se comprueba que si no es el final del String y hay un "-" seguido de otro "-" sigue con el bucle
+                i++;
+                continue;
+            } else if (c.length() - 2 > (i)) {//Se comprueba otra vez si no es el final del String
+
+                try {
+                    int block = Integer.parseInt(c.substring(i + 1, i + 3));//Se comprueba que lo que se mete es una pareja de numeros y no otras cosas, sino da error
+                } catch (Exception e) {
+                    System.err.println("DA ERROR");
+                    System.exit(0);
+                }
+                i += 3;//Se le suma 3 a la i para que no se vuelva a comprobar la pareja de numeros
+            } else {
+                break;
+            }
+        }
+
+        if (c.substring(0, 1).equals("-")) {//Se comprueba si el String empieza por "-" y si lo hace pone "xx" al principio
+            c = "xx" + c;
+        }
+        while (c.contains("--")) {//Se comprueba que hay "--" y si las hay mete "xx" entre ellas
+
+            c = c.replaceAll("--", "-xx-");
+        }
+
+        if (c.substring((c.length() - 1), c.length()).equals("-")) {//Se comprueba si acaba en "-" y si acaba asi añade "xx" al final
+            c = c + "xx";
+        }
+        return c;
+    }
+
 }

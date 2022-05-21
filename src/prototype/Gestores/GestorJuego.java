@@ -8,10 +8,10 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import prototype.Entes.Entidad;
+import prototype.Entes.Objetos.Bala;
 import prototype.Entes.Seres.Jugador;
 import prototype.HerramientasEntradaSalida.Mouse;
 import prototype.HerramientasEntradaSalida.Teclado;
-import prototype.Interfaces.Interfaz;
 import prototype.Interfaces.InterfazPausa;
 import prototype.mapa.Mapa;
 import prototype.mapa.Tile;
@@ -37,6 +37,7 @@ public class GestorJuego implements Gestor {
     private int Speed = 4;
     private boolean salir;
     private InterfazPausa interfaz = null;
+    private boolean mapaMoving = false;
 
     public GestorJuego(int width, int height, int ID_MAPA, Teclado teclado, Mouse raton) {
         mapa = new Mapa(null, width, height, ID_MAPA);
@@ -45,7 +46,7 @@ public class GestorJuego implements Gestor {
         this.teclado = teclado;
         interfaz = null;
         this.raton = raton;
-        this.salir=false;
+        this.salir = false;
         entesEnMapa = mapa.entesEnMapa;
         this.jugador = new Jugador(100, 100, 107, 69, teclado);
         entesEnMapa.add(jugador);
@@ -53,6 +54,18 @@ public class GestorJuego implements Gestor {
 
     @Override
     public void actualizar() {
+        if (cambiarAInterfazPausa()) {
+            return;
+        }
+        detMovimientoJugador();
+        actualizarColisiones();
+        cancelarMovimiento();
+        actualizarJugador();
+        mover();
+
+    }
+
+    private boolean cambiarAInterfazPausa() {
         //Comprobamos los controles y determinamos la velocidad DE CADA OBJETO
         if (teclado.escape) {
             interfaz = new InterfazPausa(WIDTH, HEIGHT, teclado, raton);
@@ -60,19 +73,14 @@ public class GestorJuego implements Gestor {
         if (interfaz != null) {
             interfaz.actualizar();
             if (interfaz.isSalir()) {
-                salir=true;
+                salir = true;
             }
             if (interfaz.isJugar()) {
-                interfaz=null;
+                interfaz = null;
             }
-            return;
+            return true;
         }
-
-        detMovimientoJugador();
-        actualizarColisiones();
-        cancelarMovimiento();
-        mover();
-
+        return false;
     }
 
     @Override
@@ -89,13 +97,23 @@ public class GestorJuego implements Gestor {
 
     public void detMovimientoJugador() {
         xa = 0;
+        jugador.setXa(0);
         jugador.caer();
+        if (jugador.getHitbox().x + jugador.getHitbox().width >= WIDTH) {
+            teclado.right = false;
+        } else if (jugador.getHitbox().x <= 0) {
+            teclado.left = false;
+        }
         if (!(teclado.left || teclado.right || teclado.jumping)) {//AÑADIR DISPARO
             return;
         }
         xa = (teclado.left) ? -Speed : (teclado.right) ? Speed : 0;
         xa *= (teclado.running) ? 2 : 1;
         jugador.setXa(xa);
+        if (teclado.shooting) {
+            jugador.disparar();
+        }
+
     }
 
     private void actualizarColisiones() {
@@ -122,6 +140,10 @@ public class GestorJuego implements Gestor {
                 }
                 entesEnMapa.get(i).isGoingToCollide(entesEnMapa.get(j).getHitbox());//Comprobamos si colisiona al fin
             }
+            if ((entesEnMapa.get(i).isCollidingXLeft() || entesEnMapa.get(i).isCollidingXRight() || entesEnMapa.get(i).isCollidingYUp() || entesEnMapa.get(i).isCollidingYDown()) && entesEnMapa.get(i) instanceof Bala) {
+                entesEnMapa.remove(i);
+                continue;
+            }
             //Si esta fuera de la pantalla es invisible
             if (isOutSideScreen(entesEnMapa.get(i).getHitbox())) {
                 entesEnMapa.get(i).setVisible(false);
@@ -144,13 +166,65 @@ public class GestorJuego implements Gestor {
     private void mover() {
         for (int i = 0; i < entesEnMapa.size(); i++) {
             if (entesEnMapa.get(i) instanceof Jugador) {
-                entesEnMapa.get(i).setXa(xa);
-                entesEnMapa.get(i).actualizar();
                 continue;
             }
+            if (entesEnMapa.get(i) instanceof Tile && !mapaMoving) {
+                entesEnMapa.get(i).setXa(0);
+                mapa.setXa(0);
+                entesEnMapa.get(i).actualizar();
+                continue;
+            } else {
+                mapa.setXa(-xa);
+            }
+
             entesEnMapa.get(i).setXa(-xa);
             entesEnMapa.get(i).actualizar();
         }
+        mapa.actualizar();
+        jugador.addBalasAsEntidadtidad(entesEnMapa);
+    }
+
+    private void actualizarJugador() {
+        mapaMoving = false;
+        System.out.println(xa);
+        int middleScreenPos = WIDTH / 2 - jugador.getHitbox().width;
+
+        if (mapa.isLimit() && xa != 0) {
+            /**
+             * Esto quiere decir que el mapa esta en el limite izquierdo(donde
+             * parte)
+             */
+            if (jugador.getHitbox().x < middleScreenPos) {
+                jugador.setXa(xa);
+            } else if (xa > 0) {
+                jugador.setXa(0);
+                mapaMoving = true;
+            }
+
+        } else if (mapa.isLimit_fin() && xa != 0) {
+            /**
+             * Esto quiere decir que el mapa esta en el limite derecho(donde
+             * termina)
+             */
+            if (jugador.getHitbox().x > middleScreenPos) {
+                jugador.setXa(xa);
+            } else if (xa < 0) {
+                // Se mueve todo
+                jugador.setXa(0);
+                mapaMoving = true;
+            }
+        } else if (xa != 0 && middleScreenPos != jugador.getHitbox().x) {
+//            System.out.println("pasa por aqui?");
+            //Se mueve todo
+            if (jugador.isCollidingXRight() && xa < 0) {
+                xa = 0;
+            } else {
+                jugador.setXa(0);
+                mapaMoving = true;
+            }
+        }
+        System.out.println("limite derecho mapa: " + mapa.isLimit_fin() + "\nLimite izquierdo mapa: " + mapa.isLimit());
+        jugador.actualizar();
     }
 
     public boolean colisionX(Rectangle r1, Rectangle r2) {
@@ -170,5 +244,5 @@ public class GestorJuego implements Gestor {
     public boolean isSalir() {
         return salir;
     }
-    
+
 }

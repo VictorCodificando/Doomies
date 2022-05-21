@@ -29,7 +29,7 @@ public class Mapa {
     private int xa;
     private int ya;
     private boolean right;
-    private boolean limit;
+    private boolean limit = true;
     private boolean limit_fin;
     private boolean up;
     public ArrayList<Entidad> entesEnMapa = new ArrayList<Entidad>();
@@ -77,19 +77,22 @@ public class Mapa {
      */
     public void actualizar() {
         //Ha llegado al final
+        System.out.println(x);
         if (0 <= x) {
+//            System.out.println("limite izq");
             limit = true;
             limit_fin = false;
         } else if (SCREEN_WIDTH >= x + WIDTH) {
+//            System.out.println("lmiite derecho");
             limit = false;
             limit_fin = true;
         } else {
             limit = false;
+            limit_fin = false;
         }
-        x -= xa;
+        x += xa;
         bg_x = (int) ((this.background.getWidth() - SCREEN_WIDTH) * ((float) (x) / WIDTH));
         y += ya;
-
     }
 
     public BufferedImage getBackground() {
@@ -175,6 +178,5 @@ public class Mapa {
     public boolean isLimit_fin() {
         return limit_fin;
     }
-    
 
 }

@@ -14,7 +14,6 @@ public class Jugador extends SerVivo {
     public ArrayList<Bala> balas;
     private int cooldownBalas;
     public Teclado teclado;
-
     /**
      * Crea el jugador
      *
@@ -45,7 +44,7 @@ public class Jugador extends SerVivo {
     }
 
     public void actualizar() {
-        this.mover();
+        super.actualizar();
     }
 
     protected void definirEstado() {
@@ -71,10 +70,9 @@ public class Jugador extends SerVivo {
             this.jump();
         }
         super.mover();
-
     }
 
-    protected void disparar() {
+    public void disparar() {
         if (this.teclado.shooting && this.cooldownBalas == 0) {//Si esta intentando disparar y puede disparar(cooldown bala==0) entonces dispara
             // inicio contador balas
             this.shooting = true;
@@ -131,8 +129,11 @@ public class Jugador extends SerVivo {
         }
     }
 
-    private void addBalasAsEntidadtidad(final ArrayList entes) {
+    public void addBalasAsEntidadtidad(final ArrayList entes) {
         for (int i = 0; i < this.balas.size(); i++) {
+            if (balas.get(i)==null) {
+                continue;
+            }
             entes.add(this.balas.get(i));
         }
     }

@@ -24,6 +24,7 @@ public class SerVivo extends Entidad {
         ID_STAY=0
         ID_WALK=2
         ID_FALLING=4
+    IF SHOOTING +1
      */
     public SerVivo(final Sprite[] sprite, final int WIDTH, final int HEIGHT) {
         super(sprite, WIDTH, HEIGHT);
@@ -56,6 +57,9 @@ public class SerVivo extends Entidad {
         if (this.collidingYDown) {// Si esta colisionando en Y, no puede estar cayendo
             this.falling = false;
             this.contGravedad = 0;//Reseteo de contador
+        }
+        if (ya != 0) {
+            falling = true;
         }
     }
 

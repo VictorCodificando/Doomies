@@ -6,7 +6,9 @@ package prototype.Interfaces;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import prototype.HerramientasEntradaSalida.LoadTools;
 import prototype.HerramientasEntradaSalida.Mouse;
 import prototype.HerramientasEntradaSalida.Teclado;
@@ -32,7 +34,7 @@ public class InterfazPausa extends Interfaz {
         super(WIDTH, HEIGHT, teclado, raton);
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
-        panel = new Boton(((WIDTH / 2) - 400), ((HEIGHT / 2) - 300), 800, 600, " ", font.deriveFont(23f), Color.ORANGE, 4, 2, raton);
+        panel = new Boton(((WIDTH / 2) - 400), ((HEIGHT / 2) - 300), 800, 600, " ", font.deriveFont(23f),new Color(249,90,9), 4, 2, raton);
         panel.setFormat(40);
         botonSeguirJugando = new Boton(450, 300, 400, 100, "SEGUIR JUGANDO", font.deriveFont(24f), Color.GRAY, 7, 4, raton);
         botonSalir = new Boton(450, 450, 400, 100, "SALIR", font.deriveFont(28f), Color.GRAY, -3, 4, raton);

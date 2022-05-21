@@ -33,7 +33,7 @@ public class Bala extends Entidad {
 
     @Override
     public void dibujar(final Graphics g) {
-        g.setColor(Color.green);//COLOR PROVISIONAL DE LA BALA, DEBERA SER UN SPRITE
+        g.setColor(Color.CYAN);//COLOR PROVISIONAL DE LA BALA, DEBERA SER UN SPRITE
         g.fillRect(this.x, this.y, this.WIDTH, this.HEIGHT);
     }
 

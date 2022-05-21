@@ -5,6 +5,7 @@ import prototype.Visual.Sprite;
 import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import javax.sound.sampled.Line;
+import prototype.Gestores.GestorJuego;
 
 public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta sometido a una gravedad
 
@@ -56,11 +57,10 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
     public void ajustarHitboxinX(final Rectangle limit, final Rectangle next) {//Arregla glitchs visuales
         if (limit.x > next.x && limit.x < next.x + next.width && xa != 0) {
             collidingXLeft = true;
-            hitbox.x = limit.x - hitbox.width - ((Math.abs(xa)==4)? 4:8);
-
+            hitbox.x = limit.x - hitbox.width - ((Math.abs(xa) == 4) ? 4 : 8);
         } else if (limit.x < next.x && limit.x + limit.width > next.x && xa != 0) {
             collidingXRight = true;
-            hitbox.x = limit.x + limit.width + ((Math.abs(xa)==4)? 4:8);
+            hitbox.x = limit.x + limit.width + ((Math.abs(xa) == 4) ? 4 : 8);
         }
     }
 

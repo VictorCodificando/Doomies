@@ -33,6 +33,7 @@ public class Tile extends Entidad {//Nada todavia
 
     @Override
     public void actualizar() {
+        x+=xa;
         this.hitbox.x = x;
         this.hitbox.y = y;
     }

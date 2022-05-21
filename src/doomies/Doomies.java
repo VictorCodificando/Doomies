@@ -46,7 +46,7 @@ public class Doomies {
             fps++;
             if ((actual - contador) >= 1000000000) {//Cada segundo se ejecuta y muestra cuantos fps y aps hay
                 contador = System.nanoTime();
-                ventana.setTitle("Prototype APS: " + aps + "    FPS: " + fps);
+                ventana.setTitle("Doomies APS: " + aps + "    FPS: " + fps);
                 aps = 0;
                 fps = 0;
             }

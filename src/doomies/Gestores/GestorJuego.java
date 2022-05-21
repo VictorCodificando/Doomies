@@ -50,7 +50,6 @@ public class GestorJuego implements Gestor {
     private boolean mapaMoving = false;
 
     public GestorJuego(int width, int height, int ID_MAPA, Teclado teclado, Mouse raton) {
-
         mapa = new Mapa(null, width, height, ID_MAPA);
         this.WIDTH = width;
         this.HEIGHT = height;
@@ -146,14 +145,18 @@ public class GestorJuego implements Gestor {
         } else if (jugador.getHitbox().x <= 0) {
             teclado.left = false;
         }
-        if (!(teclado.left || teclado.right || teclado.jumping)) {//AÑADIR DISPARO
+        if (!(teclado.left || teclado.right || teclado.jumping||teclado.shooting)) {
             return;
         }
         xa = (teclado.left) ? -Speed : (teclado.right) ? Speed : 0;
         xa *= (teclado.running) ? 2 : 1;
         jugador.setXa(xa);
+        jugador.calcularCooldownBalas();
         if (teclado.shooting) {
             jugador.disparar();
+            jugador.setShooting(true);
+        }else{
+            jugador.setShooting(false);
         }
 
     }
@@ -163,18 +166,19 @@ public class GestorJuego implements Gestor {
             //Si no es visible no comprobar
             if (!entesEnMapa.get(i).isVisible()) {
                 if (entesEnMapa.get(i) instanceof Bala) {
-                    entesEnMapa.remove(i);
+                    entesEnMapa.set(i, null);   
                 } else {
                     continue;
                 }
-            }
-            if (i == entesEnMapa.size()) {
-                break;
             }
             //Si es null, lo eliminamos
             if (entesEnMapa.get(i) == null) {
                 entesEnMapa.remove(i);
             }
+            if (i == entesEnMapa.size()) {
+                break;
+            }
+
             //Movidas de colisiones
             entesEnMapa.get(i).setCollidingXRight(false);
             entesEnMapa.get(i).setCollidingXLeft(false);

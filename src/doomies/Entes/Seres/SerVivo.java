@@ -86,7 +86,7 @@ public class SerVivo extends Entidad {
         //Actualizamos el sprite actual
         int max = 40;
         this.spriteActual = (xa != 0 && !(ya != 0 && !this.collidingYDown)) ? 4 : (ya != 0 && !this.collidingYDown) ? 8 : 0;
-        this.spriteActual += (shooting) ? 2 : 0;
+
         if (walking && !((ya != 0) && !this.collidingYDown)) {
             if (animacion <= ((int) max / 2)) {
                 spriteActual = 0;
@@ -100,6 +100,7 @@ public class SerVivo extends Entidad {
         } else {
             animacion = 0;
         }
+        this.spriteActual += (shooting) ? 2 : 0;
         this.spriteActual += (dir.equals("R") ? 0 : 1);
         System.out.println(spriteActual);
     }

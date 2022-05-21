@@ -59,14 +59,14 @@ public class Jugador extends SerVivo {
     }
 
     public void disparar() {
-        if (true) {//Si esta intentando disparar y puede disparar(cooldown bala==0) entonces dispara
+        if (cooldownBalas==0) {//Si esta intentando disparar y puede disparar(cooldown bala==0) entonces dispara
             // inicio contador balas
             this.shooting = true;
             this.cooldownBalas++;
             if (this.dir.equalsIgnoreCase("L")) {//Si mira a la izquierda dispara a la izquierda (con el boolean bala derecha= false)
-                this.balas.add(new Bala(this.hitbox.x + this.hitbox.width, this.hitbox.y + 50, false));
+                this.balas.add(new Bala(this.hitbox.x - 12, this.hitbox.y + 45-3, false));
             } else {//Si no, ira a la derecha
-                this.balas.add(new Bala(this.hitbox.x, this.hitbox.y + 50, true));
+                this.balas.add(new Bala(this.hitbox.x + this.hitbox.width + 12, this.hitbox.y + 45-3, true));
             }
         }
     }
@@ -87,6 +87,7 @@ public class Jugador extends SerVivo {
             this.balas.get(i).dibujar(g);
         }
     }
+
     /**
      * @deprecated No se usa ya que se comprueba desde GestorJuego
      */
@@ -101,6 +102,9 @@ public class Jugador extends SerVivo {
                 this.balas.get(i).actualizar();
             }
         }
+    }
+
+    public void calcularCooldownBalas() {
         //Cooldown de las balas
         if (this.cooldownBalas != 0 && this.cooldownBalas < 10) {
             this.cooldownBalas++;
@@ -121,7 +125,7 @@ public class Jugador extends SerVivo {
         if (this.balas.size() <= 0) {
             return;
         }
-        for (int i = 0; i < this.balas.size(); i=i+0) {
+        for (int i = 0; i < this.balas.size(); i = i + 0) {
             if (balas.get(i) == null) {
                 balas.remove(i);
             }

@@ -102,7 +102,7 @@ public class SerVivo extends Entidad {
         }
         this.spriteActual += (shooting) ? 2 : 0;
         this.spriteActual += (dir.equals("R") ? 0 : 1);
-        System.out.println(spriteActual);
+//        System.out.println(spriteActual);
     }
 
     public int getVida() {

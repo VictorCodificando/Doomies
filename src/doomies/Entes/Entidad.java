@@ -3,9 +3,6 @@ package doomies.Entes;
 import java.awt.Graphics;
 import doomies.Visual.Sprite;
 import java.awt.Rectangle;
-import java.awt.geom.Line2D;
-import javax.sound.sampled.Line;
-import doomies.Gestores.GestorJuego;
 
 public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta sometido a una gravedad
 

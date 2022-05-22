@@ -21,6 +21,10 @@ import doomies.Doomies;
 import doomies.Visual.Sprite;
 import doomies.Visual.SpriteSheet;
 import doomies.mapa.Tile;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 public class LoadTools {
 
@@ -37,7 +41,7 @@ public class LoadTools {
         Image img = null;//La imagen es nula por defecto para que no nos de error
         try {
             if (RUTA_ACTUAL.contains(".jar")) {
-                System.out.println("error aqui");
+//                System.out.println("error aqui");
                 img = ImageIO.read(LoadTools.class.getResourceAsStream(path));//Cargo la imagen
             } else {
                 img = ImageIO.read(new File(RUTA_ACTUAL + path));//Cargo la imagen
@@ -214,6 +218,67 @@ public class LoadTools {
             count++;
         }
         return count;
+    }
+
+    public static String[] cargarPartidas(String path) {
+        File f = null;
+        ArrayList<String> partidasExtensible = new ArrayList();
+        String partidas[];
+        String rawString = "";
+        try {
+            Scanner lector;
+            if (RUTA_ACTUAL.contains(".jar")) {
+                InputStream inputStream = LoadTools.class.getResourceAsStream(path);
+                lector = new Scanner(inputStream);
+            } else {
+                f = new File(RUTA_ACTUAL + path);
+                lector = new Scanner(f);
+            }
+            for (int i = 0; lector.hasNext(); i++) {
+                partidasExtensible.add(lector.next());
+            }
+            lector.close();
+        } catch (IOException e) {
+            System.out.println("error");
+            return null;
+        } catch (Exception e) {
+            System.out.println("error");
+            return null;
+        }
+        partidas = new String[partidasExtensible.size()];
+        for (int i = 0; i < partidasExtensible.size(); i++) {
+            partidas[i] = partidasExtensible.get(i);
+            System.out.println(partidas[i]);
+        }
+        return partidas;
+    }
+
+    public static void guardarPartidas(String path, String[] partidas) {
+        File f = null;
+        try {
+            Scanner lector;
+            if (RUTA_ACTUAL.contains(".jar")) {
+//                f = new File(path);
+//                OutputStreamWriter outputStream = new OutputStreamWriter(new FileOutputStream(f));
+//                System.out.println("si lo ");
+//
+//                outputStream.write(partidas);
+            } else {
+                f = new File(RUTA_ACTUAL + path);
+                FileWriter fw = new FileWriter(f);
+                for (int i = 0; i < partidas.length; i++) {
+                    fw.write(partidas[i]+"\n");
+                }
+                fw.close();
+            }
+        } catch (IOException e) {
+            System.out.println("ERROR IO" + e);
+            return;
+        } catch (Exception e) {
+            System.out.println("ERROR OTRO");
+            return;
+        }
+
     }
 
     public static String reemplazarANull(String a) {

@@ -83,8 +83,15 @@ public class GestorJuego implements Gestor {
         } else if (this.win()) {
             win = true;
             ArrayList<Boolean> levels = GestorEstados.partida.getNivelesDesbloqueados();
-            levels.add(true);
-            GestorEstados.partida.setNivelesDesbloqueados(levels);
+            System.out.println(GestorEstados.partida.isDesbloqueado(mapa.getID()));
+            if (!GestorEstados.partida.isDesbloqueado(mapa.getID() + 1)) {
+                try {
+                    levels.set(mapa.getID(), true);
+                } catch (Exception e) {
+                    levels.add(true);
+                }
+                GestorEstados.partida.setNivelesDesbloqueados(levels);
+            }
         }
 
     }
@@ -145,7 +152,7 @@ public class GestorJuego implements Gestor {
         } else if (jugador.getHitbox().x <= 0) {
             teclado.left = false;
         }
-        if (!(teclado.left || teclado.right || teclado.jumping||teclado.shooting)) {
+        if (!(teclado.left || teclado.right || teclado.jumping || teclado.shooting)) {
             return;
         }
         xa = (teclado.left) ? -Speed : (teclado.right) ? Speed : 0;
@@ -155,7 +162,7 @@ public class GestorJuego implements Gestor {
         if (teclado.shooting) {
             jugador.disparar();
             jugador.setShooting(true);
-        }else{
+        } else {
             jugador.setShooting(false);
         }
 
@@ -166,7 +173,7 @@ public class GestorJuego implements Gestor {
             //Si no es visible no comprobar
             if (!entesEnMapa.get(i).isVisible()) {
                 if (entesEnMapa.get(i) instanceof Bala) {
-                    entesEnMapa.set(i, null);   
+                    entesEnMapa.set(i, null);
                 } else {
                     continue;
                 }

@@ -181,4 +181,8 @@ public class Mapa {
         return limit_fin;
     }
 
+    public int getID() {
+        return ID;
+    }
+
 }

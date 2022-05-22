@@ -4,6 +4,7 @@
  */
 package doomies.Gestores;
 
+import doomies.HerramientasEntradaSalida.LoadTools;
 import java.awt.Frame;
 import java.awt.Graphics;
 import javax.swing.JOptionPane;
@@ -78,6 +79,7 @@ public class GestorMenu implements Gestor {
         } else if (this.isSeleccNiveles()) {
             this.opcionesSeleccionNivel();
         } else if (this.isMenuLoad()) {
+            GestorEstados.partidas = LoadTools.cargarPartidas("/save/save.txt");
             this.opcionesMenuCarga();
         } else if (this.isMenuSave()) {
             this.opcionesMenuGuardar();
@@ -142,12 +144,8 @@ public class GestorMenu implements Gestor {
         }
         InterfazCargar temp = (InterfazCargar) interActual;
         this.partidas = temp.getPartida();
-        if (temp.isCargar()) {
-            JOptionPane.showMessageDialog(new Frame(), "Selecciona el nivel\n");
-            cargar = true;
-            this.setMenuSaveLoad();
-        }
-        if (teclado.escape) {
+
+        if (teclado.escape || temp.isSalir()) {
             this.setMenuSaveLoad();
         }
     }
@@ -158,10 +156,8 @@ public class GestorMenu implements Gestor {
         }
         InterfazGuardar temp = (InterfazGuardar) interActual;
         this.partidasGuardadas = temp.getPartidasGuardadas();
-        if (temp.isGuardar()) {
-            guardar = true;
-        }
-        if (teclado.escape) {
+        if (teclado.escape || temp.isSalir()) {
+            LoadTools.guardarPartidas("/save/save.txt", GestorEstados.partidas);
             this.setMenuSaveLoad();
         }
     }
@@ -192,14 +188,17 @@ public class GestorMenu implements Gestor {
     }
 
     public void setMenuLoad() {
+        GestorEstados.partidas = LoadTools.cargarPartidas("/save/save.txt");
         this.interActual = (Interfaz) new InterfazCargar(WIDTH, HEIGHT, teclado, raton);
     }
 
     public boolean isMenuSave() {
+
         return interActual instanceof InterfazGuardar;
     }
 
     public void setMenuSave() {
+        GestorEstados.partidas = LoadTools.cargarPartidas("/save/save.txt");
         this.interActual = (Interfaz) new InterfazGuardar(WIDTH, HEIGHT, teclado, raton);
     }
 

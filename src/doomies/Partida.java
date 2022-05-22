@@ -19,12 +19,16 @@ public class Partida {
      * Constructor para la partida cargada
      *
      * @param nombre El nombre del jugador que haya metido el usuario
-     * @param nivelesDesbloqueados Un arrayList (tamaño variable) de los niveles
-     * desbloqueados, TODO LO QUE ESTE EN FALSE O NO ESTE ES BLOQUEADO
+     * @param nivelesAlcanzado El nivel hasta el que ha llegado en esta partida
+     *
      */
-    public Partida(String nombre, ArrayList<Boolean> nivelesDesbloqueados) {
-        this.nombre = nombre;
-        this.nivelesDesbloqueados = nivelesDesbloqueados;
+    public Partida(String nombre, int nivelAlcanzado) {
+        this(nombre);
+        if (nivelAlcanzado > 1) {
+            for (int i = 1; i < nivelAlcanzado; i++) {
+                this.nivelesDesbloqueados.add(true);
+            }
+        }
     }
 
     /**
@@ -35,12 +39,6 @@ public class Partida {
     public Partida(String nombre) {
         this.nombre = nombre;
         this.nivelesDesbloqueados.add(true);//Por defecto el primero te viene desbloqueado
-        this.nivelesDesbloqueados.add(true);
-        this.nivelesDesbloqueados.add(true);
-        this.nivelesDesbloqueados.add(true);
-        this.nivelesDesbloqueados.add(true);
-        this.nivelesDesbloqueados.add(true);
-
     }
 
     /**

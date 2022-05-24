@@ -14,6 +14,7 @@ public class Jugador extends SerVivo {
     public ArrayList<Bala> balas;
     private int cooldownBalas;
     public Teclado teclado;
+    
 
     /**
      * Crea el jugador
@@ -35,6 +36,7 @@ public class Jugador extends SerVivo {
             SpriteSheet.PERSONAJE.getSprite(5, 0), SpriteSheet.PERSONAJE.getSprite(5, 1)};
         this.hitbox = new Rectangle(x, y, WIDTH, HEIGHT);
         this.teclado = teclado;
+        this.COOLDOWNDAÑOTOTAL=100;
     }
 
     /**
@@ -48,25 +50,33 @@ public class Jugador extends SerVivo {
     }
 
     public void actualizar() {
+        if (cooldownBalas != 0 && cooldownBalas < COOLBALAS) {
+            cooldownBalas++;
+        } else if (cooldownBalas == COOLBALAS) {
+            cooldownBalas = 0;
+        }
         super.actualizar();
+
     }
 
     public void mover() {
         if (collidingYDown && this.teclado.jumping) {
             this.jump();
         }
+
         super.mover();
     }
 
     public void disparar() {
-        if (cooldownBalas==0) {//Si esta intentando disparar y puede disparar(cooldown bala==0) entonces dispara
+        
+        if (cooldownBalas == 0) {//Si esta intentando disparar y puede disparar(cooldown bala==0) entonces dispara
             // inicio contador balas
             this.shooting = true;
-            this.cooldownBalas++;
+            cooldownBalas++;
             if (this.dir.equalsIgnoreCase("L")) {//Si mira a la izquierda dispara a la izquierda (con el boolean bala derecha= false)
-                this.balas.add(new Bala(this.hitbox.x - 12, this.hitbox.y + 45-3, false));
+                this.balas.add(new Bala(this.hitbox.x - 12, this.hitbox.y + 45 - 3, false));
             } else {//Si no, ira a la derecha
-                this.balas.add(new Bala(this.hitbox.x + this.hitbox.width + 12, this.hitbox.y + 45-3, true));
+                this.balas.add(new Bala(this.hitbox.x + this.hitbox.width + 12, this.hitbox.y + 45 - 3, true));
             }
         }
     }
@@ -104,14 +114,7 @@ public class Jugador extends SerVivo {
         }
     }
 
-    public void calcularCooldownBalas() {
-        //Cooldown de las balas
-        if (this.cooldownBalas != 0 && this.cooldownBalas < 10) {
-            this.cooldownBalas++;
-        } else if (this.cooldownBalas == 10) {
-            this.cooldownBalas = 0;
-        }
-    }
+
 
     public void setStates(boolean run, boolean walking, boolean fall) {
         running = run;
@@ -143,9 +146,12 @@ public class Jugador extends SerVivo {
         }
     }
 
+    /**
+     * Resetea la posicion del jugador
+     */
     public void resetPos() {
         this.ya = 0;
-        this.hitbox.x = 100;
+        this.hitbox.x = 1280 / 2 - hitbox.width;
         this.hitbox.y = 100;
     }
 

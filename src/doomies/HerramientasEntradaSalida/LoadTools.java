@@ -21,10 +21,7 @@ import doomies.Doomies;
 import doomies.Visual.Sprite;
 import doomies.Visual.SpriteSheet;
 import doomies.mapa.Tile;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 
 public class LoadTools {
 
@@ -115,7 +112,7 @@ public class LoadTools {
     }
 
     /**
-     * Carga los tiles del mapa desde un archivo
+     * Carga los tiles del mapa desde un archivo FUERA
      *
      * @param path Ruta donde se encuentra el archivo que compone el mapa
      * @return Los tiles que componen el mapa del archivo
@@ -129,14 +126,21 @@ public class LoadTools {
         try {
             Scanner lector;
             if (RUTA_ACTUAL.contains(".jar")) {
-                InputStream inputStream = LoadTools.class.getResourceAsStream(path);
-                lector = new Scanner(inputStream);
+                f = new File("." + path);
+                lector = new Scanner(f);
             } else {
-                f = new File(RUTA_ACTUAL + path);
+                f = new File(RUTA_ACTUAL + "./" + path);
                 lector = new Scanner(f);
             }
+            //LEO EL MAPA
             for (int i = 0; lector.hasNext(); i++) {
-                mapa += lector.next() + ";";
+                mapa += lector.next();
+                mapa += ";";
+                if (mapa.contains(":")) {
+                    mapa = mapa.replaceAll(":;", "");
+                    System.out.println("te lo encontraste");
+                    break;
+                }
             }
             lector.close();
             tilesArray = loadTile(mapa);
@@ -147,12 +151,11 @@ public class LoadTools {
             JOptionPane.showMessageDialog(new Frame(), "ERROR EN LA LECTURA DEL MAPA\n" + e, "ERROR", 2);
             System.exit(0);
         }
-
         return tilesArray;
     }
 
     /**
-     * Cargamos la informacion desde el String en bruto del archivo
+     * Cargamos la informacion desde el String en bruto del archivo FUERA
      *
      * @param in El String que compone los tiles del mapa
      * @return Un array Bidimensional de Tiles que representa en que posicion
@@ -180,6 +183,12 @@ public class LoadTools {
         return tiles;
     }
 
+    /**
+     * FUERA
+     *
+     * @param foldPath
+     * @return
+     */
     public static int countMap(String foldPath) {
         File f = null;
         int count = 0;
@@ -220,6 +229,12 @@ public class LoadTools {
         return count;
     }
 
+    /**
+     * FUERA
+     *
+     * @param path
+     * @return
+     */
     public static String[] cargarPartidas(String path) {
         File f = null;
         ArrayList<String> partidasExtensible = new ArrayList();
@@ -253,6 +268,12 @@ public class LoadTools {
         return partidas;
     }
 
+    /**
+     * FUERA
+     *
+     * @param path
+     * @param partidas
+     */
     public static void guardarPartidas(String path, String[] partidas) {
         File f = null;
         try {
@@ -267,7 +288,7 @@ public class LoadTools {
                 f = new File(RUTA_ACTUAL + path);
                 FileWriter fw = new FileWriter(f);
                 for (int i = 0; i < partidas.length; i++) {
-                    fw.write(partidas[i]+"\n");
+                    fw.write(partidas[i] + "\n");
                 }
                 fw.close();
             }

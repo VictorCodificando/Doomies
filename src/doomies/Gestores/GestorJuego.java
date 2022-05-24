@@ -4,6 +4,7 @@
  */
 package doomies.Gestores;
 
+import doomies.Doomies;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -12,6 +13,7 @@ import doomies.Entes.Entidad;
 import doomies.Entes.Objetos.Bala;
 import doomies.Entes.Seres.Enemigo;
 import doomies.Entes.Seres.Jugador;
+import doomies.Entes.Seres.SerVivo;
 import doomies.HerramientasEntradaSalida.LoadTools;
 import doomies.HerramientasEntradaSalida.Mouse;
 import doomies.HerramientasEntradaSalida.Teclado;
@@ -43,12 +45,22 @@ public class GestorJuego implements Gestor {
     private final int HEIGHT;
     private ArrayList<Entidad> entesEnMapa = new ArrayList();
     private Teclado teclado;
+    private long timeInicio;
     private Mouse raton;
     private int Speed = 4;
     private boolean salir;
     private InterfazPausa interfaz = null;
     private boolean mapaMoving = false;
 
+    /**
+     * Crea el gestor de juegos actual.
+     *
+     * @param width int Anchura de la pantalla
+     * @param height int Altura de la pantalla
+     * @param ID_MAPA int ID del mapa
+     * @param teclado Teclado teclado que controla al jugador
+     * @param raton Mouse raton que se usa como deteccion a los botones
+     */
     public GestorJuego(int width, int height, int ID_MAPA, Teclado teclado, Mouse raton) {
         mapa = new Mapa(null, width, height, ID_MAPA);
         this.WIDTH = width;
@@ -59,11 +71,15 @@ public class GestorJuego implements Gestor {
         this.salir = false;
         entesEnMapa = mapa.entesEnMapa;
         this.jugador = new Jugador(100, 100, 107, 69, teclado);
-        //entesEnMapa.add(new Enemigo(200, 200, 117, 129, 0));
+        entesEnMapa.add(new Enemigo(200, 200, 117, 129, 3));
         entesEnMapa.add(jugador);
+        teclado.resetAllKeys();
 
     }
 
+    /**
+     * Actualiza todos los elementos que hay en juego
+     */
     @Override
     public void actualizar() {
         if (cambiarAInterfazPausa()) {
@@ -80,8 +96,10 @@ public class GestorJuego implements Gestor {
         mover();
         if (jugador.isDead()) {
             this.gameOver = true;
+            this.timeInicio = System.nanoTime();
         } else if (this.win()) {
             win = true;
+            this.timeInicio = System.nanoTime();
             ArrayList<Boolean> levels = GestorEstados.partida.getNivelesDesbloqueados();
             System.out.println(GestorEstados.partida.isDesbloqueado(mapa.getID()));
             if (!GestorEstados.partida.isDesbloqueado(mapa.getID() + 1)) {
@@ -96,19 +114,25 @@ public class GestorJuego implements Gestor {
 
     }
 
+    /**
+     * Tiempo de espera
+     */
     private void waitScreen() {
-        long tiempoActual = System.nanoTime();
-        long tiempoFinal = System.nanoTime();
-        while ((tiempoFinal - tiempoActual) < 1000000000) {
-            tiempoFinal = System.nanoTime();
+        if (System.nanoTime() - this.timeInicio >= 1700000000) {
+            this.salir = true;
         }
-        salir = true;
     }
 
+    /**
+     * Comprobamos si la interfaz esta en modo pausa
+     *
+     * @return Devuelve un true si el juego esta en pausa
+     */
     private boolean cambiarAInterfazPausa() {
-        //Comprobamos los controles y determinamos la velocidad DE CADA OBJETO
-        if (teclado.escape) {
+
+        if (teclado.escape || !Doomies.onTop()) {
             interfaz = new InterfazPausa(WIDTH, HEIGHT, teclado, raton);
+            teclado.resetAllKeys();
         }
         if (interfaz != null) {
             interfaz.actualizar();
@@ -123,6 +147,13 @@ public class GestorJuego implements Gestor {
         return false;
     }
 
+    /**
+     * Dibuja todo lo que hay en juego
+     *
+     * @param g Graphics clase que dibuja todo en pantalla viene desde
+     *
+     * @see GestorEstados#dibujar(java.awt.Graphics)
+     */
     @Override
     public void dibujar(Graphics g) {
         if (gameOver) {
@@ -143,10 +174,14 @@ public class GestorJuego implements Gestor {
         dibujarVidas(g);
     }
 
+    /**
+     * A traves de lo controles de los listeners se determina el movimiento del
+     * jugador
+     */
     public void detMovimientoJugador() {
         xa = 0;
         jugador.setXa(0);
-        jugador.caer();
+//        jugador.caer();
         if (jugador.getHitbox().x + jugador.getHitbox().width >= WIDTH) {
             teclado.right = false;
         } else if (jugador.getHitbox().x <= 0) {
@@ -158,7 +193,6 @@ public class GestorJuego implements Gestor {
         xa = (teclado.left) ? -Speed : (teclado.right) ? Speed : 0;
         xa *= (teclado.running) ? 2 : 1;
         jugador.setXa(xa);
-        jugador.calcularCooldownBalas();
         if (teclado.shooting) {
             jugador.disparar();
             jugador.setShooting(true);
@@ -168,9 +202,14 @@ public class GestorJuego implements Gestor {
 
     }
 
+    /**
+     * Comprueba ente a ente que colision y que tipo de colision tiene, si
+     * colisiona segun el tipo que sea entonces o no se movera o se golpeara...
+     */
     private void actualizarColisiones() {
         for (int i = 0; i < entesEnMapa.size(); i++) {//Se comprueba ente a ente
             //Si no es visible no comprobar
+
             if (!entesEnMapa.get(i).isVisible()) {
                 if (entesEnMapa.get(i) instanceof Bala) {
                     entesEnMapa.set(i, null);
@@ -178,14 +217,29 @@ public class GestorJuego implements Gestor {
                     continue;
                 }
             }
+            if (entesEnMapa.get(i) instanceof Enemigo) {
+                Enemigo eActual = (Enemigo) entesEnMapa.get(i);
+                System.out.println(eActual.getVida());
+                if (eActual.isDead()) {
+                    entesEnMapa.set(i, null);
+                }
+            }
             //Si es null, lo eliminamos
             if (entesEnMapa.get(i) == null) {
                 entesEnMapa.remove(i);
             }
+
             if (i == entesEnMapa.size()) {
                 break;
             }
-
+            if (entesEnMapa.get(i) instanceof SerVivo) {
+                entesEnMapa.get(i).caer();
+            }
+            if (entesEnMapa.get(i) instanceof Enemigo) {
+                Enemigo eActual = (Enemigo) entesEnMapa.get(i);
+                eActual.xPlayer = jugador.getHitbox().x;
+                eActual.yPlayer = jugador.getHitbox().y;
+            }
             //Movidas de colisiones
             entesEnMapa.get(i).setCollidingXRight(false);
             entesEnMapa.get(i).setCollidingXLeft(false);
@@ -200,6 +254,33 @@ public class GestorJuego implements Gestor {
                 }
                 if ((entesEnMapa.get(i) instanceof Bala && entesEnMapa.get(j) instanceof Jugador) || (entesEnMapa.get(j) instanceof Bala && entesEnMapa.get(i) instanceof Jugador)) {
                     continue;
+                }
+                //Colisiones de bala enemigo
+                if ((entesEnMapa.get(i) instanceof Bala && entesEnMapa.get(j) instanceof Enemigo) || (entesEnMapa.get(j) instanceof Bala && entesEnMapa.get(i) instanceof Enemigo)) {
+                    Enemigo eActual = (Enemigo) ((entesEnMapa.get(i) instanceof Enemigo) ? entesEnMapa.get(i) : entesEnMapa.get(j));
+                    if (this.colisionX(entesEnMapa.get(j).getHitbox(), entesEnMapa.get(i).getHitbox())) {
+                        if (entesEnMapa.get(i) instanceof Enemigo) {
+                            entesEnMapa.get(j).setCollidingXRight(true);
+                        } else {
+                            entesEnMapa.get(i).setCollidingXRight(true);
+                        }
+
+                        eActual.perderVida();
+                    }
+                    continue;
+                }
+                //Colisiones de jugador enemigo
+                if ((entesEnMapa.get(i) instanceof Jugador && entesEnMapa.get(j) instanceof Enemigo) || (entesEnMapa.get(j) instanceof Jugador && entesEnMapa.get(i) instanceof Enemigo)) {
+                    Jugador eActual = (Jugador) ((entesEnMapa.get(j) instanceof Enemigo) ? entesEnMapa.get(i) : entesEnMapa.get(j));
+                    Rectangle hitboxExp = new Rectangle(entesEnMapa.get(i).getHitbox().x - 5, entesEnMapa.get(i).getHitbox().y - 5, entesEnMapa.get(i).getHitbox().width + 10, entesEnMapa.get(i).getHitbox().height + 10);
+                    int vidainic = eActual.getVida();
+                    if (this.colisionX(entesEnMapa.get(j).getHitbox(), hitboxExp)) {
+                        eActual.perderVida();
+                    }
+                    if (vidainic == eActual.getVida() || entesEnMapa.get(i) instanceof Enemigo) {
+                        continue;
+                    }
+
                 }
                 entesEnMapa.get(i).isGoingToCollide(entesEnMapa.get(j).getHitbox());//Comprobamos si colisiona al fin
             }
@@ -216,6 +297,9 @@ public class GestorJuego implements Gestor {
         }
     }
 
+    /**
+     * Cancela el movimiento del jugador si esta colisionando
+     */
     private void cancelarMovimiento() {
         if ((jugador.isCollidingYUp() && ya < 0) || (jugador.isCollidingYDown() && ya > 0)) {
             ya = 0;
@@ -225,6 +309,9 @@ public class GestorJuego implements Gestor {
         }
     }
 
+    /**
+     * Mueve todos los entes en pantalla
+     */
     private void mover() {
         for (int i = 0; i < entesEnMapa.size(); i++) {
             if (entesEnMapa.get(i) instanceof Jugador || !entesEnMapa.get(i).isVisible()) {
@@ -246,6 +333,9 @@ public class GestorJuego implements Gestor {
         jugador.addBalasAsEntidadtidad(entesEnMapa);
     }
 
+    /**
+     * Actualiza el estado del jugador y su velocidad respeto a la pantalla
+     */
     private void actualizarJugador() {
         mapaMoving = false;
         //System.out.println(xa);
@@ -287,16 +377,23 @@ public class GestorJuego implements Gestor {
                 mapaMoving = true;
             }
         }
-//        System.out.println("limite derecho mapa: " + mapa.isLimit_fin() + "\nLimite izquierdo mapa: " + mapa.isLimit());
+        /**
+         * System.out.println("limite derecho mapa: " + mapa.isLimit_fin() +
+         * "\nLimite izquierdo mapa: " + mapa.isLimit());
+         */
         jugador.actualizar();
         if (fallOutSideMap()) {
             jugador.resetPos();
+            this.mapaMoving = true;
             jugador.setVida(jugador.getVida() - 1);
         }
         this.definirEstadoJugador();
         jugador.actualizarSprite();
     }
 
+    /**
+     * Define y cambia los booleans del jugador segun su estado
+     */
     public void definirEstadoJugador() {
         if (this.xa != 0) {//Si se esta moviendo en el eje X
             if (this.teclado.left) {//Si anda a la izquierda
@@ -310,11 +407,22 @@ public class GestorJuego implements Gestor {
             jugador.setStay(true);
             jugador.setWalking(false);
         }
-        if (!jugador.isCollidingYDown()) {//Si esta cayendo
+        /**
+         * colisiona abajo
+         */
+        if (!jugador.isCollidingYDown()) {
             jugador.setFalling(true);
         }
     }
 
+    /**
+     * Comprueba colisiones
+     *
+     * @deprecated
+     * @param r1 Rectangle que representa el primer rectangulo.
+     * @param r2 Rectangle que representa el segundo rectangulo.
+     * @return Devuelve true o false si a colisionado o no.
+     */
     public boolean colisionX(Rectangle r1, Rectangle r2) {
         return (r1.x < r2.x + r2.width
                 && r1.x + r1.width > r2.x
@@ -322,6 +430,13 @@ public class GestorJuego implements Gestor {
                 && r1.height + r1.y > r2.y);
     }
 
+    /**
+     *
+     * @param rect Rectangle que representa el rectangulo a probar si se ha
+     * salido de la pantalla
+     * @return Devuelve true si el rectangulo a salido de pantalla y false si
+     * no.
+     */
     public boolean isOutSideScreen(Rectangle rect) {
         if (WIDTH > rect.x || HEIGHT > rect.y || rect.x + rect.width < 0 || rect.y + rect.height < 0) {
             return false;
@@ -329,6 +444,11 @@ public class GestorJuego implements Gestor {
         return true;
     }
 
+    /**
+     * Comprueba si gana o no
+     *
+     * @return Devuelve si se ha conseguido ganar el nivel
+     */
     public boolean win() {
         if (jugador.getHitbox().x + jugador.getHitbox().width >= WIDTH) {
             return true;
@@ -336,6 +456,11 @@ public class GestorJuego implements Gestor {
         return false;
     }
 
+    /**
+     * Comprueba si el jugador se ha caido del mapa
+     *
+     * @return Devuelve si se ha caido del mapa
+     */
     public boolean fallOutSideMap() {
         if (jugador.getHitbox().y > HEIGHT) {
             return true;
@@ -343,18 +468,39 @@ public class GestorJuego implements Gestor {
         return false;
     }
 
+    /**
+     * @return Devuelve si se va a salir del juego
+     */
     public boolean isSalir() {
         return salir;
     }
 
+    /**
+     * Dibuja la pantalla de gameover
+     *
+     * @param g Graphics que dibuja el gameOver
+     * @see GestorJuego#dibujar(java.awt.Graphics)
+     */
     private void DibujarGameOver(Graphics g) {
         g.drawImage(PANTALLA_GAMEOVER, 0, 0, null);
     }
 
+    /**
+     * Dibuja la pantalla de nivel finalizado
+     *
+     * @param g Graphics que dibuja la pantalla de nivel finalizado
+     * @see GestorJuego#dibujar(java.awt.Graphics)
+     */
     private void DibujarWin(Graphics g) {
         g.drawImage(PANTALLA_WIN, 0, 0, null);
     }
 
+    /**
+     * Dibuja en pantalla las vidas actuales del jugador
+     *
+     * @param g Graphics que dibuja las vidas actuales en pantalla
+     * @see GestorJuego#dibujar(java.awt.Graphics)
+     */
     public void dibujarVidas(Graphics g) {
         int posInicialX = 50;
         int posInicialY = 20;

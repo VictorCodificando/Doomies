@@ -18,6 +18,8 @@ public class SerVivo extends Entidad {
     protected static final int FALL_ID = 4;
     protected int spriteActual;
     protected int animacion;
+    protected int cooldownDaño = 0;
+    protected int COOLDOWNDAÑOTOTAL=100;
 
     /*
     Distribucion de sprites PARA SERES:
@@ -62,7 +64,6 @@ public class SerVivo extends Entidad {
     }
 
     protected void mover() {// mueve las variables de posicion
-        //this.caer();
         hitbox.x += this.xa;//aumenta la x a la velocidad que debia
         hitbox.y += this.ya;//aumenta la y a la velocidad que debia
         if (this.collidingYDown) {// Si esta colisionando en Y, no puede estar cayendo
@@ -72,6 +73,15 @@ public class SerVivo extends Entidad {
         if (ya != 0) {
             falling = true;
         }
+        activarCooldownVida();
+
+    }
+
+    public void perderVida() {
+        if (cooldownDaño == 0) {
+            this.vida--;
+            cooldownDaño++;        }
+
     }
 
     protected void contadorAnimacion() {
@@ -102,7 +112,15 @@ public class SerVivo extends Entidad {
         }
         this.spriteActual += (shooting) ? 2 : 0;
         this.spriteActual += (dir.equals("R") ? 0 : 1);
-//        System.out.println(spriteActual);
+    }
+
+    private void activarCooldownVida() {
+        if (cooldownDaño == 0) {
+        } else if (cooldownDaño < COOLDOWNDAÑOTOTAL && cooldownDaño > 0) {
+            this.cooldownDaño++;
+        } else {
+            cooldownDaño = 0;
+        }
     }
 
     public int getVida() {

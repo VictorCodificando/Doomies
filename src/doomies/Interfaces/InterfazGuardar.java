@@ -69,7 +69,9 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
         g.setColor(Color.red);
         g2d.setPaint(verticalGradient);
         g2d.fillRect(0, 0, this.WIDTH, this.HEIGHT);
-        //Titulo
+        /**
+         * Titulo
+         */
         g.setColor(Color.BLACK);
         g.setFont(font);
         g.setFont(g.getFont().deriveFont(55f));
@@ -127,10 +129,11 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
         String fecha = dtf.format(now);
         JFrame jFrame = new JFrame();
         jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        String nombre=GestorEstados.partida.getNombre();
+        String nombre = GestorEstados.partida.getNombre();
         if (GestorEstados.partida.getNombre().equals("default")) {
             nombre = JOptionPane.showInputDialog(jFrame, "Introduce el nombre de la partida:");
         }
+
         if (nombre == null) {
             return false;
         }

@@ -79,6 +79,17 @@ public class Teclado implements KeyListener {
 
     public void resetKeys() {
         escape = false;
-        
+
     }
+
+    public void resetAllKeys() {
+        left = false;
+        right = false;
+        running = false;
+        jumping = false;
+        shooting = false;
+        escape = false;
+
+    }
+
 }

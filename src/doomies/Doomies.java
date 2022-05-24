@@ -1,5 +1,11 @@
 package doomies;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Víctor Zero
@@ -10,14 +16,16 @@ public class Doomies {
     //Declaramos la ventana y el lienzo(donde se dibujaran las cosas)
     private Ventana ventana;
     private Lienzo canvas;
+    private static boolean onTop;
     private boolean enEjecucion = false;//Variable que funcionara como bucle infinito
-    
+
     public Doomies(int width, int height) {//inicializo el canvas primero y luego se lo paso al frame(ventana)
         this.canvas = new Lienzo(width, height);
         this.ventana = new Ventana(canvas);
     }
 
-    public static void main(String[] args) {//Inicializo la clase principal con las medidas adecuadas(se pueden cambiar
+    public static void main(String[] args) {
+        //Inicializo la clase principal con las medidas adecuadas(se pueden cambiar
         Doomies pr = new Doomies(1280, 720);
         pr.iniciar();
     }
@@ -37,6 +45,7 @@ public class Doomies {
         while (enEjecucion) {
             actual = System.nanoTime();//coje el tiempo actual en nanosegundos 1* 10 E9
             dif = actual - anterior;//mide la diferencia con la anterior iteracion
+            onTop=ventana.isActive();
             if ((dif) > (1000000000 / 60)) {//Dice si la diferencia llega al tiempo exacto para que halla 60 actualizaciones por segundo
                 anterior = System.nanoTime();
                 actualizar();//actualiza las variables
@@ -60,5 +69,8 @@ public class Doomies {
     private void dibujar() {//Dibujar mas elevado en jerarquia
         canvas.dibujar();
     }
-
+    public static boolean onTop(){
+        return onTop;
+    }
+    
 }

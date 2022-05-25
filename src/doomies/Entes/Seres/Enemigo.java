@@ -103,12 +103,9 @@ public class Enemigo extends SerVivo {
                 } else {
                     cooldownMuestra++;
                 }
-                xa += Speed;
-                if (collidingXLeft) {
-                    xa -= Speed;
-                }
-                if (collidingXRight) {
-                    xa -= Speed;
+
+                if (!(collidingXRight || collidingXLeft)) {
+                    xa += Speed;
                 }
                 break;
             //BARON

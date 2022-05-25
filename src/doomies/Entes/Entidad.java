@@ -1,6 +1,7 @@
 package doomies.Entes;
 
 import doomies.Entes.Seres.Jugador;
+import doomies.Gestores.GestorJuego;
 import java.awt.Graphics;
 import doomies.Visual.Sprite;
 import java.awt.Rectangle;
@@ -56,10 +57,10 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
         if (!(this instanceof Jugador)) {
             if (limit.x > next.x && limit.x < next.x + next.width) {
                 collidingXLeft = true;
-                hitbox.x = limit.x - hitbox.width - ((Math.abs(xa) == 0) ? -Math.abs(this.Speed) : Math.abs(this.Speed));
+                hitbox.x = limit.x - hitbox.width - ((Math.abs(GestorJuego.getXa()) == 0) ? Math.abs(this.Speed) : Math.abs(this.Speed));
             } else if (limit.x < next.x && limit.x + limit.width > next.x) {
                 collidingXRight = true;
-                hitbox.x = limit.x + limit.width + ((Math.abs(xa) == 0) ? -Math.abs(this.Speed) : Math.abs(this.Speed));
+                hitbox.x = limit.x + limit.width + ((Math.abs(GestorJuego.getXa()) == 0) ? Math.abs(this.Speed) : Math.abs(this.Speed));
             }
         } else {
             if (limit.x > next.x && limit.x < next.x + next.width && xa != 0) {
@@ -73,15 +74,26 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
     }
 
     public void ajustarHitboxinY(final Rectangle limit, final Rectangle next) {
-
-        if (limit.y > next.y && limit.y < next.y + next.height) {
-            collidingYDown = true;
-            ya = 0;
-            hitbox.y = limit.y - hitbox.height;
-        } else if (limit.y < next.y && limit.y + limit.height > next.y) {
-            collidingYUp = true;
-            ya = 0;
-            hitbox.y = limit.y + limit.height;
+        if (!(this instanceof Jugador)) {
+            if (limit.y > next.y && limit.y < next.y + next.height) {
+                collidingYDown = true;
+                ya = 0;
+                hitbox.y = limit.y - hitbox.height;
+            } else if (limit.y < next.y && limit.y + limit.height > next.y) {
+                collidingYUp = true;
+                ya = 0;
+                hitbox.y = limit.y + limit.height;
+            }
+        } else {
+            if (limit.y > next.y && limit.y < next.y + next.height) {
+                collidingYDown = true;
+                ya = 0;
+                hitbox.y = limit.y - hitbox.height;
+            } else if (limit.y < next.y && limit.y + limit.height > next.y) {
+                collidingYUp = true;
+                ya = 0;
+                hitbox.y = limit.y + limit.height;
+            }
         }
     }
 

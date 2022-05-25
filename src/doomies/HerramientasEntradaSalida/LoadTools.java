@@ -38,7 +38,6 @@ public class LoadTools {
         Image img = null;//La imagen es nula por defecto para que no nos de error
         try {
             if (RUTA_ACTUAL.contains(".jar")) {
-//                System.out.println("error aqui");
                 img = ImageIO.read(LoadTools.class.getResourceAsStream(path));//Cargo la imagen
             } else {
                 img = ImageIO.read(new File(RUTA_ACTUAL + path));//Cargo la imagen

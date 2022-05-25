@@ -45,14 +45,15 @@ public class Doomies {
         while (enEjecucion) {
             actual = System.nanoTime();//coje el tiempo actual en nanosegundos 1* 10 E9
             dif = actual - anterior;//mide la diferencia con la anterior iteracion
-            onTop=ventana.isActive();
+            onTop = ventana.isActive();
             if ((dif) > (1000000000 / 60)) {//Dice si la diferencia llega al tiempo exacto para que halla 60 actualizaciones por segundo
                 anterior = System.nanoTime();
                 actualizar();//actualiza las variables
                 aps++;
+                dibujar();//luego dibuja y aumenta los fps
+                fps++;
             }
-            dibujar();//luego dibuja y aumenta los fps
-            fps++;
+
             if ((actual - contador) >= 1000000000) {//Cada segundo se ejecuta y muestra cuantos fps y aps hay
                 contador = System.nanoTime();
                 ventana.setTitle("Doomies APS: " + aps + "    FPS: " + fps);
@@ -69,8 +70,9 @@ public class Doomies {
     private void dibujar() {//Dibujar mas elevado en jerarquia
         canvas.dibujar();
     }
-    public static boolean onTop(){
+
+    public static boolean onTop() {
         return onTop;
     }
-    
+
 }

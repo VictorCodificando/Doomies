@@ -30,7 +30,7 @@ public class GestorJuego implements Gestor {
     private Jugador jugador;
     private Mapa mapa;
     //Velocidades
-    private int xa;
+    private static int xa;
     private int ya;
     private boolean pausa;
     private int vidas;
@@ -71,7 +71,7 @@ public class GestorJuego implements Gestor {
         this.salir = false;
         entesEnMapa = mapa.entesEnMapa;
         this.jugador = new Jugador(100, 100, 107, 69, teclado);
-        entesEnMapa.add(new Enemigo(200, 200, 117, 129, 3));
+        entesEnMapa.add(new Enemigo(700, 200, 117, 129, 3));
         entesEnMapa.add(jugador);
         teclado.resetAllKeys();
 
@@ -219,7 +219,7 @@ public class GestorJuego implements Gestor {
             }
             if (entesEnMapa.get(i) instanceof Enemigo) {
                 Enemigo eActual = (Enemigo) entesEnMapa.get(i);
-                System.out.println(eActual.getVida());
+//                System.out.println(eActual.getVida());
                 if (eActual.isDead()) {
                     entesEnMapa.set(i, null);
                 }
@@ -280,7 +280,6 @@ public class GestorJuego implements Gestor {
                     if (vidainic == eActual.getVida() || entesEnMapa.get(i) instanceof Enemigo) {
                         continue;
                     }
-
                 }
                 entesEnMapa.get(i).isGoingToCollide(entesEnMapa.get(j).getHitbox());//Comprobamos si colisiona al fin
             }
@@ -514,4 +513,133 @@ public class GestorJuego implements Gestor {
             }
         }
     }
+
+    public Jugador getJugador() {
+        return jugador;
+    }
+
+    public void setJugador(Jugador jugador) {
+        this.jugador = jugador;
+    }
+
+    public Mapa getMapa() {
+        return mapa;
+    }
+
+    public void setMapa(Mapa mapa) {
+        this.mapa = mapa;
+    }
+
+    public static int getXa() {
+        return GestorJuego.xa;
+    }
+
+    public static void setXa(int xa) {
+        GestorJuego.xa = xa;
+    }
+
+    public int getYa() {
+        return ya;
+    }
+
+    public void setYa(int ya) {
+        this.ya = ya;
+    }
+
+    public boolean isPausa() {
+        return pausa;
+    }
+
+    public void setPausa(boolean pausa) {
+        this.pausa = pausa;
+    }
+
+    public int getVidas() {
+        return vidas;
+    }
+
+    public void setVidas(int vidas) {
+        this.vidas = vidas;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public boolean isWin() {
+        return win;
+    }
+
+    public void setWin(boolean win) {
+        this.win = win;
+    }
+
+    public boolean isJugando() {
+        return jugando;
+    }
+
+    public void setJugando(boolean jugando) {
+        this.jugando = jugando;
+    }
+
+    public ArrayList<Entidad> getEntesEnMapa() {
+        return entesEnMapa;
+    }
+
+    public void setEntesEnMapa(ArrayList<Entidad> entesEnMapa) {
+        this.entesEnMapa = entesEnMapa;
+    }
+
+    public Teclado getTeclado() {
+        return teclado;
+    }
+
+    public void setTeclado(Teclado teclado) {
+        this.teclado = teclado;
+    }
+
+    public long getTimeInicio() {
+        return timeInicio;
+    }
+
+    public void setTimeInicio(long timeInicio) {
+        this.timeInicio = timeInicio;
+    }
+
+    public Mouse getRaton() {
+        return raton;
+    }
+
+    public void setRaton(Mouse raton) {
+        this.raton = raton;
+    }
+
+    public int getSpeed() {
+        return Speed;
+    }
+
+    public void setSpeed(int Speed) {
+        this.Speed = Speed;
+    }
+
+    public InterfazPausa getInterfaz() {
+        return interfaz;
+    }
+
+    public void setInterfaz(InterfazPausa interfaz) {
+        this.interfaz = interfaz;
+    }
+
+    public boolean isMapaMoving() {
+        return mapaMoving;
+    }
+
+    public void setMapaMoving(boolean mapaMoving) {
+        this.mapaMoving = mapaMoving;
+    }
+
 }

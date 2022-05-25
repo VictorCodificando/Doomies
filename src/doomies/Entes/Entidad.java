@@ -1,5 +1,6 @@
 package doomies.Entes;
 
+import doomies.Entes.Seres.Jugador;
 import java.awt.Graphics;
 import doomies.Visual.Sprite;
 import java.awt.Rectangle;
@@ -52,16 +53,27 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
     }
 
     public void ajustarHitboxinX(final Rectangle limit, final Rectangle next) {//Arregla glitchs visuales
-        if (limit.x > next.x && limit.x < next.x + next.width && xa != 0) {
-            collidingXLeft = true;
-            hitbox.x = limit.x - hitbox.width - ((Math.abs(xa) == 4) ? 4 : 8);
-        } else if (limit.x < next.x && limit.x + limit.width > next.x && xa != 0) {
-            collidingXRight = true;
-            hitbox.x = limit.x + limit.width + ((Math.abs(xa) == 4) ? 4 : 8);
+        if (!(this instanceof Jugador)) {
+            if (limit.x > next.x && limit.x < next.x + next.width) {
+                collidingXLeft = true;
+                hitbox.x = limit.x - hitbox.width - ((Math.abs(xa) == 0) ? -Math.abs(this.Speed) : Math.abs(this.Speed));
+            } else if (limit.x < next.x && limit.x + limit.width > next.x) {
+                collidingXRight = true;
+                hitbox.x = limit.x + limit.width + ((Math.abs(xa) == 0) ? -Math.abs(this.Speed) : Math.abs(this.Speed));
+            }
+        } else {
+            if (limit.x > next.x && limit.x < next.x + next.width && xa != 0) {
+                collidingXLeft = true;
+                hitbox.x = limit.x - hitbox.width - ((Math.abs(xa) == 4) ? 4 : 8);
+            } else if (limit.x < next.x && limit.x + limit.width > next.x && xa != 0) {
+                collidingXRight = true;
+                hitbox.x = limit.x + limit.width + ((Math.abs(xa) == 4) ? 4 : 8);
+            }
         }
     }
 
     public void ajustarHitboxinY(final Rectangle limit, final Rectangle next) {
+
         if (limit.y > next.y && limit.y < next.y + next.height) {
             collidingYDown = true;
             ya = 0;

@@ -90,6 +90,7 @@ public class Enemigo extends SerVivo {
                 break;
             //CACODEMON
             case 3:
+                int vi = xa;
                 if (cooldownMuestra == 0) {
                     if (this.xPlayer - hitbox.x < 0) {
                         Speed = Math.abs(Speed) * -1;
@@ -103,6 +104,12 @@ public class Enemigo extends SerVivo {
                     cooldownMuestra++;
                 }
                 xa += Speed;
+                if (collidingXLeft) {
+                    xa -= Speed;
+                }
+                if (collidingXRight) {
+                    xa -= Speed;
+                }
                 break;
             //BARON
             case 4:

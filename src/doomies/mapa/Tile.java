@@ -1,9 +1,18 @@
+<<<<<<< HEAD:src/doomies/mapa/Tile.java
 package doomies.mapa;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import doomies.Entes.Entidad;
 import doomies.Visual.Sprite;
+=======
+package prototype.mapa;
+
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import prototype.Entes.Entidad;
+import prototype.Visual.Sprite;
+>>>>>>> origin/Nestor:src/prototype/mapa/Tile.java
 
 /**
  *
@@ -33,7 +42,10 @@ public class Tile extends Entidad {//Nada todavia
 
     @Override
     public void actualizar() {
+<<<<<<< HEAD:src/doomies/mapa/Tile.java
         x+=xa;
+=======
+>>>>>>> origin/Nestor:src/prototype/mapa/Tile.java
         this.hitbox.x = x;
         this.hitbox.y = y;
     }

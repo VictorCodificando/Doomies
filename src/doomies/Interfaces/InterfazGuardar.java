@@ -2,14 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+<<<<<<< HEAD:src/doomies/Interfaces/InterfazGuardar.java
 package doomies.Interfaces;
 
 import doomies.Gestores.GestorEstados;
+=======
+package prototype.Interfaces;
+
+>>>>>>> origin/Nestor:src/prototype/Interfaces/InterfazGuardar.java
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+<<<<<<< HEAD:src/doomies/Interfaces/InterfazGuardar.java
 import doomies.HerramientasEntradaSalida.LoadTools;
 import doomies.HerramientasEntradaSalida.Teclado;
 import doomies.HerramientasEntradaSalida.Mouse;
@@ -19,6 +25,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+=======
+import prototype.HerramientasEntradaSalida.LoadTools;
+import prototype.HerramientasEntradaSalida.Teclado;
+import prototype.HerramientasEntradaSalida.Mouse;
+import prototype.Interfaces.Elementos.Boton;
+>>>>>>> origin/Nestor:src/prototype/Interfaces/InterfazGuardar.java
 
 /**
  *
@@ -28,18 +40,28 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
 
     private final int WIDTH;
     private final int HEIGHT;
+<<<<<<< HEAD:src/doomies/Interfaces/InterfazGuardar.java
     private final Font font = LoadTools.loadFont("/fonts/kongtext.ttf");
+=======
+    private final Font font = LoadTools.loadFont("fonts/kongtext.ttf");
+>>>>>>> origin/Nestor:src/prototype/Interfaces/InterfazGuardar.java
     //private final Image imagen = LoadTools.loadImage("img/mapa.png");
     //private Boton botonCargar;
     //private ProgressBar pb;
     //private ThreadProgreso tp;
     private boolean guardar;
+<<<<<<< HEAD:src/doomies/Interfaces/InterfazGuardar.java
     private boolean salir = false;
+=======
+>>>>>>> origin/Nestor:src/prototype/Interfaces/InterfazGuardar.java
     private Boton botonGuardar;
     private Boton botonIzquierda;
     private Boton botonDerecha;
     private Boton botonDatos;
+<<<<<<< HEAD:src/doomies/Interfaces/InterfazGuardar.java
     private int index = 0;
+=======
+>>>>>>> origin/Nestor:src/prototype/Interfaces/InterfazGuardar.java
     private final int LVL_MAX = 10;
     private int partidasGuardadas;
 
@@ -54,9 +76,15 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
         botonIzquierda.setFormat(15);
         botonDerecha = new Boton((((WIDTH / 4) * 3) - 50), 300, 100, 100, ">", font.deriveFont(100f), Color.GRAY, 16, 1, raton);
         botonDerecha.setFormat(15);
+<<<<<<< HEAD:src/doomies/Interfaces/InterfazGuardar.java
         botonDatos = new Boton(425, 150, 450, 350, "", font.deriveFont(30f), Color.orange, 27, 35, raton); //425,150,450,350
         botonDatos.setFormat(40);
         botonDatos.setLabel("");
+=======
+        botonDatos = new Boton(425,150,450,350, "",font.deriveFont(30f), Color.orange, 27,35, raton); //425,150,450,350
+        botonDatos.setFormat(40);
+        botonDatos.setLabel("DATOS////NOMBRE");
+>>>>>>> origin/Nestor:src/prototype/Interfaces/InterfazGuardar.java
         //this.datosPartida = //conexionbasededatos o fichero
     }
 
@@ -69,20 +97,29 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
         g.setColor(Color.red);
         g2d.setPaint(verticalGradient);
         g2d.fillRect(0, 0, this.WIDTH, this.HEIGHT);
+<<<<<<< HEAD:src/doomies/Interfaces/InterfazGuardar.java
         /**
          * Titulo
          */
+=======
+        //Titulo
+>>>>>>> origin/Nestor:src/prototype/Interfaces/InterfazGuardar.java
         g.setColor(Color.BLACK);
         g.setFont(font);
         g.setFont(g.getFont().deriveFont(55f));
         g.drawString("GUARDAR PARTIDA", ((WIDTH / 2) - (g.getFont().getSize() * (("GUARDAR PARTIDA").length() / 2))), 100);
         g.drawString(partidasGuardadas + "", (int) ((WIDTH / 2) - (g.getFont().getSize() * ((partidasGuardadas + "").length() / 2) * 0.5) - 46), (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80);
+<<<<<<< HEAD:src/doomies/Interfaces/InterfazGuardar.java
 
+=======
+        
+>>>>>>> origin/Nestor:src/prototype/Interfaces/InterfazGuardar.java
         //Botones
         botonIzquierda.dibujar(g);
         botonDerecha.dibujar(g);
         botonGuardar.dibujar(g);
         botonDatos.dibujar(g);
+<<<<<<< HEAD:src/doomies/Interfaces/InterfazGuardar.java
         dibujarPartidaActual(g);
     }
 
@@ -95,10 +132,13 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
         g.drawString("Nombre: " + nombre, 450, 225);
         g.drawString("\nNivel alcanzado: " + niveles, 450, 325);
         g.drawString("\nFecha: " + fecha, 450, 425);
+=======
+>>>>>>> origin/Nestor:src/prototype/Interfaces/InterfazGuardar.java
     }
 
     //MENU
     public void actualizar() {
+<<<<<<< HEAD:src/doomies/Interfaces/InterfazGuardar.java
 
         botonIzquierda.actualizar();
         botonDerecha.actualizar();
@@ -143,6 +183,26 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
         return true;
     }
 
+=======
+        
+        botonIzquierda.actualizar();
+        botonDerecha.actualizar();
+        botonGuardar.actualizar();
+
+        if (botonIzquierda.isClicked() || botonDerecha.isClicked()) {
+            partidasGuardadas += (botonDerecha.isClicked()) ? 1 : -1;//comparar id de partida guardada en la bbdd o fichero
+            if (partidasGuardadas < 1 || partidasGuardadas > LVL_MAX) {
+                partidasGuardadas = (partidasGuardadas < 1) ? 1 : LVL_MAX;
+            }
+}
+        
+        //cargar
+        if (botonGuardar.isClicked()) {
+            this.guardar = true;
+        }
+    }
+
+>>>>>>> origin/Nestor:src/prototype/Interfaces/InterfazGuardar.java
     public boolean isGuardar() {
         return guardar;
     }
@@ -150,8 +210,11 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
     public int getPartidasGuardadas() {
         return this.partidasGuardadas;
     }
+<<<<<<< HEAD:src/doomies/Interfaces/InterfazGuardar.java
 
     public boolean isSalir() {
         return this.salir;
     }
+=======
+>>>>>>> origin/Nestor:src/prototype/Interfaces/InterfazGuardar.java
 }

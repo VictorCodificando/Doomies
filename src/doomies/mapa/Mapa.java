@@ -1,15 +1,26 @@
+<<<<<<< HEAD:src/doomies/mapa/Mapa.java
 package doomies.mapa;
+=======
+package prototype.mapa;
+>>>>>>> origin/Nestor:src/prototype/mapa/Mapa.java
 
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+<<<<<<< HEAD:src/doomies/mapa/Mapa.java
 import doomies.Entes.Entidad;
 import doomies.Entes.Seres.Enemigo;
 import doomies.Entes.Seres.Jugador;
 import doomies.Entes.Seres.SerVivo;
 import doomies.HerramientasEntradaSalida.LoadTools;
+=======
+import prototype.Entes.Entidad;
+import prototype.Entes.Seres.Jugador;
+import prototype.Entes.Seres.SerVivo;
+import prototype.HerramientasEntradaSalida.LoadTools;
+>>>>>>> origin/Nestor:src/prototype/mapa/Mapa.java
 
 /**
  *
@@ -28,10 +39,16 @@ public class Mapa {
     private int x;
     private int y;
     private int xa;
+<<<<<<< HEAD:src/doomies/mapa/Mapa.java
     private final int ID;
     private int ya;
     private boolean right;
     private boolean limit = true;
+=======
+    private int ya;
+    private boolean right;
+    private boolean limit;
+>>>>>>> origin/Nestor:src/prototype/mapa/Mapa.java
     private boolean limit_fin;
     private boolean up;
     public ArrayList<Entidad> entesEnMapa = new ArrayList<Entidad>();
@@ -46,12 +63,19 @@ public class Mapa {
     public Mapa(SerVivo[] seres, final int width, final int height, int ID) {
         this.SCREEN_HEIGHT = height;
         this.SCREEN_WIDTH = width;
+<<<<<<< HEAD:src/doomies/mapa/Mapa.java
         this.ID = ID;
+=======
+>>>>>>> origin/Nestor:src/prototype/mapa/Mapa.java
         this.tiles = LoadTools.loadMap("/mapas/mapa" + ID + ".txt");
         this.background = LoadTools.loadImage("/images/BG_" + ID + ".png");
         this.HEIGHT = this.tiles.length * this.tiles[this.tiles.length - 1][this.tiles[this.tiles.length - 1].length - 1].getHitbox().height;
         this.WIDTH = this.tiles[this.tiles.length - 1].length * this.tiles[this.tiles.length - 1][this.tiles[this.tiles.length - 1].length - 1].getHitbox().width;
         this.seres = seres;
+<<<<<<< HEAD:src/doomies/mapa/Mapa.java
+=======
+
+>>>>>>> origin/Nestor:src/prototype/mapa/Mapa.java
         //Añadimos los tiles
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
@@ -79,6 +103,7 @@ public class Mapa {
      */
     public void actualizar() {
         //Ha llegado al final
+<<<<<<< HEAD:src/doomies/mapa/Mapa.java
         //System.out.println(x);
         if (0 <= x) {
 //            System.out.println("limite izq");
@@ -86,15 +111,29 @@ public class Mapa {
             limit_fin = false;
         } else if (SCREEN_WIDTH >= x + WIDTH) {
 //            System.out.println("lmiite derecho");
+=======
+        if (0 <= x) {
+            limit = true;
+            limit_fin = false;
+        } else if (SCREEN_WIDTH >= x + WIDTH) {
+>>>>>>> origin/Nestor:src/prototype/mapa/Mapa.java
             limit = false;
             limit_fin = true;
         } else {
             limit = false;
+<<<<<<< HEAD:src/doomies/mapa/Mapa.java
             limit_fin = false;
         }
         x += xa;
         bg_x = (int) ((this.background.getWidth() - SCREEN_WIDTH) * ((float) (x) / WIDTH));
         y += ya;
+=======
+        }
+        x -= xa;
+        bg_x = (int) ((this.background.getWidth() - SCREEN_WIDTH) * ((float) (x) / WIDTH));
+        y += ya;
+
+>>>>>>> origin/Nestor:src/prototype/mapa/Mapa.java
     }
 
     public BufferedImage getBackground() {
@@ -180,9 +219,13 @@ public class Mapa {
     public boolean isLimit_fin() {
         return limit_fin;
     }
+<<<<<<< HEAD:src/doomies/mapa/Mapa.java
 
     public int getID() {
         return ID;
     }
+=======
+    
+>>>>>>> origin/Nestor:src/prototype/mapa/Mapa.java
 
 }

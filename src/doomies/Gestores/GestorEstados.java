@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-<<<<<<< HEAD:src/doomies/Gestores/GestorEstados.java
 package doomies.Gestores;
 
 import doomies.HerramientasEntradaSalida.LoadTools;
@@ -10,14 +9,6 @@ import java.awt.Graphics;
 import doomies.HerramientasEntradaSalida.Mouse;
 import doomies.HerramientasEntradaSalida.Teclado;
 import doomies.Partida;
-=======
-package prototype.Gestores;
-
-import java.awt.Graphics;
-import prototype.HerramientasEntradaSalida.Mouse;
-import prototype.HerramientasEntradaSalida.Teclado;
-import prototype.Partida;
->>>>>>> origin/Nestor:src/prototype/Gestores/GestorEstados.java
 
 /**
  *
@@ -27,10 +18,7 @@ public class GestorEstados implements Gestor {
 
     private Gestor gestorActual;
     public static Partida partida;
-<<<<<<< HEAD:src/doomies/Gestores/GestorEstados.java
     public static String[] partidas;
-=======
->>>>>>> origin/Nestor:src/prototype/Gestores/GestorEstados.java
     private final int WIDTH;
     private final int HEIGHT;
     private final Teclado teclado;
@@ -50,11 +38,7 @@ public class GestorEstados implements Gestor {
         this.HEIGHT = HEIGHT;
         this.teclado = teclado;
         this.raton = raton;
-<<<<<<< HEAD:src/doomies/Gestores/GestorEstados.java
         partida = new Partida("default", 5);
-=======
-        partida = new Partida("default");
->>>>>>> origin/Nestor:src/prototype/Gestores/GestorEstados.java
         this.gestorActual = (Gestor) new GestorMenu(WIDTH, HEIGHT, teclado, raton, 0);
     }
 
@@ -121,11 +105,7 @@ public class GestorEstados implements Gestor {
      * juego
      */
     public void setGestorJuego(int ID_MAPA) {
-<<<<<<< HEAD:src/doomies/Gestores/GestorEstados.java
         this.gestorActual = (Gestor) new GestorJuego(WIDTH, HEIGHT, ID_MAPA, teclado, raton);
-=======
-        this.gestorActual = (Gestor) new GestorJuego(WIDTH, HEIGHT, ID_MAPA, teclado,raton);
->>>>>>> origin/Nestor:src/prototype/Gestores/GestorEstados.java
     }
 
     /**

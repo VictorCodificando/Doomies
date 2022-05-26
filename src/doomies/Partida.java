@@ -2,11 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-<<<<<<< HEAD:src/doomies/Partida.java
 package doomies;
-=======
-package prototype;
->>>>>>> origin/Nestor:src/prototype/Partida.java
 
 import java.util.ArrayList;
 
@@ -23,7 +19,6 @@ public class Partida {
      * Constructor para la partida cargada
      *
      * @param nombre El nombre del jugador que haya metido el usuario
-<<<<<<< HEAD:src/doomies/Partida.java
      * @param nivelesAlcanzado El nivel hasta el que ha llegado en esta partida
      *
      */
@@ -34,14 +29,6 @@ public class Partida {
                 this.nivelesDesbloqueados.add(true);
             }
         }
-=======
-     * @param nivelesDesbloqueados Un arrayList (tamaño variable) de los niveles
-     * desbloqueados, TODO LO QUE ESTE EN FALSE O NO ESTE ES BLOQUEADO
-     */
-    public Partida(String nombre, ArrayList<Boolean> nivelesDesbloqueados) {
-        this.nombre = nombre;
-        this.nivelesDesbloqueados = nivelesDesbloqueados;
->>>>>>> origin/Nestor:src/prototype/Partida.java
     }
 
     /**
@@ -51,16 +38,7 @@ public class Partida {
      */
     public Partida(String nombre) {
         this.nombre = nombre;
-<<<<<<< HEAD:src/doomies/Partida.java
         this.nivelesDesbloqueados.add(true);//Por defecto el primero te viene desbloqueado
-=======
-        this.nivelesDesbloqueados.add(true);
-        //BORRAR
-        this.nivelesDesbloqueados.add(true);
-        this.nivelesDesbloqueados.add(true);
-        this.nivelesDesbloqueados.add(true);
-        this.nivelesDesbloqueados.add(true);
->>>>>>> origin/Nestor:src/prototype/Partida.java
     }
 
     /**
@@ -72,11 +50,7 @@ public class Partida {
     public boolean isDesbloqueado(int nivel) {//Te dice si el nivel esta desbloqueado, si no esta en el array, quiere decir que esta bloqueado.
         boolean desbloqueado = false;
         try {
-<<<<<<< HEAD:src/doomies/Partida.java
             desbloqueado = nivelesDesbloqueados.get(nivel - 1);
-=======
-            desbloqueado = nivelesDesbloqueados.get(nivel-1);
->>>>>>> origin/Nestor:src/prototype/Partida.java
         } catch (Exception e) {
         }
         return desbloqueado;

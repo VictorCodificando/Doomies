@@ -60,6 +60,9 @@ public class SerVivo extends Entidad {
 
     //Salto
     protected void jump() {
+        if (!collidingYDown) {
+            return;
+        }
         this.ya = -11;
     }
 

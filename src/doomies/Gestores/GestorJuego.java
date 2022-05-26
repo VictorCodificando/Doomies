@@ -50,7 +50,8 @@ public class GestorJuego implements Gestor {
     private int Speed = 4;
     private boolean salir;
     private InterfazPausa interfaz = null;
-    private boolean mapaMoving = false;
+    private static boolean mapaMoving = false;
+    private int vidasJugador = 0;
 
     /**
      * Crea el gestor de juegos actual.
@@ -71,7 +72,8 @@ public class GestorJuego implements Gestor {
         this.salir = false;
         entesEnMapa = mapa.entesEnMapa;
         this.jugador = new Jugador(100, 100, 107, 69, teclado);
-        entesEnMapa.add(new Enemigo(700, 200, 117, 129, 3));
+        entesEnMapa.add(new Enemigo(700, 200, 96, 107, 3));
+        entesEnMapa.add(new Enemigo(800, 200, 96, 107, 3));
         entesEnMapa.add(jugador);
         teclado.resetAllKeys();
 
@@ -130,7 +132,7 @@ public class GestorJuego implements Gestor {
      */
     private boolean cambiarAInterfazPausa() {
 
-        if (teclado.escape || !Doomies.onTop()) {
+        if ((teclado.escape || !Doomies.onTop()) && (!win && !gameOver)) {
             interfaz = new InterfazPausa(WIDTH, HEIGHT, teclado, raton);
             teclado.resetAllKeys();
         }
@@ -233,7 +235,14 @@ public class GestorJuego implements Gestor {
                 break;
             }
             if (entesEnMapa.get(i) instanceof SerVivo) {
-                entesEnMapa.get(i).caer();
+                if (entesEnMapa.get(i) instanceof Enemigo) {
+                    Enemigo eActual = (Enemigo) entesEnMapa.get(i);
+                    if (!(eActual.getEnemyType() == 3 || eActual.getEnemyType() == 2)) {
+                        entesEnMapa.get(i).caer();
+                    }
+                } else {
+                    entesEnMapa.get(i).caer();
+                }
             }
             if (entesEnMapa.get(i) instanceof Enemigo) {
                 Enemigo eActual = (Enemigo) entesEnMapa.get(i);
@@ -280,6 +289,12 @@ public class GestorJuego implements Gestor {
                     if (vidainic == eActual.getVida() || entesEnMapa.get(i) instanceof Enemigo) {
                         continue;
                     }
+                }
+                if (entesEnMapa.get(i) instanceof Enemigo && entesEnMapa.get(j) instanceof Enemigo) {
+                    continue;
+                }
+                if (entesEnMapa.get(i) instanceof Bala && entesEnMapa.get(j) instanceof Tile) {
+
                 }
                 entesEnMapa.get(i).isGoingToCollide(entesEnMapa.get(j).getHitbox());//Comprobamos si colisiona al fin
             }
@@ -505,7 +520,10 @@ public class GestorJuego implements Gestor {
         int posInicialY = 20;
         int separacion = 10 + (HEART.getWidth());
         int vidas = jugador.getVida() - 1;
-        for (int i = 0; i < 3; i++) {
+        if (vidasJugador == 0) {
+            vidasJugador = jugador.getVida();
+        }
+        for (int i = 0; i < vidasJugador; i++) {
             if (i > vidas) {
                 g.drawImage(HEART_BROKEN, posInicialX + (separacion * i), posInicialY, null);
             } else {
@@ -634,12 +652,12 @@ public class GestorJuego implements Gestor {
         this.interfaz = interfaz;
     }
 
-    public boolean isMapaMoving() {
-        return mapaMoving;
+    public static boolean isMapaMoving() {
+        return GestorJuego.mapaMoving;
     }
 
-    public void setMapaMoving(boolean mapaMoving) {
-        this.mapaMoving = mapaMoving;
+    public static void setMapaMoving(boolean mapaMoving) {
+        GestorJuego.mapaMoving = mapaMoving;
     }
 
 }

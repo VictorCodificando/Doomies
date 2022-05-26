@@ -28,6 +28,7 @@ public class Jugador extends SerVivo {
     public Jugador(final int x, final int y, final int HEIGHT, final int WIDTH, final Teclado teclado) {
         super(new Sprite[4], 100, 30, 3);
         this.balas = new ArrayList<Bala>();
+        this.vida=20;
         this.sprites = new Sprite[]{(Sprite) SpriteSheet.PERSONAJE.getSprite(0, 0), SpriteSheet.PERSONAJE.getSprite(0, 1),
             SpriteSheet.PERSONAJE.getSprite(1, 0), SpriteSheet.PERSONAJE.getSprite(1, 1),
             SpriteSheet.PERSONAJE.getSprite(2, 0), SpriteSheet.PERSONAJE.getSprite(2, 1),

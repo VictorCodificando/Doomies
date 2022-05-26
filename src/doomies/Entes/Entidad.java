@@ -26,7 +26,6 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
     protected boolean visible;
     protected int contGravedad;
     protected Sprite[] sprites;
-
     public abstract void dibujar(final Graphics g);
 
     public abstract void actualizar();
@@ -57,10 +56,10 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
         if (!(this instanceof Jugador)) {
             if (limit.x > next.x && limit.x < next.x + next.width) {
                 collidingXLeft = true;
-                hitbox.x = limit.x - hitbox.width - ((Math.abs(GestorJuego.getXa()) == 0) ? Math.abs(this.Speed) : Math.abs(this.Speed));
+                hitbox.x = limit.x - hitbox.width - Math.abs(GestorJuego.getXa());
             } else if (limit.x < next.x && limit.x + limit.width > next.x) {
                 collidingXRight = true;
-                hitbox.x = limit.x + limit.width + ((Math.abs(GestorJuego.getXa()) == 0) ? Math.abs(this.Speed) : Math.abs(this.Speed));
+                hitbox.x = limit.x + limit.width + Math.abs(GestorJuego.getXa()) + Math.abs(this.Speed);
             }
         } else {
             if (limit.x > next.x && limit.x < next.x + next.width && xa != 0) {
@@ -98,12 +97,11 @@ public abstract class Entidad implements CuerpoGravitatorio {//Si existe esta so
     }
 
     public void isGoingToCollide(Rectangle estatico) {
-        Rectangle nextHitboxinX = new Rectangle(hitbox.x + xa, hitbox.y, hitbox.width, hitbox.height);
-        Rectangle nextHitboxinY = new Rectangle(hitbox.x, hitbox.y + ya, hitbox.width, hitbox.height);
+        Rectangle nextHitboxinX = new Rectangle(hitbox.x + xa, hitbox.y+10, hitbox.width, hitbox.height-20);
+        Rectangle nextHitboxinY = new Rectangle(hitbox.x+10, hitbox.y + ya, hitbox.width-20, hitbox.height);
         if (estatico.intersects(nextHitboxinY)) {
             this.ajustarHitboxinY(estatico, nextHitboxinY);
-        }
-        if (estatico.intersects(nextHitboxinX)) {
+        } else if (estatico.intersects(nextHitboxinX)) {
             this.ajustarHitboxinX(estatico, nextHitboxinX);
         }
     }

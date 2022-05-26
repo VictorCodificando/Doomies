@@ -2,11 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-<<<<<<< HEAD:src/doomies/HerramientasEntradaSalida/Excepciones.java
 package doomies.HerramientasEntradaSalida;
-=======
-package prototype.HerramientasEntradaSalida;
->>>>>>> origin/Nestor:src/prototype/HerramientasEntradaSalida/Excepciones.java
 
 import java.awt.Frame;
 import javax.swing.JOptionPane;

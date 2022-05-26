@@ -18,13 +18,8 @@ public class Doomies {
     private Lienzo canvas;
     private static boolean onTop;
     private boolean enEjecucion = false;//Variable que funcionara como bucle infinito
-<<<<<<< HEAD:src/doomies/Doomies.java
 
     public Doomies(int width, int height) {//inicializo el canvas primero y luego se lo paso al frame(ventana)
-=======
-    
-    public Prototype(int width, int height) {//inicializo el canvas primero y luego se lo paso al frame(ventana)
->>>>>>> origin/Nestor:src/prototype/Prototype.java
         this.canvas = new Lienzo(width, height);
         this.ventana = new Ventana(canvas);
     }

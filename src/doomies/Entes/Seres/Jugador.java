@@ -14,10 +14,7 @@ public class Jugador extends SerVivo {
     public ArrayList<Bala> balas;
     private int cooldownBalas;
     public Teclado teclado;
-<<<<<<< HEAD:src/doomies/Entes/Seres/Jugador.java
     
-=======
->>>>>>> origin/Nestor:src/prototype/Entes/Seres/Jugador.java
 
     /**
      * Crea el jugador
@@ -33,14 +30,10 @@ public class Jugador extends SerVivo {
         this.balas = new ArrayList<Bala>();
         this.sprites = new Sprite[]{(Sprite) SpriteSheet.PERSONAJE.getSprite(0, 0), SpriteSheet.PERSONAJE.getSprite(0, 1),
             SpriteSheet.PERSONAJE.getSprite(1, 0), SpriteSheet.PERSONAJE.getSprite(1, 1),
-<<<<<<< HEAD:src/doomies/Entes/Seres/Jugador.java
             SpriteSheet.PERSONAJE.getSprite(2, 0), SpriteSheet.PERSONAJE.getSprite(2, 1),
             SpriteSheet.PERSONAJE.getSprite(3, 0), SpriteSheet.PERSONAJE.getSprite(3, 1),
             SpriteSheet.PERSONAJE.getSprite(4, 0), SpriteSheet.PERSONAJE.getSprite(4, 1),
             SpriteSheet.PERSONAJE.getSprite(5, 0), SpriteSheet.PERSONAJE.getSprite(5, 1)};
-=======
-            SpriteSheet.PERSONAJE.getSprite(2, 0), SpriteSheet.PERSONAJE.getSprite(2, 1)};
->>>>>>> origin/Nestor:src/prototype/Entes/Seres/Jugador.java
         this.hitbox = new Rectangle(x, y, WIDTH, HEIGHT);
         this.teclado = teclado;
         this.COOLDOWNDAÑOTOTAL=100;
@@ -57,7 +50,6 @@ public class Jugador extends SerVivo {
     }
 
     public void actualizar() {
-<<<<<<< HEAD:src/doomies/Entes/Seres/Jugador.java
         if (cooldownBalas != 0 && cooldownBalas < COOLBALAS) {
             cooldownBalas++;
         } else if (cooldownBalas == COOLBALAS) {
@@ -70,47 +62,14 @@ public class Jugador extends SerVivo {
     public void mover() {
         if (collidingYDown && this.teclado.jumping) {
             this.jump();
-=======
-        this.mover();
-    }
-
-    protected void definirEstado() {
-        if (this.xa != 0) {//Si se esta moviendo en el eje X
-            if (this.teclado.left) {//Si anda a la izquierda
-                this.walking = true;
-                this.dir = "L";
-            } else if (this.teclado.right) {//Si anda a la derecha
-                this.walking = true;
-                this.dir = "R";
-            }
-        } else {//Si no se esta moviendo
-            this.stay = true;
-            this.walking = false;
-        }
-        if (!this.collidingYDown) {//Si esta cayendo
-            this.falling = true;
->>>>>>> origin/Nestor:src/prototype/Entes/Seres/Jugador.java
         }
 
         super.mover();
     }
 
-<<<<<<< HEAD:src/doomies/Entes/Seres/Jugador.java
     public void disparar() {
         
         if (cooldownBalas == 0) {//Si esta intentando disparar y puede disparar(cooldown bala==0) entonces dispara
-=======
-    public void mover() {
-        if (collidingYDown && this.teclado.jumping) {
-            this.jump();
-        }
-        super.mover();
-
-    }
-
-    protected void disparar() {
-        if (this.teclado.shooting && this.cooldownBalas == 0) {//Si esta intentando disparar y puede disparar(cooldown bala==0) entonces dispara
->>>>>>> origin/Nestor:src/prototype/Entes/Seres/Jugador.java
             // inicio contador balas
             this.shooting = true;
             cooldownBalas++;
@@ -165,7 +124,6 @@ public class Jugador extends SerVivo {
         }
     }
 
-<<<<<<< HEAD:src/doomies/Entes/Seres/Jugador.java
     public void addBalasAsEntidadtidad(final ArrayList entes) {
         if (this.balas.size() <= 0) {
             return;
@@ -174,18 +132,6 @@ public class Jugador extends SerVivo {
             if (balas.get(i) == null) {
                 balas.remove(i);
             }
-=======
-    public void setStates(boolean run, boolean walking, boolean fall) {
-        running = run;
-        this.walking = walking;
-        if (!this.collidingYDown) {//Si esta cayendo
-            this.falling = true;
-        }
-    }
-
-    private void addBalasAsEntidadtidad(final ArrayList entes) {
-        for (int i = 0; i < this.balas.size(); i++) {
->>>>>>> origin/Nestor:src/prototype/Entes/Seres/Jugador.java
             entes.add(this.balas.get(i));
             balas.remove(i);
         }

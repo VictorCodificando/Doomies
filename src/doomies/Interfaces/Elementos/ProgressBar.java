@@ -2,11 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-<<<<<<< HEAD:src/doomies/Interfaces/Elementos/ProgressBar.java
 package doomies.Interfaces.Elementos;
-=======
-package prototype.Interfaces.Elementos;
->>>>>>> origin/Nestor:src/prototype/Interfaces/Elementos/ProgressBar.java
 
 import java.awt.Color;
 import java.awt.Graphics;

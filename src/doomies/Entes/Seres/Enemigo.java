@@ -149,20 +149,20 @@ public class Enemigo extends SerVivo {
         if (cooldownMuestraY == 0) {
             System.out.println(this.yPlayer);
 //            System.out.println(ya);
-            if (this.yPlayer < hitbox.y) {
+            if (this.yPlayer + 120 < hitbox.y) {
 //                System.out.println("arriba");
                 SpeedY = Math.abs(SpeedY) * -1;
-            } else {
+            } else if (this.yPlayer > hitbox.y) {
 //                System.out.println("abajo");
                 SpeedY = Math.abs(SpeedY);
             }
             cooldownMuestraY++;
-        } else if (cooldownMuestraY == 100) {
+        } else if (cooldownMuestraY == 10) {
             cooldownMuestraY = 0;
         } else {
             cooldownMuestraY++;
         }
-        ya=((collidingYUp && Speed<0)||(collidingYDown && Speed>0))? 0:Speed;
+        ya = ((collidingYUp && SpeedY < 0) || (collidingYDown && SpeedY > 0)) ? 0 : SpeedY;
     }
 
     private void moverInX() {
@@ -187,5 +187,5 @@ public class Enemigo extends SerVivo {
     public int getEnemyType() {
         return enemyType;
     }
-    
+
 }

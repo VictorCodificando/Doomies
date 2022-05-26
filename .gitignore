@@ -2,5 +2,9 @@ nbproject
 build.xml
 manifest.mf
 build
+<<<<<<< HEAD
 dist
 *.rar
+=======
+dist
+>>>>>>> origin/Nestor

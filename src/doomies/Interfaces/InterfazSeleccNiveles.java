@@ -2,7 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+<<<<<<< HEAD:src/doomies/Interfaces/InterfazSeleccNiveles.java
 package doomies.Interfaces;
+=======
+package prototype.Interfaces;
+>>>>>>> origin/Nestor:src/prototype/Interfaces/InterfazSeleccNiveles.java
 
 import java.awt.Color;
 import java.awt.Frame;
@@ -11,11 +15,19 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.swing.JOptionPane;
+<<<<<<< HEAD:src/doomies/Interfaces/InterfazSeleccNiveles.java
 import doomies.Gestores.GestorEstados;
 import doomies.HerramientasEntradaSalida.LoadTools;
 import doomies.HerramientasEntradaSalida.Mouse;
 import doomies.HerramientasEntradaSalida.Teclado;
 import doomies.Interfaces.Elementos.Boton;
+=======
+import prototype.Gestores.GestorEstados;
+import prototype.HerramientasEntradaSalida.LoadTools;
+import prototype.HerramientasEntradaSalida.Mouse;
+import prototype.HerramientasEntradaSalida.Teclado;
+import prototype.Interfaces.Elementos.Boton;
+>>>>>>> origin/Nestor:src/prototype/Interfaces/InterfazSeleccNiveles.java
 
 /**
  *

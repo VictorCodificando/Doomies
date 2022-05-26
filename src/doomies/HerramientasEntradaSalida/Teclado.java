@@ -79,6 +79,7 @@ public class Teclado implements KeyListener {
 
     public void resetKeys() {
         escape = false;
+<<<<<<< HEAD:src/doomies/HerramientasEntradaSalida/Teclado.java
 
     }
 
@@ -92,4 +93,7 @@ public class Teclado implements KeyListener {
 
     }
 
+=======
+    }
+>>>>>>> origin/Nestor:src/prototype/HerramientasEntradaSalida/Teclado.java
 }

@@ -16,11 +16,19 @@ public class SpriteSheet {
     private final int SPRITE_HEIGHT;
     private final BufferedImage img;
     private final Sprite[][] sprites;
+<<<<<<< HEAD:src/doomies/Visual/SpriteSheet.java
     public static final SpriteSheet PERSONAJE = new SpriteSheet(160, 636, 80, 106, "/spritesSheet/Character.png");
     public static SpriteSheet MAPA = new SpriteSheet(512, 512, 64, 64, "/spritesSheet/Mapa.png");
     public static SpriteSheet IMP = new SpriteSheet(96, 195, 48, 48, "/spritesSheet/Imp.png");
     public static SpriteSheet PINKIE = new SpriteSheet(96, 195, 48, 48, "/spritesSheet/Pinkie.png");
     public static SpriteSheet CACODEMON = new SpriteSheet(258, 468,129, 117, "/spritesSheet/Cacodemon.png");
+=======
+    public static final SpriteSheet PERSONAJE = new SpriteSheet(160, 642, 79, 106, "/spritesSheet/Character.png");
+    public static SpriteSheet MAPA = new SpriteSheet(512, 512, 64, 64, "/spritesSheet/Mapa.png");
+    public static SpriteSheet IMP = new SpriteSheet(96, 195, 48, 48, "/spritesSheet/Imp.png");
+    public static SpriteSheet PINKIE = new SpriteSheet(96, 195, 48, 48, "/spritesSheet/Pinkie.png");
+    public static SpriteSheet CACODEMON = new SpriteSheet(96, 192, 48, 48, "/spritesSheet/Cacodemon.png");
+>>>>>>> origin/Nestor:src/prototype/Visual/SpriteSheet.java
     public static SpriteSheet SOUL = new SpriteSheet(64, 96, 32, 32, "/spritesSheet/Soul.png");
     public static SpriteSheet BARON = new SpriteSheet(96, 296, 48, 74, "/spritesSheet/Baron.png");
 

@@ -112,7 +112,6 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
             }
         }
         //cargar
-        System.out.println(botonGuardar.isClicked());
         if (botonGuardar.isClicked()) {
             this.salir = guardar();
         }

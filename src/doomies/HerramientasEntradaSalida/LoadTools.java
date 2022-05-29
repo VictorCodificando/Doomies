@@ -18,6 +18,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import doomies.Doomies;
+import doomies.Entes.Entidad;
+import doomies.Entes.Seres.Enemigo;
 import doomies.Visual.Sprite;
 import doomies.Visual.SpriteSheet;
 import doomies.mapa.Tile;
@@ -182,6 +184,52 @@ public class LoadTools {
         return tiles;
     }
 
+    public static ArrayList<Entidad> loadEntes(String path, ArrayList<Entidad> entes) {
+        File f = null;
+        ArrayList<Tile> tiles = new ArrayList();
+        Tile tilesArray[][] = null;
+        String mapa = "";
+        SpriteSheet hoja = SpriteSheet.MAPA;
+        try {
+            Scanner lector;
+            if (RUTA_ACTUAL.contains(".jar")) {
+                f = new File("." + path);
+                lector = new Scanner(f);
+            } else {
+                f = new File(RUTA_ACTUAL + "./" + path);
+                lector = new Scanner(f);
+            }
+            //LEO EL MAPA
+
+            for (int i = 0; lector.hasNext(); i++) {
+                mapa += lector.next();
+                if (mapa.contains(":")) {//Hacemos que llegue a la parte que nos interesa
+                    break;
+                }
+            }
+            for (int i = 0; lector.hasNext(); i++) {
+                String line[] = lector.next().split(";");
+                int enemyType = Integer.parseInt(line[0]);
+                int x = Integer.parseInt(line[1]) * 64;
+                int y = Integer.parseInt(line[2]) * 64;
+                int anchuraAltura[] = Enemigo.establecerAnchuraYAlturaSegunTipo(enemyType);
+                int width = anchuraAltura[0];
+                int height = anchuraAltura[1];
+                entes.add(new Enemigo(x, y, width, height, enemyType));
+                
+            }
+            lector.close();
+            tilesArray = loadTile(mapa);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(new Frame(), "ERROR MAPA NO ENCONTRADO\n" + path, "ERROR", 2);
+            System.exit(0);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(new Frame(), "ERROR EN LA LECTURA DEL MAPA\n" + e, "ERROR", 2);
+            System.exit(0);
+        }
+        return entes;
+    }
+
     /**
      * FUERA
      *
@@ -198,7 +246,8 @@ public class LoadTools {
                 //Se hara referencia a mapa
                 for (int i = 1; hasMoreFiles < 1; i++) {
                     try {
-                        InputStream inputStream = LoadTools.class.getResourceAsStream(foldPath + "/mapa" + i + ".txt");
+                        InputStream inputStream = LoadTools.class
+                                .getResourceAsStream(foldPath + "/mapa" + i + ".txt");
                         if (inputStream != null) {
                             count++;
                         } else {
@@ -241,8 +290,10 @@ public class LoadTools {
         String rawString = "";
         try {
             Scanner lector;
+
             if (RUTA_ACTUAL.contains(".jar")) {
-                InputStream inputStream = LoadTools.class.getResourceAsStream(path);
+                InputStream inputStream = LoadTools.class
+                        .getResourceAsStream(path);
                 lector = new Scanner(inputStream);
             } else {
                 f = new File(RUTA_ACTUAL + path);
@@ -262,7 +313,6 @@ public class LoadTools {
         partidas = new String[partidasExtensible.size()];
         for (int i = 0; i < partidasExtensible.size(); i++) {
             partidas[i] = partidasExtensible.get(i);
-            System.out.println(partidas[i]);
         }
         return partidas;
     }
@@ -298,7 +348,6 @@ public class LoadTools {
             System.out.println("ERROR OTRO");
             return;
         }
-
     }
 
     public static String reemplazarANull(String a) {

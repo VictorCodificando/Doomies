@@ -18,11 +18,11 @@ public class SpriteSheet {
     private final Sprite[][] sprites;
     public static final SpriteSheet PERSONAJE = new SpriteSheet(160, 636, 80, 106, "/spritesSheet/Character.png");
     public static SpriteSheet MAPA = new SpriteSheet(512, 512, 64, 64, "/spritesSheet/Mapa.png");
-    public static SpriteSheet IMP = new SpriteSheet(96, 195, 48, 48, "/spritesSheet/Imp.png");
-    public static SpriteSheet PINKIE = new SpriteSheet(96, 195, 48, 48, "/spritesSheet/Pinkie.png");
-    public static SpriteSheet CACODEMON = new SpriteSheet(214, 387,107, 96, "/spritesSheet/Cacodemon.png");
-    public static SpriteSheet SOUL = new SpriteSheet(64, 96, 32, 32, "/spritesSheet/Soul.png");
-    public static SpriteSheet BARON = new SpriteSheet(96, 296, 48, 74, "/spritesSheet/Baron.png");
+    public static SpriteSheet IMP = new SpriteSheet(183, 300, 91, 100, "/spritesSheet/Imp.png");
+    public static SpriteSheet PINKIE = new SpriteSheet(168, 336, 84, "/spritesSheet/Pinkie.png");
+    public static SpriteSheet CACODEMON = new SpriteSheet(214, 387, 107, 96, "/spritesSheet/Cacodemon.png");
+    public static SpriteSheet SOUL = new SpriteSheet(124, 60, 62, 60, "/spritesSheet/Soul.png");
+    public static SpriteSheet BARON = new SpriteSheet(258, 768, 129, 192, "/spritesSheet/Baron.png");
 
     /**
      * Crea la hoja de sprite, siendo sprites de un ancho y un alto diferente
@@ -68,6 +68,7 @@ public class SpriteSheet {
     }
 
     public Sprite getSprite(final int x, final int y) {
+
         return sprites[x][y];
     }
 }

@@ -18,6 +18,14 @@ public class Teclado implements KeyListener {
     public boolean jumping;
     public boolean shooting;
     public boolean escape;
+    public int teclaActual;
+    public int leftKey;
+    public int rightKey;
+    public int runKey;
+    public int jumpKey;
+    public int shootKey;
+    public boolean teclaPulsada = false;
+    public String caracterActual;
 
     public Teclado() {//se inicializan todas en false
         left = false;
@@ -26,6 +34,12 @@ public class Teclado implements KeyListener {
         jumping = false;
         shooting = false;
         escape = false;
+        leftKey = KeyEvent.VK_LEFT;
+        rightKey = KeyEvent.VK_RIGHT;
+        runKey = KeyEvent.VK_SHIFT;
+        jumpKey = KeyEvent.VK_UP;
+        shootKey = KeyEvent.VK_C;
+
     }
 
     @Override
@@ -34,52 +48,34 @@ public class Teclado implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {//Si se ha pulsado D es derecha si es A es izquierda, shift correr y espacio es saltar
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_RIGHT:
-                right = true;
-                break;
-            case KeyEvent.VK_LEFT:
-                left = true;
-                break;
-            case KeyEvent.VK_SHIFT:
-                running = true;
-                break;
-            case KeyEvent.VK_UP:
-                jumping = true;
-                break;
-            case KeyEvent.VK_C:
-                shooting = true;
-                break;
-        }
+        right = (e.getKeyCode() == rightKey) ? true : right;
+        left = (e.getKeyCode() == leftKey) ? true : left;
+        running = (e.getKeyCode() == runKey) ? true : running;
+        jumping = (e.getKeyCode() == jumpKey) ? true : jumping;
+        shooting = (e.getKeyCode() == shootKey) ? true : shooting;
+
     }
 
     @Override
     public void keyReleased(KeyEvent e) {//si se suelta la tecla entonces se cancela este boolean y se pone en false
+        right = (e.getKeyCode() == rightKey) ? false : right;
+        left = (e.getKeyCode() == leftKey) ? false : left;
+        running = (e.getKeyCode() == runKey) ? false : running;
+        jumping = (e.getKeyCode() == jumpKey) ? false : jumping;
+        shooting = (e.getKeyCode() == shootKey) ? false : shooting;
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_RIGHT:
-                right = false;
-                break;
-            case KeyEvent.VK_LEFT:
-                left = false;
-                break;
-            case KeyEvent.VK_SHIFT:
-                running = false;
-                break;
-            case KeyEvent.VK_UP:
-                jumping = false;
-                break;
-            case KeyEvent.VK_C:
-                shooting = false;
-                break;
             case KeyEvent.VK_ESCAPE:
                 escape = true;
                 break;
         }
+        teclaActual = e.getKeyCode();
+        teclaPulsada = true;
+        caracterActual = KeyEvent.getKeyText(teclaActual);
     }
 
     public void resetKeys() {
         escape = false;
-
+        teclaPulsada = false;
     }
 
     public void resetAllKeys() {

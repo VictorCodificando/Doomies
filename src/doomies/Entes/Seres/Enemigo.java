@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import doomies.Visual.Sprite;
 import doomies.Visual.SpriteSheet;
+import java.awt.Color;
 import java.awt.Frame;
 import javax.swing.JOptionPane;
 
@@ -17,6 +18,7 @@ import javax.swing.JOptionPane;
  */
 public class Enemigo extends SerVivo {
 
+    private final int VIDA_TOTAL;
     private int enemyType;
     public static int xPlayer;
     public static int yPlayer;
@@ -28,7 +30,7 @@ public class Enemigo extends SerVivo {
 
     public Enemigo(final int x, final int y, final int WIDTH, final int HEIGHT, int type) {
         super(new Sprite[8], WIDTH, HEIGHT, 5);
-        this.COOLDOWNDAÑOTOTAL =10;
+        this.COOLDOWNDAÑOTOTAL = 10;
         switch (type) {
             //IMP (2-5)
             case 0:
@@ -69,17 +71,37 @@ public class Enemigo extends SerVivo {
                 System.exit(0);
                 sprites = null;
         }
+        this.VIDA_TOTAL = vida;
         this.SpeedY = Speed;
         this.hitbox = new Rectangle(x, y, WIDTH, HEIGHT);
     }
 
     public void dibujar(final Graphics g) {
         super.dibujar(g);
+        dibujarBarraVida(g);
     }
 
     public void actualizar() {
         this.moverEnemigo();
         super.actualizar();
+    }
+
+    private void dibujarBarraVida(Graphics g) {
+        int anchuraBarra = 50;
+        int alturaBarra = 4;
+        int posX = this.hitbox.x + (this.hitbox.width / 2) - (anchuraBarra / 2);
+        int posY = this.hitbox.y - 20;
+        float porcentaje = ((vida * 1f) / VIDA_TOTAL);
+        int format = 1;
+//        System.out.println(VIDA_TOTAL + " " + vida);
+        g.setColor(Color.BLACK);
+        g.fillRect(posX, posY + format, format, alturaBarra - format * 2);
+        g.fillRect(posX + anchuraBarra - format, posY + format, format, alturaBarra - format * 2);
+        //Lineas X
+        g.fillRect(posX + format, posY + alturaBarra - format, anchuraBarra - (format * 2), format);
+        g.fillRect(posX + format, posY, anchuraBarra - (format * 2), format);
+        g.setColor(Color.red);
+        g.fillRect(posX + 1, posY + 1, (int) (anchuraBarra * porcentaje) - 2, alturaBarra - 2);
     }
 
     @Override
@@ -206,9 +228,9 @@ public class Enemigo extends SerVivo {
 
     private void perseguirX() {
         if (cooldownMuestra == 0) {
-            if (this.xPlayer + 34 - hitbox.x + (hitbox.width / 2) < 0) {
+            if (this.xPlayer + 34 < hitbox.x + (hitbox.width / 2)) {
                 Speed = Math.abs(Speed) * -1;
-            } else if (this.xPlayer + 34 - hitbox.x + (hitbox.width / 2) > 0) {
+            } else if (this.xPlayer + 34 > hitbox.x + (hitbox.width / 2)) {
                 Speed = Math.abs(Speed);
             }
             if (collidingXRight || collidingXLeft) {

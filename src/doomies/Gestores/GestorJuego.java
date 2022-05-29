@@ -17,9 +17,11 @@ import doomies.Entes.Seres.SerVivo;
 import doomies.HerramientasEntradaSalida.LoadTools;
 import doomies.HerramientasEntradaSalida.Mouse;
 import doomies.HerramientasEntradaSalida.Teclado;
+import doomies.Interfaces.Elementos.Boton;
 import doomies.Interfaces.InterfazPausa;
 import doomies.mapa.Mapa;
 import doomies.mapa.Tile;
+import java.awt.Color;
 
 /**
  *
@@ -52,6 +54,7 @@ public class GestorJuego implements Gestor {
     private InterfazPausa interfaz = null;
     private static boolean mapaMoving = false;
     private int vidasJugador = 0;
+    private Boton[] tutorial;
 
     /**
      * Crea el gestor de juegos actual.
@@ -74,6 +77,16 @@ public class GestorJuego implements Gestor {
         this.jugador = new Jugador(100, 100, 107, 69, teclado);
         entesEnMapa.add(jugador);
         teclado.resetAllKeys();
+
+        if (mapa.getID() == 1) {
+            tutorial = new Boton[3];
+            tutorial[0] = new Boton(100, 200, 600, 100, "Muevete con las flechas,/salta con \"Flecha arriba\"", LoadTools.loadFont("/fonts/kongtext.ttf").deriveFont(20f), Color.gray, 60, 50, raton);
+            tutorial[0].setFormat(60);
+            tutorial[1] = new Boton(1000, 200, 630, 100, "Para destruir a los enemigos /has de dispararlos con la \"C\"", LoadTools.loadFont("/fonts/kongtext.ttf").deriveFont(20f), Color.gray, 60, 50, raton);
+            tutorial[1].setFormat(60);
+            tutorial[2] = new Boton(2000, 200, 600, 100, "Para correr, manten \"SHIFT\" /mientras te mueves", LoadTools.loadFont("/fonts/kongtext.ttf").deriveFont(20f), Color.gray, 60, 50, raton);
+            tutorial[2].setFormat(60);
+        }
 
     }
 
@@ -156,6 +169,7 @@ public class GestorJuego implements Gestor {
      */
     @Override
     public void dibujar(Graphics g) {
+
         if (gameOver) {
             this.DibujarGameOver(g);
             return;
@@ -164,6 +178,11 @@ public class GestorJuego implements Gestor {
             return;
         }
         mapa.dibujar(g);
+        if (this.tutorial != null) {
+            for (int i = 0; i < tutorial.length; i++) {
+                tutorial[i].dibujar(g);
+            }
+        }
         //Dibujamos todos los entes
         for (int i = 0; i < entesEnMapa.size(); i++) {
             if (entesEnMapa.get(i).isVisible()) {
@@ -348,8 +367,14 @@ public class GestorJuego implements Gestor {
             entesEnMapa.get(i).setXa(-xa);
             entesEnMapa.get(i).actualizar();
         }
+        if (this.tutorial != null && mapaMoving) {
+            for (int i = 0; i < tutorial.length; i++) {
+                tutorial[i].moveInX(-xa);
+            }
+        }
         mapa.actualizar();
         jugador.addBalasAsEntidadtidad(entesEnMapa);
+
     }
 
     /**

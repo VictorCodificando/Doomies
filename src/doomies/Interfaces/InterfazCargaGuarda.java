@@ -19,17 +19,19 @@ import doomies.Interfaces.Elementos.Boton;
  * @author Víctor Zero
  */
 public class InterfazCargaGuarda extends Interfaz {
+
     /**
      * Definicion de variables
      */
-    
     private final Boton botonJugar;
     private final Boton botonCargar;
     private final Boton botonGuardar;
     private final Boton botonSalir;
+    private final Boton botonOpciones;
     private boolean jugar = false;
     private boolean cargar = false;
     private boolean guardar = false;
+    private boolean opciones = false;
     private boolean salir = false;
 
     /**
@@ -40,11 +42,12 @@ public class InterfazCargaGuarda extends Interfaz {
      * @param raton Raton que usaran los botones de la interfaz
      */
     public InterfazCargaGuarda(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
-        super(WIDTH,HEIGHT,teclado,raton);
-        botonJugar = new Boton(450, 100, 400, 70, "JUGAR", font.deriveFont(20f), Color.gray, -10, 4, raton);
-        botonCargar = new Boton(450, 250, 400, 70, "CARGAR PARTIDA", font.deriveFont(20f), Color.gray, 2, 4, raton);
-        botonGuardar = new Boton(450, 400, 400, 70, "GUARDAR PARTIDA", font.deriveFont(20f), Color.gray, 3, 4, raton);
-        botonSalir = new Boton(450, 550, 400, 70, "SALIR", font.deriveFont(20f), Color.gray, -10, 4, raton);
+        super(WIDTH, HEIGHT, teclado, raton);
+        botonJugar = new Boton(450, 80, 400, 70, "JUGAR", font.deriveFont(20f), Color.gray, -10, 4, raton);
+        botonCargar = new Boton(450, 220, 400, 70, "CARGAR PARTIDA", font.deriveFont(20f), Color.gray, 2, 4, raton);
+        botonGuardar = new Boton(450, 340, 400, 70, "GUARDAR PARTIDA", font.deriveFont(20f), Color.gray, 3, 4, raton);
+        botonOpciones = new Boton(450, 480, 400, 70, "OPCIONES", font.deriveFont(20f), Color.gray, -7, 4, raton);
+        botonSalir = new Boton(450, 620, 400, 70, "SALIR", font.deriveFont(20f), Color.gray, -10, 4, raton);
     }
 
     @Override
@@ -60,6 +63,7 @@ public class InterfazCargaGuarda extends Interfaz {
         botonJugar.dibujar(g);
         botonCargar.dibujar(g);
         botonGuardar.dibujar(g);
+        botonOpciones.dibujar(g);
         botonSalir.dibujar(g);
     }
 
@@ -71,6 +75,7 @@ public class InterfazCargaGuarda extends Interfaz {
         botonJugar.actualizar();
         botonCargar.actualizar();
         botonGuardar.actualizar();
+        botonOpciones.actualizar();
         botonSalir.actualizar();
         /**
          * Definicion de estados
@@ -86,7 +91,9 @@ public class InterfazCargaGuarda extends Interfaz {
         if (botonGuardar.isClicked()) {
             guardar = true;
         }
-
+        if (botonOpciones.isClicked()) {
+            opciones = true;
+        }
         if (botonSalir.isClicked()) {
             System.exit(0);
         }
@@ -115,6 +122,10 @@ public class InterfazCargaGuarda extends Interfaz {
      */
     public boolean isGuardar() {
         return guardar;
+    }
+
+    public boolean isOpciones() {
+        return opciones;
     }
 
 }

@@ -3,6 +3,8 @@ package doomies.Entes.Seres;
 import java.awt.Graphics;
 import doomies.Visual.Sprite;
 import doomies.Entes.Entidad;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 
 public class SerVivo extends Entidad {
 
@@ -17,9 +19,10 @@ public class SerVivo extends Entidad {
     protected static final int WALK_ID = 2;
     protected static final int FALL_ID = 4;
     protected int spriteActual;
+    protected Sprite[] spritesHovered = null;
     protected int animacion;
     protected int cooldownDaño = 0;
-    protected int COOLDOWNDAÑOTOTAL=100;
+    protected int COOLDOWNDAÑOTOTAL = 100;
 
     /*
     Distribucion de sprites PARA SERES:
@@ -44,9 +47,52 @@ public class SerVivo extends Entidad {
         this.vida = vida;
     }
 
+    /**
+     * Dibuja los sprites con daño
+     */
+    protected void paintHoveredSprites() {
+        this.spritesHovered = new Sprite[sprites.length];
+        Sprite spActual;
+        int incremento = 100;
+        for (int i = 0; i < this.sprites.length; i++) {
+            spActual = sprites[i];
+            BufferedImage img = spActual.getImgCopy();
+            Graphics g = img.getGraphics();
+            g.drawImage(img, 0, 0, null);
+            for (int k = 0; k < img.getHeight(); k++) {
+                for (int j = 0; j < img.getWidth(); j++) {
+                    if (((img.getRGB(j, k)) >>> 24) == 0x00) {
+                        continue;
+                    }
+                    Color oldColor = new Color(img.getRGB(j, k));
+                    int rojo = oldColor.getRed();
+                    Color color = new Color(((rojo < (255 - incremento)) ? (rojo + incremento) : 255), oldColor.getGreen(), oldColor.getBlue());
+                    g.setColor(color);
+                    g.fillRect(j, k, 1, 1);
+                }
+            }
+
+            g.dispose();
+            spritesHovered[i] = new Sprite(img);
+
+        }
+    }
+
     @Override
     public void dibujar(final Graphics g) {//Dibujamos si es visible
+
+        if (spritesHovered == null || spritesHovered[0] == null) {
+            paintHoveredSprites();
+        }
         if (!this.visible) {//Si no es visible se sale
+            return;
+        }
+        if (cooldownDaño != 0) {
+            if (this instanceof Jugador && cooldownDaño >= COOLDOWNDAÑOTOTAL - 5) {
+                this.sprites[spriteActual].dibujar(g, this.hitbox.x, this.hitbox.y);
+                return;
+            }
+            this.spritesHovered[spriteActual].dibujar(g, this.hitbox.x, this.hitbox.y);
             return;
         }
         this.sprites[spriteActual].dibujar(g, this.hitbox.x, this.hitbox.y);
@@ -77,13 +123,13 @@ public class SerVivo extends Entidad {
             falling = true;
         }
         activarCooldownVida();
-
     }
 
     public void perderVida() {
         if (cooldownDaño == 0) {
             this.vida--;
-            cooldownDaño++;        }
+            cooldownDaño++;
+        }
 
     }
 

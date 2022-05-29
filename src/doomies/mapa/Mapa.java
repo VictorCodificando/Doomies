@@ -61,6 +61,8 @@ public class Mapa {
                 entesEnMapa.add(tiles[i][j]);
             }
         }
+//        System.out.println("antes");
+        entesEnMapa=LoadTools.loadEntes("/mapas/mapa" + ID + ".txt", entesEnMapa);
         //Añadimos los seres
         /*for (int i = 0; i < seres.length; i++) {
             if (seres[i]==null) {

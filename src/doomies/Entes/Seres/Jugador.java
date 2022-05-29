@@ -6,6 +6,8 @@ import doomies.Visual.SpriteSheet;
 import doomies.Visual.Sprite;
 import doomies.HerramientasEntradaSalida.Teclado;
 import doomies.Entes.Objetos.Bala;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Jugador extends SerVivo {
@@ -14,7 +16,6 @@ public class Jugador extends SerVivo {
     public ArrayList<Bala> balas;
     private int cooldownBalas;
     public Teclado teclado;
-    
 
     /**
      * Crea el jugador
@@ -28,7 +29,7 @@ public class Jugador extends SerVivo {
     public Jugador(final int x, final int y, final int HEIGHT, final int WIDTH, final Teclado teclado) {
         super(new Sprite[4], 100, 30, 3);
         this.balas = new ArrayList<Bala>();
-        this.vida=20;
+        this.vida = 3;
         this.sprites = new Sprite[]{(Sprite) SpriteSheet.PERSONAJE.getSprite(0, 0), SpriteSheet.PERSONAJE.getSprite(0, 1),
             SpriteSheet.PERSONAJE.getSprite(1, 0), SpriteSheet.PERSONAJE.getSprite(1, 1),
             SpriteSheet.PERSONAJE.getSprite(2, 0), SpriteSheet.PERSONAJE.getSprite(2, 1),
@@ -37,7 +38,7 @@ public class Jugador extends SerVivo {
             SpriteSheet.PERSONAJE.getSprite(5, 0), SpriteSheet.PERSONAJE.getSprite(5, 1)};
         this.hitbox = new Rectangle(x, y, WIDTH, HEIGHT);
         this.teclado = teclado;
-        this.COOLDOWNDAÑOTOTAL=100;
+        this.COOLDOWNDAÑOTOTAL = 100;
     }
 
     /**
@@ -60,6 +61,37 @@ public class Jugador extends SerVivo {
 
     }
 
+    @Override
+    protected void paintHoveredSprites() {
+        this.spritesHovered = new Sprite[sprites.length];
+        Sprite spActual;
+        int incremento = 150;
+        for (int i = 0; i < this.sprites.length; i++) {
+            spActual = sprites[i];
+            BufferedImage img = spActual.getImgCopy();
+            Graphics g = img.getGraphics();
+            g.drawImage(img, 0, 0, null);
+            for (int k = 0; k < img.getHeight(); k++) {
+                for (int j = 0; j < img.getWidth(); j++) {
+                    if (((img.getRGB(j, k)) >>> 24) == 0x00) {
+                        continue;
+                    }
+                    Color oldColor = new Color(img.getRGB(j, k));
+                    int rojo = oldColor.getRed();
+                    int azul = oldColor.getBlue();
+                    int verde = oldColor.getGreen();
+                    Color color = new Color(((rojo < (255 - incremento)) ? (rojo + incremento) : 255), ((azul < (255 - incremento)) ? (azul + incremento) : 255), ((verde < (255 - incremento)) ? (verde + incremento) : 255));
+                    g.setColor(color);
+                    g.fillRect(j, k, 1, 1);
+                }
+            }
+
+            g.dispose();
+            spritesHovered[i] = new Sprite(img);
+
+        }
+    }
+
     public void mover() {
         if (collidingYDown && this.teclado.jumping) {
             this.jump();
@@ -69,7 +101,7 @@ public class Jugador extends SerVivo {
     }
 
     public void disparar() {
-        
+
         if (cooldownBalas == 0) {//Si esta intentando disparar y puede disparar(cooldown bala==0) entonces dispara
             // inicio contador balas
             this.shooting = true;
@@ -114,8 +146,6 @@ public class Jugador extends SerVivo {
             }
         }
     }
-
-
 
     public void setStates(boolean run, boolean walking, boolean fall) {
         running = run;

@@ -5,11 +5,10 @@
 package doomies.Gestores;
 
 import doomies.HerramientasEntradaSalida.LoadTools;
-import java.awt.Frame;
 import java.awt.Graphics;
-import javax.swing.JOptionPane;
 import doomies.HerramientasEntradaSalida.Mouse;
 import doomies.HerramientasEntradaSalida.Teclado;
+import doomies.Interfaces.Elementos.InterfazOpciones;
 import doomies.Interfaces.Interfaz;
 import doomies.Interfaces.InterfazCargaGuarda;
 import doomies.Interfaces.InterfazCargar;
@@ -83,6 +82,8 @@ public class GestorMenu implements Gestor {
             this.opcionesMenuCarga();
         } else if (this.isMenuSave()) {
             this.opcionesMenuGuardar();
+        } else if (this.isOpciones()) {
+            this.opcionesMenuOpciones();
         }
     }
 
@@ -115,8 +116,11 @@ public class GestorMenu implements Gestor {
             this.setMenuLoad();
         } else if (temp.isGuardar()) {
             this.setMenuSave();
+        } else if (temp.isOpciones()) {
+            this.setOpciones();
         } else if (teclado.escape) {
             this.setInicio();
+
         }
     }
 
@@ -158,6 +162,16 @@ public class GestorMenu implements Gestor {
         this.partidasGuardadas = temp.getPartidasGuardadas();
         if (teclado.escape || temp.isSalir()) {
             LoadTools.guardarPartidas("/save/save.txt", GestorEstados.partidas);
+            this.setMenuSaveLoad();
+        }
+    }
+
+    private void opcionesMenuOpciones() {
+        if (!this.isOpciones()) {
+            return;
+        }
+        InterfazOpciones temp = (InterfazOpciones) interActual;
+        if (temp.isGuardar()) {
             this.setMenuSaveLoad();
         }
     }
@@ -208,6 +222,14 @@ public class GestorMenu implements Gestor {
 
     public void setSeleccNiveles() {
         this.interActual = (Interfaz) new InterfazSeleccNiveles(WIDTH, HEIGHT, teclado, raton);
+    }
+
+    public boolean isOpciones() {
+        return interActual instanceof InterfazOpciones;
+    }
+
+    public void setOpciones() {
+        this.interActual = (Interfaz) new InterfazOpciones(WIDTH, HEIGHT, teclado, raton);
     }
 
     //niveles

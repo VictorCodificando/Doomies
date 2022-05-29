@@ -48,17 +48,31 @@ public class Jugador extends SerVivo {
      */
     public void dibujar(final Graphics g) {
         super.dibujar(g);
-        this.dibujarBalas(g);
     }
 
     public void actualizar() {
+        activarContadorBalas();
+        if (cooldownDaño != 0) {
+            if (inmunidad > 0 && inmunidad < 40) {
+                inmunidad++;
+            } else if (inmunidad == 40) {
+                inmunidad = 0;
+            }
+            if (inmunidad < 20 && inmunidad >= 0) {
+                inmunidad++;
+            }
+        } else {
+            inmunidad = 0;
+        }
+        super.actualizar();
+    }
+
+    private void activarContadorBalas() {
         if (cooldownBalas != 0 && cooldownBalas < COOLBALAS) {
             cooldownBalas++;
         } else if (cooldownBalas == COOLBALAS) {
             cooldownBalas = 0;
         }
-        super.actualizar();
-
     }
 
     @Override
@@ -93,10 +107,9 @@ public class Jugador extends SerVivo {
     }
 
     public void mover() {
-        if (collidingYDown && this.teclado.jumping) {
+        if (this.teclado.jumping && !falling) {
             this.jump();
         }
-
         super.mover();
     }
 
@@ -120,9 +133,6 @@ public class Jugador extends SerVivo {
         this.contadorAnimacion();
         this.Speed *= (this.teclado.running ? 2 : 1);
         this.xa -= (((this.teclado.left || this.teclado.right)) ? (this.teclado.left ? this.Speed : (-this.Speed)) : 0);
-        if (!this.falling && this.teclado.jumping) {
-            this.jump();
-        }
     }
 
     private void dibujarBalas(final Graphics g) {//Dibuja las balas que existan

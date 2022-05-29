@@ -23,6 +23,7 @@ public class SerVivo extends Entidad {
     protected int animacion;
     protected int cooldownDaño = 0;
     protected int COOLDOWNDAÑOTOTAL = 100;
+    protected int inmunidad = 0;
 
     /*
     Distribucion de sprites PARA SERES:
@@ -71,7 +72,6 @@ public class SerVivo extends Entidad {
                     g.fillRect(j, k, 1, 1);
                 }
             }
-
             g.dispose();
             spritesHovered[i] = new Sprite(img);
 
@@ -80,7 +80,6 @@ public class SerVivo extends Entidad {
 
     @Override
     public void dibujar(final Graphics g) {//Dibujamos si es visible
-
         if (spritesHovered == null || spritesHovered[0] == null) {
             paintHoveredSprites();
         }
@@ -88,13 +87,13 @@ public class SerVivo extends Entidad {
             return;
         }
         if (cooldownDaño != 0) {
-            if (this instanceof Jugador && cooldownDaño >= COOLDOWNDAÑOTOTAL - 5) {
+            if ((this instanceof Jugador && cooldownDaño >= COOLDOWNDAÑOTOTAL - 5) || (this instanceof Jugador && inmunidad < 20 && inmunidad >= 0)) {
                 this.sprites[spriteActual].dibujar(g, this.hitbox.x, this.hitbox.y);
                 return;
             }
             this.spritesHovered[spriteActual].dibujar(g, this.hitbox.x, this.hitbox.y);
             return;
-        }
+        } 
         this.sprites[spriteActual].dibujar(g, this.hitbox.x, this.hitbox.y);
     }
 
@@ -106,9 +105,7 @@ public class SerVivo extends Entidad {
 
     //Salto
     protected void jump() {
-        if (!collidingYDown) {
-            return;
-        }
+        
         this.ya = -11;
     }
 

@@ -47,7 +47,7 @@ public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
      * @param y es el inicio en las y donde se va a imprimir el boton
      * @param labelImg es la imagen que entrará como label
      */
-    public Boton(int x, int y, BufferedImage labelImg) {
+    private Boton(int x, int y, BufferedImage labelImg) {
         this(x, y);
         this.labelImg = labelImg;
         this.width = labelImg.getWidth();
@@ -65,7 +65,7 @@ public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
      * @param label es el string que ira encima del color
      * @param font es la fuente
      */
-    public Boton(int x, int y, int width, int height, String label, Font font) {
+    private Boton(int x, int y, int width, int height, String label, Font font) {
         this(x, y);
         this.width = width;
         this.height = height;
@@ -114,8 +114,8 @@ public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
 
         if (hover && raton.clicked) {
             clicked = true;
-        }else{
-            clicked=false;
+        } else {
+            clicked = false;
         }
     }
 
@@ -216,7 +216,7 @@ public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
     public void setLabel(String label) {
         this.label = label;
     }
-    
-    
-
+    public void moveInX(int dx){
+        this.x+=dx;
+    }
 }

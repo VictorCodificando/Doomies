@@ -14,12 +14,15 @@ import java.util.logging.Logger;
 public class Doomies {
 
     //Declaramos la ventana y el lienzo(donde se dibujaran las cosas)
-    private Ventana ventana;
-    private Lienzo canvas;
+    private final Ventana ventana;
+    private final Lienzo canvas;
     private static boolean onTop;
     private boolean enEjecucion = false;//Variable que funcionara como bucle infinito
+    private final long refresco = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getRefreshRate();
+    public static boolean vSync = false;
+    public static boolean fps60 = false;
 
-    public Doomies(int width, int height) {//inicializo el canvas primero y luego se lo paso al frame(ventana)
+    public Doomies(final int width, final int height) {//inicializo el canvas primero y luego se lo paso al frame(ventana)
         this.canvas = new Lienzo(width, height);
         this.ventana = new Ventana(canvas);
     }
@@ -38,18 +41,24 @@ public class Doomies {
     private void bucleContador() {//El bucle contador llama a actualizar y a llamar
         long actual = 0;
         long anterior = 0;
+        long anterior2 = 0;
         long contador = System.nanoTime();
         long dif = 0;
+        long dif2 = 0;
         int fps = 0;
         int aps = 0;
         while (enEjecucion) {
             actual = System.nanoTime();//coje el tiempo actual en nanosegundos 1* 10 E9
             dif = actual - anterior;//mide la diferencia con la anterior iteracion
+            dif2 = actual - anterior2;
             onTop = ventana.isActive();
             if ((dif) > (1000000000 / 60)) {//Dice si la diferencia llega al tiempo exacto para que halla 60 actualizaciones por segundo
                 anterior = System.nanoTime();
                 actualizar();//actualiza las variables
                 aps++;
+            }
+            if (((dif2) > (1000000000 / refresco) && vSync && !fps60) || (!vSync && !fps60) || (fps60 && (dif2) > (1000000000 / 60))) {
+                anterior2 = System.nanoTime();
                 dibujar();//luego dibuja y aumenta los fps
                 fps++;
             }

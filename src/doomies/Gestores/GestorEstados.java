@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import doomies.HerramientasEntradaSalida.Mouse;
 import doomies.HerramientasEntradaSalida.Teclado;
 import doomies.Partida;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,7 +18,7 @@ public class GestorEstados implements Gestor {
 
     private Gestor gestorActual;
     public static Partida partida;
-    public static String[] partidas;
+    public static ArrayList<String> partidas;
     private final int WIDTH;
     private final int HEIGHT;
     private final Teclado teclado;

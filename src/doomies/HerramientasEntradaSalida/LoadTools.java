@@ -455,4 +455,29 @@ public class LoadTools {
         return keyboard;
     }
 
+    public static void saveSettings(Teclado t) {
+        String path = "resources/save/config.save";
+        if (RUTA_ACTUAL.contains(".jar")) {
+            path = "save/config.save";
+        }
+        File f = new File(path);
+
+        if (!f.exists()) { //IMPOSIBLE QUE PASE PERO POR SEGURIDAD
+            try {
+                f.createNewFile();
+            } catch (IOException ex) {
+                System.err.println(ex);
+            }
+        }
+        try {
+            FileWriter fw = new FileWriter(f);
+            String controles = t.leftKey + ";" + t.rightKey + ";" + t.runKey + ";" + t.jumpKey + ";" + t.shootKey;
+            int opciones = (Doomies.fps60 || Doomies.vSync) ? (Doomies.fps60) ? 2 : 1 : 0;
+            fw.write(controles + "\n" + opciones);
+            fw.close();
+        } catch (IOException ex) {
+            System.err.println(ex);
+        }
+
+    }
 }

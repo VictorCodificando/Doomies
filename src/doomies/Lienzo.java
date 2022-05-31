@@ -3,12 +3,11 @@ package doomies;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.Toolkit;
-import java.awt.event.MouseListener;
-import java.awt.event.KeyListener;
 import java.awt.Dimension;
 import doomies.HerramientasEntradaSalida.Mouse;
 import doomies.HerramientasEntradaSalida.Teclado;
 import doomies.Gestores.Pantalla;
+import doomies.HerramientasEntradaSalida.LoadTools;
 import java.awt.Canvas;
 /**
  *
@@ -26,7 +25,7 @@ public class Lienzo extends Canvas
      * @param HEIGHT La altura del lienzo
      */
     public Lienzo(final int WIDTH, final int HEIGHT) {
-        this.teclado = new Teclado();
+        this.teclado = LoadTools.createTeclado();
         this.raton = new Mouse((int) this.getLocation().getX(), (int) this.getLocation().getY());
         pantalla = new Pantalla(WIDTH, HEIGHT, teclado, raton);//le pasamos el tamaño y el teclado para bajarlo en la jerarquia
         setPreferredSize(new Dimension(WIDTH, HEIGHT));//definimos tamaño del lienzo

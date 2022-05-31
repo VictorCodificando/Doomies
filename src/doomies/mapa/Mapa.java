@@ -47,6 +47,7 @@ public class Mapa {
         this.SCREEN_HEIGHT = height;
         this.SCREEN_WIDTH = width;
         this.ID = ID;
+
         this.tiles = LoadTools.loadMap("/mapas/mapa" + ID + ".txt");
         this.background = LoadTools.loadImage("/images/BG_" + ID + ".png");
         this.HEIGHT = this.tiles.length * this.tiles[this.tiles.length - 1][this.tiles[this.tiles.length - 1].length - 1].getHitbox().height;
@@ -62,7 +63,7 @@ public class Mapa {
             }
         }
 //        System.out.println("antes");
-        entesEnMapa=LoadTools.loadEntes("/mapas/mapa" + ID + ".txt", entesEnMapa);
+        entesEnMapa = LoadTools.loadEntes("/mapas/mapa" + ID + ".txt", entesEnMapa);
         //Añadimos los seres
         /*for (int i = 0; i < seres.length; i++) {
             if (seres[i]==null) {

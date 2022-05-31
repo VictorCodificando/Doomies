@@ -2,6 +2,7 @@ package doomies.HerramientasEntradaSalida;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
 /**
  *
@@ -39,6 +40,16 @@ public class Teclado implements KeyListener {
         runKey = KeyEvent.VK_SHIFT;
         jumpKey = KeyEvent.VK_UP;
         shootKey = KeyEvent.VK_C;
+        System.out.println(leftKey + ";" + rightKey + ";" + runKey + ";" + jumpKey + ";" + shootKey);
+    }
+
+    public Teclado(int lKey, int rKey, int runKey, int jumpKey, int shootKey) {
+        this();
+        this.leftKey = lKey;
+        this.rightKey = rKey;
+        this.runKey = runKey;
+        this.jumpKey = jumpKey;
+        this.shootKey = shootKey;
 
     }
 
@@ -87,5 +98,4 @@ public class Teclado implements KeyListener {
         escape = false;
 
     }
-
 }

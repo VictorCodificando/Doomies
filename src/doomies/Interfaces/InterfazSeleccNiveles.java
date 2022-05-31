@@ -75,6 +75,7 @@ public class InterfazSeleccNiveles extends Interfaz {
         botonJugar.dibujar(g);
         botonIzquierda.dibujar(g);
         botonDerecha.dibujar(g);
+        mostrarMejorTiempo(g);
 
     }
 
@@ -104,6 +105,7 @@ public class InterfazSeleccNiveles extends Interfaz {
         g.setFont(g.getFont().deriveFont(120f));
         g.drawString(nivel + "", (int) ((WIDTH / 2) - (g.getFont().getSize() * ((nivel + "").length() / 2) * 0.5) - 46), (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80);
         g.drawImage(locked, (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80, (int) ((WIDTH / 2) + (g.getFont().getSize() * ((nivel + "").length() / 2) * 0.5) - 46), null);
+
     }
 
     private void mostrarNivelDesbloqueado(Graphics g) {
@@ -111,6 +113,18 @@ public class InterfazSeleccNiveles extends Interfaz {
         g.setFont(g.getFont().deriveFont(120f));
         g.drawString(nivel + "", (int) ((WIDTH / 2) - (g.getFont().getSize() * ((nivel + "").length() / 2) * 0.5) - 46), (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80);
         g.drawImage(unlocked, (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80, (int) ((WIDTH / 2) + (g.getFont().getSize() * ((nivel + "").length() / 2) * 0.5) - 46), null);
+    }
+
+    private void mostrarMejorTiempo(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.setFont(g.getFont().deriveFont(30f));
+        try {
+            int timeInSeconds = GestorEstados.partida.getNivelesDesbloqueados().get(nivel-1);
+            String formatTime = String.format("Record: %d:%02d:%02d", timeInSeconds / 3600, (timeInSeconds % 3600) / 60, (timeInSeconds % 60));
+            g.drawString(formatTime, 400, 500);
+        } catch (Exception e) {
+
+        }
     }
 
     /**

@@ -83,13 +83,17 @@ public class InterfazCargar extends Interfaz {//Clase para la parte VISUAL
     }
 
     private void dibujarPartidaActual(Graphics g) {
+          if (GestorEstados.partidas.size() <= 0) {
+            return;
+        }
         g.setColor(Color.WHITE);
         g.setFont(g.getFont().deriveFont(20f));
-        String nombre = GestorEstados.partidas[index].split(";")[0];
-        String niveles = GestorEstados.partidas[index].split(";")[1];
-        String fecha = GestorEstados.partidas[index].split(";")[2];
+        String nombre = GestorEstados.partidas.get(index).split(";")[0];
+        String niveles = GestorEstados.partidas.get(index).split(";")[1].replaceAll("\\{|\\}", "");
+        int nivelMaximo = niveles.split(";").length;
+        String fecha = GestorEstados.partidas.get(index).split(";")[2];
         g.drawString("Nombre: " + nombre, 450, 225);
-        g.drawString("\nNivel alcanzado: " + niveles, 450, 325);
+        g.drawString("\nNivel alcanzado: " + nivelMaximo, 450, 325);
         g.drawString("\nFecha: " + fecha, 450, 425);
     }
 
@@ -101,7 +105,7 @@ public class InterfazCargar extends Interfaz {//Clase para la parte VISUAL
         if (botonIzquierda.isClicked() || botonDerecha.isClicked()) {
             try {
                 index += (botonDerecha.isClicked()) ? 1 : -1;//comparar id de partida guardada en la bbdd o fichero
-                String error = GestorEstados.partidas[index];
+                String error = GestorEstados.partidas.get(index);
             } catch (Exception e) {
                 index += (botonDerecha.isClicked()) ? -1 : 1;
             }
@@ -118,8 +122,11 @@ public class InterfazCargar extends Interfaz {//Clase para la parte VISUAL
      * @return
      */
     private boolean cargar() {
-        String nombre = GestorEstados.partidas[index].split(";")[0];
-        String tiempos[] = GestorEstados.partidas[index].split(";")[1].replaceAll("\\{|\\}", "").split(",");
+        if (GestorEstados.partidas.size()<=0) {
+            return false;
+        }
+        String nombre = GestorEstados.partidas.get(index).split(";")[0];
+        String tiempos[] = GestorEstados.partidas.get(index).split(";")[1].replaceAll("\\{|\\}", "").split(",");
         ArrayList<Integer> times = new ArrayList<Integer>();
         for (int i = 0; i < tiempos.length; i++) {
             times.add(Integer.parseInt(tiempos[i]));

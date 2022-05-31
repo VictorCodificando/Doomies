@@ -24,8 +24,7 @@ import doomies.Visual.SpriteSheet;
 import doomies.mapa.Tile;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.URISyntaxException;
 
 public class LoadTools {
 
@@ -38,13 +37,19 @@ public class LoadTools {
      * @return Una BufferedImage
      */
     public static BufferedImage loadImage(final String path) {
+        String ruta = "";
+        try {
+            ruta = LoadTools.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().toString().substring(1).replaceAll("Doomies.jar|%20", "");
+        } catch (URISyntaxException ex) {
+            System.out.println(ex);
+        }
         GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();//Obtengo graficos compatibles
         Image img = null;//La imagen es nula por defecto para que no nos de error
         try {
             if (RUTA_ACTUAL.contains(".jar")) {
                 img = ImageIO.read(LoadTools.class.getResourceAsStream(path));//Cargo la imagen
             } else {
-                img = ImageIO.read(new File(RUTA_ACTUAL + path));//Cargo la imagen
+                img = ImageIO.read(new File(ruta + path));//Cargo la imagen
             }
 
         } catch (Exception ex) {
@@ -67,13 +72,19 @@ public class LoadTools {
      * que se termina el programa
      */
     public static Font loadFont(final String path) {//Cargamos una fuente en una ruta indicada
+        String ruta = "";
+        try {
+            ruta = LoadTools.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().toString().substring(1).replaceAll("Doomies.jar|%20", "");
+        } catch (URISyntaxException ex) {
+            System.out.println(ex);
+        }
         Font font = null;
         try {
             if (RUTA_ACTUAL.contains(".jar")) {
                 ClassLoader loader = Doomies.class.getClassLoader();
                 font = Font.createFont(Font.TRUETYPE_FONT, LoadTools.class.getResourceAsStream(path)).deriveFont(15f);//Cargo la imagen
             } else {
-                font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File(RUTA_ACTUAL + path))).deriveFont(15f);//Cargo la imagen
+                font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File(ruta + path))).deriveFont(15f);//Cargo la imagen
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(new Frame(), "ERROR CARGANDO LA FUENTE EN LA RUTA\n" + path, "ERROR", 2);
@@ -121,6 +132,12 @@ public class LoadTools {
      * @return Los tiles que componen el mapa del archivo
      */
     public static Tile[][] loadMap(String path) {
+        String ruta = "";
+        try {
+            ruta = LoadTools.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().toString().substring(1).replaceAll("Doomies.jar|%20", "");
+        } catch (URISyntaxException ex) {
+            System.out.println(ex);
+        }
         File f = null;
         ArrayList<Tile> tiles = new ArrayList();
         Tile tilesArray[][] = null;
@@ -128,13 +145,8 @@ public class LoadTools {
         SpriteSheet hoja = SpriteSheet.MAPA;
         try {
             Scanner lector;
-            if (RUTA_ACTUAL.contains(".jar")) {
-                f = new File(path);
-                lector = new Scanner(f);
-            } else {
-                f = new File(RUTA_ACTUAL + "./" + path);
-                lector = new Scanner(f);
-            }
+            f = new File(ruta + path);
+            lector = new Scanner(f);
             //LEO EL MAPA
             for (int i = 0; lector.hasNext(); i++) {
                 mapa += lector.next();
@@ -187,6 +199,12 @@ public class LoadTools {
     }
 
     public static ArrayList<Entidad> loadEntes(String path, ArrayList<Entidad> entes) {
+        String ruta = "";
+        try {
+            ruta = LoadTools.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().toString().substring(1).replaceAll("Doomies.jar|%20", "");
+        } catch (URISyntaxException ex) {
+            System.out.println(ex);
+        }
         File f = null;
         ArrayList<Tile> tiles = new ArrayList();
         Tile tilesArray[][] = null;
@@ -194,13 +212,8 @@ public class LoadTools {
         SpriteSheet hoja = SpriteSheet.MAPA;
         try {
             Scanner lector;
-            if (RUTA_ACTUAL.contains(".jar")) {
-                f = new File("." + path);
-                lector = new Scanner(f);
-            } else {
-                f = new File(RUTA_ACTUAL + "./" + path);
-                lector = new Scanner(f);
-            }
+            f = new File(ruta + path);
+            lector = new Scanner(f);
             //LEO EL MAPA
 
             for (int i = 0; lector.hasNext(); i++) {
@@ -239,13 +252,15 @@ public class LoadTools {
      * @return
      */
     public static int countMap(String foldPath) {
+        String ruta = "";
+        try {
+            ruta = LoadTools.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().toString().substring(1).replaceAll("Doomies.jar|%20", "");
+        } catch (URISyntaxException ex) {
+            System.out.println(ex);
+        }
         File f = null;
         int count = 0;
-        if (RUTA_ACTUAL.contains(".jar")) {
-            f = new File(foldPath);
-        } else {
-            f = new File(RUTA_ACTUAL + foldPath);
-        }
+        f = new File(ruta + foldPath);
         if (!f.exists()) {
             JOptionPane.showMessageDialog(new Frame(), "ERROR EN LA LECTURA DEL DIRECTORIO:\n" + foldPath, "ERROR", 2);
             System.exit(0);
@@ -263,20 +278,20 @@ public class LoadTools {
      * @param path
      * @return
      */
-    public static String[] cargarPartidas(String path) {
+    public static ArrayList<String> cargarPartidas(String path) {
+        String ruta = "";
+        try {
+            ruta = LoadTools.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().toString().substring(1).replaceAll("Doomies.jar|%20", "");
+        } catch (URISyntaxException ex) {
+            System.out.println(ex);
+        }
         File f = null;
         ArrayList<String> partidasExtensible = new ArrayList();
         String partidas[];
         try {
             Scanner lector;
-
-            if (RUTA_ACTUAL.contains(".jar")) {
-                f = new File(path);
-                lector = new Scanner(f);
-            } else {
-                f = new File(RUTA_ACTUAL + path);
-                lector = new Scanner(f);
-            }
+            f = new File(ruta + path);
+            lector = new Scanner(f);
             for (int i = 0; lector.hasNext(); i++) {
                 partidasExtensible.add(lector.next());
             }
@@ -288,11 +303,7 @@ public class LoadTools {
             System.out.println("error");
             return null;
         }
-        partidas = new String[partidasExtensible.size()];
-        for (int i = 0; i < partidasExtensible.size(); i++) {
-            partidas[i] = partidasExtensible.get(i);
-        }
-        return partidas;
+        return partidasExtensible;
     }
 
     /**
@@ -301,21 +312,21 @@ public class LoadTools {
      * @param path
      * @param partidas
      */
-    public static void guardarPartidas(String path, String[] partidas) {
+    public static void guardarPartidas(String path, ArrayList<String> partidas) {
+        String ruta = "";
+        try {
+            ruta = LoadTools.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().toString().substring(1).replaceAll("Doomies.jar|%20", "");
+        } catch (URISyntaxException ex) {
+            System.out.println(ex);
+        }
         File f = null;
         FileWriter fw = null;
         try {
             Scanner lector;
-            if (RUTA_ACTUAL.contains(".jar")) {
-                f = new File(path);
-                fw = new FileWriter(f);
-            } else {
-                f = new File(RUTA_ACTUAL + path);
-                fw = new FileWriter(f);
-
-            }
-            for (int i = 0; i < partidas.length; i++) {
-                fw.write(partidas[i] + "\n");
+            f = new File(ruta + path);
+            fw = new FileWriter(f);
+            for (int i = 0; i < partidas.size(); i++) {
+                fw.write(partidas.get(i) + "\n");
             }
             fw.close();
         } catch (IOException e) {
@@ -325,34 +336,6 @@ public class LoadTools {
             System.out.println("ERROR OTRO" + e);
             return;
         }
-    }
-
-    public static String reemplazarANull(String a) {
-        if ((a.length() + 1) % 3 != 0) {//tiene que ser divisible entre 3 para que este el formato bien porque coje xx- y es +1 porque los ultimos 2 no acaban en -
-            System.err.println("DA ERROR");
-            System.exit(0);
-        }
-        for (int i = 0; i < a.length(); i += 3) {//Se hace un for para comprobar que lo que se meten son parejas de xx o de numeros y no otra cosa
-            if (a.substring(i, i + 2).equals("xx")) {//Se comprueba que lo que se mete es una pareja de xx y no otras letras.
-            } else {
-                try {
-                    int block = Integer.parseInt(a.substring(i, i + 2));//Se comprueba que lo que se mete es una pareja de numeros y no otras cosas
-                } catch (Exception e) {
-                    System.err.println("DA ERROR");
-                    System.exit(0);
-                }
-            }
-            if (i == a.length() - 2) {//Si son los 2 ultimos se los salta y continua
-                continue;
-            }
-            if (!a.substring(i + 2, i + 3).equals("-")) {//Se comprueba que en cada 3 posicion haya un - , sino da un error
-                System.err.println("DA ERROR");
-                System.exit(0);
-            }
-        }
-        a = a.replace("xx", "");//Se remplazan las xx por espacios vacios para optimizar espacio
-        return a;
-
     }
 
     public static String reemplazarAX(String c) {
@@ -402,12 +385,15 @@ public class LoadTools {
     }
 
     public static Teclado createTeclado() {
-        Teclado keyboard = null;
-        String path = "resources/save/config.save";
-        if (RUTA_ACTUAL.contains(".jar")) {
-            path = "save/config.save";
+        String ruta = "";
+        try {
+            ruta = LoadTools.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().toString().substring(1).replaceAll("Doomies.jar|%20", "");
+        } catch (URISyntaxException ex) {
+            System.out.println(ex);
         }
-        File f = new File(path);
+        Teclado keyboard = null;
+        String path = "/save/config.save";
+        File f = new File(ruta+path);
 
         if (!f.exists()) {
             try {

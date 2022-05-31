@@ -87,13 +87,17 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
     }
 
     private void dibujarPartidaActual(Graphics g) {
+        if (GestorEstados.partidas.size() <= 0 || index >= GestorEstados.partidas.size()) {
+            return;
+        }
         g.setColor(Color.WHITE);
         g.setFont(g.getFont().deriveFont(20f));
-        String nombre = GestorEstados.partidas[index].split(";")[0];
-        String niveles = GestorEstados.partidas[index].split(";")[1];
-        String fecha = GestorEstados.partidas[index].split(";")[2];
+        String nombre = GestorEstados.partidas.get(index).split(";")[0];
+        String niveles = GestorEstados.partidas.get(index).split(";")[1].replaceAll("\\{|\\}", "");
+        int nivelMaximo = niveles.split(";").length;
+        String fecha = GestorEstados.partidas.get(index).split(";")[2];
         g.drawString("Nombre: " + nombre, 450, 225);
-        g.drawString("\nNivel alcanzado: " + niveles, 450, 325);
+        g.drawString("\nNivel alcanzado: " + nivelMaximo, 450, 325);
         g.drawString("\nFecha: " + fecha, 450, 425);
     }
 
@@ -104,12 +108,18 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
         botonDerecha.actualizar();
         botonGuardar.actualizar();
         if (botonIzquierda.isClicked() || botonDerecha.isClicked()) {
+            System.out.println(index + "  " + GestorEstados.partidas.size());
+            if (botonDerecha.isClicked() && index == GestorEstados.partidas.size() - 1) {
+                index += 1;
+                return;
+            }
             try {
                 index += (botonDerecha.isClicked()) ? 1 : -1;//comparar id de partida guardada en la bbdd o fichero
-                String error = GestorEstados.partidas[index];
+                String error = GestorEstados.partidas.get(index);
             } catch (Exception e) {
                 index += (botonDerecha.isClicked()) ? -1 : 1;
             }
+
         }
         //cargar
         if (botonGuardar.isClicked()) {
@@ -117,12 +127,18 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
         }
     }
 
+    /**
+     *
+     * Guarda la partida con el formato: nombre;{tiempo1,...},fechaActual
+     *
+     * @return
+     */
     private boolean guardar() {
-        int niveles = 1;
-        while (GestorEstados.partida.isDesbloqueado(niveles)) {
-            niveles++;
+        String nivelesTiempos = "{";
+        for (int i = 0; i < GestorEstados.partida.getNivelesDesbloqueados().size(); i++) {
+            nivelesTiempos += GestorEstados.partida.getNivelesDesbloqueados().get(i) + ",";
         }
-        niveles--;
+        nivelesTiempos += "}";
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDateTime now = LocalDateTime.now();
         String fecha = dtf.format(now);
@@ -133,11 +149,16 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
             nombre = JOptionPane.showInputDialog(jFrame, "Introduce el nombre de la partida:");
         }
 
-        if (nombre == null) {
+        if (nombre == null || nombre.equals("") || nombre.equals("default")) {
             return false;
         }
-        String linea = nombre + ";" + niveles + ";" + fecha;
-        GestorEstados.partidas[index] = linea;
+        String linea = nombre + ";" + nivelesTiempos + ";" + fecha;
+        try {
+            GestorEstados.partidas.set(index, linea);
+        } catch (Exception e) {
+            GestorEstados.partidas.add(linea);
+        }
+
         JOptionPane.showMessageDialog(new Frame(), "¡Partida guardada con exito!\n");
         return true;
     }

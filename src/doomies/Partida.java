@@ -4,6 +4,7 @@
  */
 package doomies;
 
+import doomies.HerramientasEntradaSalida.LoadTools;
 import java.util.ArrayList;
 
 /**
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 public class Partida {
 
     private String nombre;
-    private ArrayList<Boolean> nivelesDesbloqueados = new ArrayList<Boolean>();
+    private ArrayList<Integer> nivelesDesbloqueados = new ArrayList<Integer>();
 
     /**
      * Constructor para la partida cargada
@@ -22,13 +23,9 @@ public class Partida {
      * @param nivelesAlcanzado El nivel hasta el que ha llegado en esta partida
      *
      */
-    public Partida(String nombre, int nivelAlcanzado) {
+    public Partida(String nombre, ArrayList<Integer> lvls) {
         this(nombre);
-        if (nivelAlcanzado > 1) {
-            for (int i = 1; i < nivelAlcanzado; i++) {
-                this.nivelesDesbloqueados.add(true);
-            }
-        }
+        nivelesDesbloqueados = lvls;
     }
 
     /**
@@ -38,7 +35,6 @@ public class Partida {
      */
     public Partida(String nombre) {
         this.nombre = nombre;
-        this.nivelesDesbloqueados.add(true);//Por defecto el primero te viene desbloqueado
     }
 
     /**
@@ -47,13 +43,8 @@ public class Partida {
      * @param nivel El nivel del que queremos saber la información
      * @return
      */
-    public boolean isDesbloqueado(int nivel) {//Te dice si el nivel esta desbloqueado, si no esta en el array, quiere decir que esta bloqueado.
-        boolean desbloqueado = false;
-        try {
-            desbloqueado = nivelesDesbloqueados.get(nivel - 1);
-        } catch (Exception e) {
-        }
-        return desbloqueado;
+    public boolean isDesbloqueado(final int nivel) {//Te dice si el nivel esta desbloqueado, si no esta en el array, quiere decir que esta bloqueado.
+        return (nivel <= nivelesDesbloqueados.size() + 1);
     }
 
     /**
@@ -77,7 +68,7 @@ public class Partida {
      *
      * @return Los niveles que estan desbloqueados
      */
-    public ArrayList<Boolean> getNivelesDesbloqueados() {
+    public ArrayList<Integer> getNivelesDesbloqueados() {
         return nivelesDesbloqueados;
     }
 
@@ -87,8 +78,7 @@ public class Partida {
      * @param nivelesDesbloqueados ArrayList de booleans con los niveles
      * desbloqueados
      */
-    public void setNivelesDesbloqueados(ArrayList<Boolean> nivelesDesbloqueados) {
+    public void setNivelesDesbloqueados(ArrayList<Integer> nivelesDesbloqueados) {
         this.nivelesDesbloqueados = nivelesDesbloqueados;
     }
-
 }

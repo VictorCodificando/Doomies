@@ -4,7 +4,6 @@
  */
 package doomies.Gestores;
 
-import doomies.HerramientasEntradaSalida.LoadTools;
 import java.awt.Graphics;
 import doomies.HerramientasEntradaSalida.Mouse;
 import doomies.HerramientasEntradaSalida.Teclado;
@@ -38,7 +37,7 @@ public class GestorEstados implements Gestor {
         this.HEIGHT = HEIGHT;
         this.teclado = teclado;
         this.raton = raton;
-        partida = new Partida("default", 5);
+        partida = new Partida("default");
         this.gestorActual = (Gestor) new GestorMenu(WIDTH, HEIGHT, teclado, raton, 0);
     }
 

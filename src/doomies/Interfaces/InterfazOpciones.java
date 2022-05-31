@@ -2,11 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package doomies.Interfaces.Elementos;
+package doomies.Interfaces;
 
 import doomies.Doomies;
 import doomies.HerramientasEntradaSalida.Mouse;
 import doomies.HerramientasEntradaSalida.Teclado;
+import doomies.Interfaces.Elementos.Boton;
 import doomies.Interfaces.Interfaz;
 import java.awt.Color;
 import java.awt.GradientPaint;

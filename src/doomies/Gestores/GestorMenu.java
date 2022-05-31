@@ -8,7 +8,7 @@ import doomies.HerramientasEntradaSalida.LoadTools;
 import java.awt.Graphics;
 import doomies.HerramientasEntradaSalida.Mouse;
 import doomies.HerramientasEntradaSalida.Teclado;
-import doomies.Interfaces.Elementos.InterfazOpciones;
+import doomies.Interfaces.InterfazOpciones;
 import doomies.Interfaces.Interfaz;
 import doomies.Interfaces.InterfazCargaGuarda;
 import doomies.Interfaces.InterfazCargar;

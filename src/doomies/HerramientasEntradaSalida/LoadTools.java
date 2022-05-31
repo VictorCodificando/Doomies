@@ -14,7 +14,6 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Transparency;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import doomies.Doomies;
@@ -23,7 +22,10 @@ import doomies.Entes.Seres.Enemigo;
 import doomies.Visual.Sprite;
 import doomies.Visual.SpriteSheet;
 import doomies.mapa.Tile;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LoadTools {
 
@@ -127,7 +129,7 @@ public class LoadTools {
         try {
             Scanner lector;
             if (RUTA_ACTUAL.contains(".jar")) {
-                f = new File("." + path);
+                f = new File(path);
                 lector = new Scanner(f);
             } else {
                 f = new File(RUTA_ACTUAL + "./" + path);
@@ -216,7 +218,7 @@ public class LoadTools {
                 int width = anchuraAltura[0];
                 int height = anchuraAltura[1];
                 entes.add(new Enemigo(x, y, width, height, enemyType));
-                
+
             }
             lector.close();
             tilesArray = loadTile(mapa);
@@ -240,29 +242,7 @@ public class LoadTools {
         File f = null;
         int count = 0;
         if (RUTA_ACTUAL.contains(".jar")) {
-            final ClassLoader loader = Thread.currentThread().getContextClassLoader();
-            try {
-                int hasMoreFiles = 0;
-                //Se hara referencia a mapa
-                for (int i = 1; hasMoreFiles < 1; i++) {
-                    try {
-                        InputStream inputStream = LoadTools.class
-                                .getResourceAsStream(foldPath + "/mapa" + i + ".txt");
-                        if (inputStream != null) {
-                            count++;
-                        } else {
-                            hasMoreFiles = 1;
-                        }
-                    } catch (Exception e) {
-                        hasMoreFiles = 1;
-                        break;
-                    }
-                }
-                return count;
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(new Frame(), "ERROR EN LA LECTURA DEL DIRECTORIO DENTRO DEL JAR:\n" + foldPath, "ERROR", 2);
-                System.exit(0);
-            }
+            f = new File(foldPath);
         } else {
             f = new File(RUTA_ACTUAL + foldPath);
         }
@@ -287,14 +267,12 @@ public class LoadTools {
         File f = null;
         ArrayList<String> partidasExtensible = new ArrayList();
         String partidas[];
-        String rawString = "";
         try {
             Scanner lector;
 
             if (RUTA_ACTUAL.contains(".jar")) {
-                InputStream inputStream = LoadTools.class
-                        .getResourceAsStream(path);
-                lector = new Scanner(inputStream);
+                f = new File(path);
+                lector = new Scanner(f);
             } else {
                 f = new File(RUTA_ACTUAL + path);
                 lector = new Scanner(f);
@@ -325,27 +303,26 @@ public class LoadTools {
      */
     public static void guardarPartidas(String path, String[] partidas) {
         File f = null;
+        FileWriter fw = null;
         try {
             Scanner lector;
             if (RUTA_ACTUAL.contains(".jar")) {
-//                f = new File(path);
-//                OutputStreamWriter outputStream = new OutputStreamWriter(new FileOutputStream(f));
-//                System.out.println("si lo ");
-//
-//                outputStream.write(partidas);
+                f = new File(path);
+                fw = new FileWriter(f);
             } else {
                 f = new File(RUTA_ACTUAL + path);
-                FileWriter fw = new FileWriter(f);
-                for (int i = 0; i < partidas.length; i++) {
-                    fw.write(partidas[i] + "\n");
-                }
-                fw.close();
+                fw = new FileWriter(f);
+
             }
+            for (int i = 0; i < partidas.length; i++) {
+                fw.write(partidas[i] + "\n");
+            }
+            fw.close();
         } catch (IOException e) {
             System.out.println("ERROR IO" + e);
             return;
         } catch (Exception e) {
-            System.out.println("ERROR OTRO"+e);
+            System.out.println("ERROR OTRO" + e);
             return;
         }
     }
@@ -422,6 +399,60 @@ public class LoadTools {
             c = c + "xx";
         }
         return c;
+    }
+
+    public static Teclado createTeclado() {
+        Teclado keyboard = null;
+        String path = "resources/save/config.save";
+        if (RUTA_ACTUAL.contains(".jar")) {
+            path = "save/config.save";
+        }
+        File f = new File(path);
+
+        if (!f.exists()) {
+            try {
+                f.createNewFile();
+                FileWriter fw = new FileWriter(f);
+                fw.write("37;39;16;38;67\n"
+                        + "0");
+                fw.close();
+                return new Teclado();
+            } catch (IOException ex) {
+                System.err.println("ERROR NO SE PUEDE CREAR EL ARCHIVO DE CONFIGURACION ASEGURESE DE QUE SE TIENEN PERMISOS SUFICIENTES...");
+            }
+        }
+        try {
+            Scanner rd = new Scanner(f);
+            String controles[] = rd.next().split(";");
+            int controlesEnNumeros[] = new int[controles.length];
+            for (int i = 0; i < controlesEnNumeros.length; i++) {
+                controlesEnNumeros[i] = Integer.parseInt(controles[i]);
+            }
+            keyboard = new Teclado(controlesEnNumeros[0], controlesEnNumeros[1], controlesEnNumeros[2], controlesEnNumeros[3], controlesEnNumeros[4]);
+            int opcionesFps = Integer.parseInt(rd.next());
+            switch (opcionesFps) {
+                case 0:
+                    Doomies.fps60 = false;
+                    Doomies.vSync = false;
+                    break;
+                case 1:
+                    Doomies.fps60 = false;
+                    Doomies.vSync = true;
+                    break;
+                case 2:
+                    Doomies.fps60 = true;
+                    Doomies.vSync = false;
+                    break;
+                default:
+                    break;
+            }
+
+        } catch (FileNotFoundException ex) {
+
+        } catch (Exception e) {
+
+        }
+        return keyboard;
     }
 
 }

@@ -16,6 +16,7 @@ import doomies.HerramientasEntradaSalida.Mouse;
 import doomies.Interfaces.Elementos.Boton;
 import doomies.Partida;
 import java.awt.Frame;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -94,11 +95,9 @@ public class InterfazCargar extends Interfaz {//Clase para la parte VISUAL
 
     //MENU
     public void actualizar() {
-
         botonIzquierda.actualizar();
         botonDerecha.actualizar();
         botonCargar.actualizar();
-
         if (botonIzquierda.isClicked() || botonDerecha.isClicked()) {
             try {
                 index += (botonDerecha.isClicked()) ? 1 : -1;//comparar id de partida guardada en la bbdd o fichero
@@ -107,21 +106,32 @@ public class InterfazCargar extends Interfaz {//Clase para la parte VISUAL
                 index += (botonDerecha.isClicked()) ? -1 : 1;
             }
         }
-
         //cargar
         if (botonCargar.isClicked()) {
             this.salir = cargar();
         }
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     private boolean cargar() {
         String nombre = GestorEstados.partidas[index].split(";")[0];
-        int nivelMax = Integer.parseInt(GestorEstados.partidas[index].split(";")[1]);
-        GestorEstados.partida = new Partida(nombre, nivelMax);
+        String tiempos[] = GestorEstados.partidas[index].split(";")[1].replaceAll("\\{|\\}", "").split(",");
+        ArrayList<Integer> times = new ArrayList<Integer>();
+        for (int i = 0; i < tiempos.length; i++) {
+            times.add(Integer.parseInt(tiempos[i]));
+        }
+
+        /**
+         * {tiempo1,tiempo2...}
+         */
+        GestorEstados.partida = new Partida(nombre, times);
         JOptionPane.showMessageDialog(new Frame(), "¡Partida cargada con exito!\n");
         return true;
     }
-
 
     public int getPartida() {
         return this.partidas;

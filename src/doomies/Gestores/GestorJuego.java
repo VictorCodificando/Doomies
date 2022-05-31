@@ -18,10 +18,13 @@ import doomies.HerramientasEntradaSalida.LoadTools;
 import doomies.HerramientasEntradaSalida.Mouse;
 import doomies.HerramientasEntradaSalida.Teclado;
 import doomies.Interfaces.Elementos.Boton;
+import doomies.Interfaces.Elementos.Cronometro;
 import doomies.Interfaces.InterfazPausa;
 import doomies.mapa.Mapa;
 import doomies.mapa.Tile;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.KeyEvent;
 
 /**
  *
@@ -34,6 +37,7 @@ public class GestorJuego implements Gestor {
     //Velocidades
     private static int xa;
     private int ya;
+    private long tiempoAlcanzado;
     private boolean pausa;
     private int vidas;
     private boolean gameOver;
@@ -55,6 +59,8 @@ public class GestorJuego implements Gestor {
     private static boolean mapaMoving = false;
     private int vidasJugador = 0;
     private Boton[] tutorial;
+    private Cronometro timer;
+    protected final Font font = LoadTools.loadFont("/fonts/kongtext.ttf");
 
     /**
      * Crea el gestor de juegos actual.
@@ -80,13 +86,15 @@ public class GestorJuego implements Gestor {
 
         if (mapa.getID() == 1) {
             tutorial = new Boton[3];
-            tutorial[0] = new Boton(100, 200, 600, 100, "Muevete con las flechas,/salta con \"Flecha arriba\"", LoadTools.loadFont("/fonts/kongtext.ttf").deriveFont(20f), Color.gray, 60, 50, raton);
+            tutorial[0] = new Boton(100, 200, 600, 100, "Muevete con "+KeyEvent.getKeyText(teclado.leftKey)+" y "+KeyEvent.getKeyText(teclado.rightKey)+",/salta con \""+KeyEvent.getKeyText(teclado.jumpKey)+"\"", LoadTools.loadFont("/fonts/kongtext.ttf").deriveFont(20f), Color.gray, 60, 50, raton);
             tutorial[0].setFormat(60);
-            tutorial[1] = new Boton(1000, 200, 630, 100, "Para destruir a los enemigos /has de dispararlos con la \"C\"", LoadTools.loadFont("/fonts/kongtext.ttf").deriveFont(20f), Color.gray, 60, 50, raton);
+            tutorial[1] = new Boton(1000, 200, 630, 100, "Para destruir a los enemigos /has de dispararlos con \""+KeyEvent.getKeyText(teclado.shootKey)+"\"", LoadTools.loadFont("/fonts/kongtext.ttf").deriveFont(20f), Color.gray, 60, 50, raton);
             tutorial[1].setFormat(60);
-            tutorial[2] = new Boton(2000, 200, 600, 100, "Para correr, manten \"SHIFT\" /mientras te mueves", LoadTools.loadFont("/fonts/kongtext.ttf").deriveFont(20f), Color.gray, 60, 50, raton);
+            tutorial[2] = new Boton(2000, 200, 600, 100, "Para correr, manten \""+KeyEvent.getKeyText(teclado.runKey)+"\" /mientras te mueves", LoadTools.loadFont("/fonts/kongtext.ttf").deriveFont(20f), Color.gray, 60, 50, raton);
             tutorial[2].setFormat(60);
         }
+        timer = new Cronometro(System.nanoTime());
+        timer.start();
 
     }
 
@@ -96,10 +104,13 @@ public class GestorJuego implements Gestor {
     @Override
     public void actualizar() {
         if (cambiarAInterfazPausa()) {
+            timer.setPause(true);
             return;
         }
+        timer.setPause(false);
         if (gameOver || win) {
             waitScreen();
+            timer.stop();
             return;
         }
         detMovimientoJugador();
@@ -113,13 +124,18 @@ public class GestorJuego implements Gestor {
             this.timeInicio = System.nanoTime();
         } else if (this.win()) {
             win = true;
-            this.timeInicio = System.nanoTime();
-            ArrayList<Boolean> levels = GestorEstados.partida.getNivelesDesbloqueados();
+            this.timeInicio=System.nanoTime();
+            tiempoAlcanzado = timer.getTimeInSeconds();
+            ArrayList<Integer> levels = GestorEstados.partida.getNivelesDesbloqueados();
             if (!GestorEstados.partida.isDesbloqueado(mapa.getID() + 1)) {
                 try {
-                    levels.set(mapa.getID(), true);
+                    int tiempoAnterior=levels.get(mapa.getID());
+                    if (tiempoAnterior<=tiempoAlcanzado) {
+                        return;
+                    }
+                    levels.set(mapa.getID(), (int) tiempoAlcanzado);
                 } catch (Exception e) {
-                    levels.add(true);
+                    levels.add((int) tiempoAlcanzado);
                 }
                 GestorEstados.partida.setNivelesDesbloqueados(levels);
             }
@@ -194,6 +210,9 @@ public class GestorJuego implements Gestor {
             interfaz.dibujar(g);
         }
         dibujarVidas(g);
+        g.setColor(Color.WHITE);
+        g.setFont(font.deriveFont(40f));
+        g.drawString(timer.getFormatTime(), 100, 700);
     }
 
     /**
@@ -516,6 +535,9 @@ public class GestorJuego implements Gestor {
      * @return Devuelve si se va a salir del juego
      */
     public boolean isSalir() {
+        if (salir) {
+            timer.stop();
+        }
         return salir;
     }
 

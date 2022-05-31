@@ -172,6 +172,7 @@ public class GestorMenu implements Gestor {
         }
         InterfazOpciones temp = (InterfazOpciones) interActual;
         if (temp.isGuardar()) {
+            LoadTools.saveSettings(teclado);
             this.setMenuSaveLoad();
         }
     }

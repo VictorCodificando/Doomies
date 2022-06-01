@@ -14,7 +14,7 @@ import doomies.Entes.Entidad;
 public class Bala extends Entidad {
 
     /**
-     * Boolean que indica si esta llendo hacia la derecha
+     * Boolean que indica si esta yendo hacia la derecha
      */
     private final boolean right;//Indica direccion
     private final int speed = 40;//La velocidad por defecto sera 40

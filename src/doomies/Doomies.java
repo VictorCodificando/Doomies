@@ -1,6 +1,6 @@
 package doomies;
 
-import doomies.Interfaces.Elementos.Cronometro;
+import doomies.HerramientasEntradaSalida.ConectionDatabase;
 
 /**
  *
@@ -25,6 +25,7 @@ public class Doomies {
 
     public static void main(String[] args) {
         //Inicializo la clase principal con las medidas adecuadas(se pueden cambiar
+        ConectionDatabase.intentarCargarMapas();
         Doomies pr = new Doomies(1280, 720);
         pr.iniciar();
     }

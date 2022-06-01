@@ -129,6 +129,9 @@ public class InterfazCargar extends Interfaz {//Clase para la parte VISUAL
         String tiempos[] = GestorEstados.partidas.get(index).split(";")[1].replaceAll("\\{|\\}", "").split(",");
         ArrayList<Integer> times = new ArrayList<Integer>();
         for (int i = 0; i < tiempos.length; i++) {
+            if (tiempos[i].equals("")) {
+                continue;
+            }
             times.add(Integer.parseInt(tiempos[i]));
         }
 

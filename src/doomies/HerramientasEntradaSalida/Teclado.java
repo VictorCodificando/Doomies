@@ -40,7 +40,6 @@ public class Teclado implements KeyListener {
         runKey = KeyEvent.VK_SHIFT;
         jumpKey = KeyEvent.VK_UP;
         shootKey = KeyEvent.VK_C;
-        System.out.println(leftKey + ";" + rightKey + ";" + runKey + ";" + jumpKey + ";" + shootKey);
     }
 
     public Teclado(int lKey, int rKey, int runKey, int jumpKey, int shootKey) {

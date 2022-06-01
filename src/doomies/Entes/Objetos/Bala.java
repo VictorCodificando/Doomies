@@ -13,7 +13,9 @@ import doomies.Entes.Entidad;
  */
 public class Bala extends Entidad {
 
-    //Atributos de la clase
+    /**
+     * Boolean que indica si esta llendo hacia la derecha
+     */
     private final boolean right;//Indica direccion
     private final int speed = 40;//La velocidad por defecto sera 40
 
@@ -32,10 +34,14 @@ public class Bala extends Entidad {
         this.hitbox = new Rectangle(x, y, 10, 6);
         this.right = right;
     }
-
+    /**
+     * Dibuja la bala
+     * 
+     * @param g Graphics donde se dibujará la bala
+     */
     @Override
     public void dibujar(final Graphics g) {
-        g.setColor(Color.CYAN);//COLOR PROVISIONAL DE LA BALA, DEBERA SER UN SPRITE
+        g.setColor(Color.CYAN);
         g.fillRect(this.x, this.y, this.WIDTH, this.HEIGHT);
     }
 

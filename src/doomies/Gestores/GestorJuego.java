@@ -83,14 +83,13 @@ public class GestorJuego implements Gestor {
         this.jugador = new Jugador(100, 100, 107, 69, teclado);
         entesEnMapa.add(jugador);
         teclado.resetAllKeys();
-
         if (mapa.getID() == 1) {
             tutorial = new Boton[3];
-            tutorial[0] = new Boton(100, 200, 600, 100, "Muevete con "+KeyEvent.getKeyText(teclado.leftKey)+" y "+KeyEvent.getKeyText(teclado.rightKey)+",/salta con \""+KeyEvent.getKeyText(teclado.jumpKey)+"\"", LoadTools.loadFont("/fonts/kongtext.ttf").deriveFont(20f), Color.gray, 60, 50, raton);
+            tutorial[0] = new Boton(100, 200, 600, 100, "Muevete con " + KeyEvent.getKeyText(teclado.leftKey) + " y " + KeyEvent.getKeyText(teclado.rightKey) + ",/salta con \"" + KeyEvent.getKeyText(teclado.jumpKey) + "\"", LoadTools.loadFont("/fonts/kongtext.ttf").deriveFont(20f), Color.gray, 60, 50, raton);
             tutorial[0].setFormat(60);
-            tutorial[1] = new Boton(1000, 200, 630, 100, "Para destruir a los enemigos /has de dispararlos con \""+KeyEvent.getKeyText(teclado.shootKey)+"\"", LoadTools.loadFont("/fonts/kongtext.ttf").deriveFont(20f), Color.gray, 60, 50, raton);
+            tutorial[1] = new Boton(1000, 200, 630, 100, "Para destruir a los enemigos /has de dispararlos con \"" + KeyEvent.getKeyText(teclado.shootKey) + "\"", LoadTools.loadFont("/fonts/kongtext.ttf").deriveFont(20f), Color.gray, 60, 50, raton);
             tutorial[1].setFormat(60);
-            tutorial[2] = new Boton(2000, 200, 600, 100, "Para correr, manten \""+KeyEvent.getKeyText(teclado.runKey)+"\" /mientras te mueves", LoadTools.loadFont("/fonts/kongtext.ttf").deriveFont(20f), Color.gray, 60, 50, raton);
+            tutorial[2] = new Boton(2000, 200, 600, 100, "Para correr, manten \"" + KeyEvent.getKeyText(teclado.runKey) + "\" /mientras te mueves", LoadTools.loadFont("/fonts/kongtext.ttf").deriveFont(20f), Color.gray, 60, 50, raton);
             tutorial[2].setFormat(60);
         }
         timer = new Cronometro(System.nanoTime());
@@ -124,20 +123,17 @@ public class GestorJuego implements Gestor {
             this.timeInicio = System.nanoTime();
         } else if (this.win()) {
             win = true;
-            this.timeInicio=System.nanoTime();
+            this.timeInicio = System.nanoTime();
             tiempoAlcanzado = timer.getTimeInSeconds();
             ArrayList<Integer> levels = GestorEstados.partida.getNivelesDesbloqueados();
-            if (!GestorEstados.partida.isDesbloqueado(mapa.getID() + 1)) {
-                try {
-                    int tiempoAnterior=levels.get(mapa.getID());
-                    if (tiempoAnterior<=tiempoAlcanzado) {
-                        return;
-                    }
-                    levels.set(mapa.getID(), (int) tiempoAlcanzado);
-                } catch (Exception e) {
-                    levels.add((int) tiempoAlcanzado);
+            try {
+                int tiempoAnterior = levels.get(mapa.getID());
+                if (tiempoAnterior <= tiempoAlcanzado) {
+                    return;
                 }
-                GestorEstados.partida.setNivelesDesbloqueados(levels);
+                levels.set(mapa.getID()-1, (int) tiempoAlcanzado);
+            } catch (Exception e) {
+                levels.add((int) tiempoAlcanzado);
             }
         }
 

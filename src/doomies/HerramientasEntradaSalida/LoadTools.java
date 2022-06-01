@@ -268,7 +268,7 @@ public class LoadTools {
         String[] archivos = f.list();
         for (int i = 0; i < archivos.length; i++) {
             if (archivos[i].contains("mapa")) {
-               count++; 
+                count++;
             }
         }
         return count;
@@ -293,16 +293,19 @@ public class LoadTools {
         try {
             Scanner lector;
             f = new File(ruta + path);
+            if (!f.exists()) {
+                f.createNewFile();
+            }
             lector = new Scanner(f);
             for (int i = 0; lector.hasNext(); i++) {
                 partidasExtensible.add(lector.next());
             }
             lector.close();
         } catch (IOException e) {
-            System.out.println("error");
+            System.out.println("error" + e);
             return null;
         } catch (Exception e) {
-            System.out.println("error");
+            System.out.println("error" + e);
             return null;
         }
         return partidasExtensible;
@@ -326,6 +329,9 @@ public class LoadTools {
         try {
             Scanner lector;
             f = new File(ruta + path);
+            if (!f.exists()) {
+                f.createNewFile();
+            }
             fw = new FileWriter(f);
             for (int i = 0; i < partidas.size(); i++) {
                 fw.write(partidas.get(i) + "\n");
@@ -340,7 +346,6 @@ public class LoadTools {
         }
     }
 
-
     public static Teclado createTeclado() {
         String ruta = "";
         try {
@@ -350,7 +355,7 @@ public class LoadTools {
         }
         Teclado keyboard = null;
         String path = "/save/config.save";
-        File f = new File(ruta+path);
+        File f = new File(ruta + path);
 
         if (!f.exists()) {
             try {

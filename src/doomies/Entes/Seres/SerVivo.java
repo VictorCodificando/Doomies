@@ -7,26 +7,84 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**
+ * Clase de la que heredan todos los seres vivos, es la clase que define el
+ * comportamiento basico de todo ser vivo, siendo lo mas característico su vida
  *
  * @author Víctor
  */
 public class SerVivo extends Entidad {
 
+    /**
+     * Representa la vida que le queda al ser, si llega a 0 deberá de morir
+     */
     protected int vida;
+    /**
+     * Representa la direccion del serVivo puede ser: "R"-derecha "L"- izquierda
+     */
     protected String dir;
+    /**
+     * BOOLEANS QUE DEFINEN ESTADO DEL SER VIVO PARA LOS SPRITES
+     */
+    /**
+     * Boolean que expresa si se esta movimendo en el eje x
+     */
     protected boolean walking;
+    /**
+     * Boolean que expresa si esta corriendo
+     */
     protected boolean running;
+    /**
+     * Boolean que expresa si esta cayendo
+     */
     protected boolean falling;
+    /**
+     * Boolean que expresa si esta disparando
+     */
     protected boolean shooting;
+    /**
+     * Boolean que expresa que esta quieto sin moverse
+     */
     protected boolean stay;
+    /**
+     * ID de SPRITES
+     */
+    /**
+     * ID del sprite de estar quieto
+     */
     protected static final int STAY_ID = 0;
+    /**
+     * ID del sprite de estar andando
+     */
     protected static final int WALK_ID = 2;
+    /**
+     * ID del sprite de estar cayendo
+     */
     protected static final int FALL_ID = 4;
+    /**
+     * Representa la posicion dentro del array de sprites
+     */
     protected int spriteActual;
+    /**
+     * Donde se almacenaran los sprites que tengan daño
+     */
     protected Sprite[] spritesHovered = null;
+    /**
+     * Contador de animacion cuando este andando para que cambie entre sus
+     * diferentes estados
+     */
     protected int animacion;
+    /**
+     * Contador del daño para que haya un tiempo mínimo entre que recibe daño
+     */
     protected int cooldownDaño = 0;
+    /**
+     * Tiempo minimo entre daño y daño
+     */
     protected int COOLDOWNDAÑOTOTAL = 100;
+    /**
+     * Periodo de inmunidad usado para el parpadeo en Jugador(podrá ser usado en
+     * otros seres mas adelante, tales como compañeros o algo asi...)
+     */
     protected int inmunidad = 0;
 
     /*
@@ -43,21 +101,40 @@ public class SerVivo extends Entidad {
         FALL I 9
         FALL SHOOT D 10
         FALL SHOOT I 11
-
+     */
+    /**
+     * Crea un Ser vivo de tipo generico, con una vida un tamaño y unos sprites
+     * determinados
+     *
+     * @see doomies.Entes.Entidad
+     * @param sprite Sprite que representa al serVivo
+     * @param WIDTH Anchura de su hitbox
+     * @param HEIGHT Altura de su hitbox
+     * @param vida Vida inicial del ser
      */
     public SerVivo(final Sprite[] sprite, final int WIDTH, final int HEIGHT, final int vida) {
         super(sprite, WIDTH, HEIGHT);
+        /**
+         * Por defecto esta mirando hacia la derecha
+         */
         this.dir = "R";
         this.spriteActual = 0;
         this.vida = vida;
     }
 
     /**
-     * Dibuja los sprites con daño
+     * Dibuja los sprites con daño y los almancena en spritesHovered Coje imagen
+     * por imagen pixel a pixel, los pone mas rojo segun la variable incremento
+     * y lo almcena en un array
+     *
+     * Se carga antes de la partida para que sea mas optimo
      */
     protected void paintHoveredSprites() {
         this.spritesHovered = new Sprite[sprites.length];
         Sprite spActual;
+        /**
+         * Incrementa el rojo con un valor de 100
+         */
         int incremento = 100;
         for (int i = 0; i < this.sprites.length; i++) {
             spActual = sprites[i];
@@ -66,6 +143,9 @@ public class SerVivo extends Entidad {
             g.drawImage(img, 0, 0, null);
             for (int k = 0; k < img.getHeight(); k++) {
                 for (int j = 0; j < img.getWidth(); j++) {
+                    /**
+                     * Si el pixel es transparente se salta
+                     */
                     if (((img.getRGB(j, k)) >>> 24) == 0x00) {
                         continue;
                     }
@@ -78,16 +158,27 @@ public class SerVivo extends Entidad {
             }
             g.dispose();
             spritesHovered[i] = new Sprite(img);
-
         }
     }
 
+    /**
+     * Dibuja el ser, dependiendo de si tiene daño o no lo dibujara en un array
+     * o en otro
+     *
+     * @param g Graphics que dibujará en la pantalla principal
+     */
     @Override
     public void dibujar(final Graphics g) {//Dibujamos si es visible
+        /**
+         * Si no tiene sprites de daño pintalos
+         */
         if (spritesHovered == null || spritesHovered[0] == null) {
             paintHoveredSprites();
         }
-        if (!this.visible) {//Si no es visible se sale
+        /**
+         * Si no es visible se sale
+         */
+        if (!this.visible) {
             return;
         }
         if (cooldownDaño != 0) {

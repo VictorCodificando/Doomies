@@ -356,7 +356,9 @@ public class LoadTools {
         Teclado keyboard = null;
         String path = "/save/config.save";
         File f = new File(ruta + path);
-
+        if (!new File(ruta + "/save").exists()) {
+            new File(ruta + "/save").mkdir();
+        }
         if (!f.exists()) {
             try {
                 f.createNewFile();

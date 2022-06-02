@@ -209,6 +209,10 @@ public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
         return clicked;
     }
 
+    public void setClicked(boolean clickIn) {
+        this.clicked = clickIn;
+    }
+
     public String getLabel() {
         return label;
     }
@@ -216,7 +220,8 @@ public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
     public void setLabel(String label) {
         this.label = label;
     }
-    public void moveInX(int dx){
-        this.x+=dx;
+
+    public void moveInX(int dx) {
+        this.x += dx;
     }
 }

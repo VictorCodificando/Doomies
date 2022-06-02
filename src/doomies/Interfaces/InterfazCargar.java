@@ -75,15 +75,19 @@ public class InterfazCargar extends Interfaz {//Clase para la parte VISUAL
         g.drawString(partidas + "", (int) ((WIDTH / 2) - (g.getFont().getSize() * ((partidas + "").length() / 2) * 0.5) - 46), (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80);
 
         //Botones
-        botonIzquierda.dibujar(g);
-        botonDerecha.dibujar(g);
+        if (index > 0) {
+            botonIzquierda.dibujar(g);
+        }
+        if (index < GestorEstados.partidas.size()-1) {
+            botonDerecha.dibujar(g);
+        }
         botonCargar.dibujar(g);
         botonDatos.dibujar(g);
         dibujarPartidaActual(g);
     }
 
     private void dibujarPartidaActual(Graphics g) {
-          if (GestorEstados.partidas.size() <= 0) {
+        if (GestorEstados.partidas.size() <= 0) {
             return;
         }
         g.setColor(Color.WHITE);
@@ -99,8 +103,17 @@ public class InterfazCargar extends Interfaz {//Clase para la parte VISUAL
 
     //MENU
     public void actualizar() {
-        botonIzquierda.actualizar();
-        botonDerecha.actualizar();
+        if (index > 0) {
+            botonIzquierda.actualizar();
+        } else {
+            botonIzquierda.setClicked(false);
+        }
+        if (index < GestorEstados.partidas.size()-1) {
+            botonDerecha.actualizar();
+        } else {
+            botonDerecha.setClicked(false);
+        }
+
         botonCargar.actualizar();
         if (botonIzquierda.isClicked() || botonDerecha.isClicked()) {
             try {
@@ -122,7 +135,7 @@ public class InterfazCargar extends Interfaz {//Clase para la parte VISUAL
      * @return
      */
     private boolean cargar() {
-        if (GestorEstados.partidas.size()<=0) {
+        if (GestorEstados.partidas.size() <= 0) {
             return false;
         }
         String nombre = GestorEstados.partidas.get(index).split(";")[0];

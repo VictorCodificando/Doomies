@@ -73,16 +73,29 @@ public class InterfazSeleccNiveles extends Interfaz {
 
         //Botones
         botonJugar.dibujar(g);
-        botonIzquierda.dibujar(g);
-        botonDerecha.dibujar(g);
+        if (nivel != 1) {
+            botonIzquierda.dibujar(g);
+        }
+        if (nivel != LVL_MAX) {
+            botonDerecha.dibujar(g);
+        }
+
         mostrarMejorTiempo(g);
 
     }
 
     public void actualizar() {
         //Botones
-        botonIzquierda.actualizar();
-        botonDerecha.actualizar();
+        if (nivel != 1) {
+            botonIzquierda.actualizar();
+        }else{
+            botonIzquierda.setClicked(false);
+        }
+        if (nivel != LVL_MAX) {
+            botonDerecha.actualizar();
+        }else{
+            botonDerecha.setClicked(false);
+        }
         botonJugar.actualizar();
         //Control y cambio de label nivel
         if (botonIzquierda.isClicked() || botonDerecha.isClicked()) {
@@ -119,7 +132,7 @@ public class InterfazSeleccNiveles extends Interfaz {
         g.setColor(Color.WHITE);
         g.setFont(g.getFont().deriveFont(30f));
         try {
-            int timeInSeconds = GestorEstados.partida.getNivelesDesbloqueados().get(nivel-1);
+            int timeInSeconds = GestorEstados.partida.getNivelesDesbloqueados().get(nivel - 1);
             String formatTime = String.format("Record: %d:%02d:%02d", timeInSeconds / 3600, (timeInSeconds % 3600) / 60, (timeInSeconds % 60));
             g.drawString(formatTime, 400, 500);
         } catch (Exception e) {

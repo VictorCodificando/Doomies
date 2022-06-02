@@ -127,7 +127,7 @@ public class GestorJuego implements Gestor {
             tiempoAlcanzado = timer.getTimeInSeconds();
             ArrayList<Integer> levels = GestorEstados.partida.getNivelesDesbloqueados();
             try {
-                int tiempoAnterior = levels.get(mapa.getID());
+                int tiempoAnterior = levels.get(mapa.getID()-1);
                 if (tiempoAnterior <= tiempoAlcanzado) {
                     return;
                 }

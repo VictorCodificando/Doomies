@@ -20,7 +20,7 @@ public class Partida {
      * Constructor para la partida cargada
      *
      * @param nombre El nombre del jugador que haya metido el usuario
-     * @param nivelesAlcanzado El nivel hasta el que ha llegado en esta partida
+     * @param lvls El nivel hasta el que ha llegado en esta partida
      *
      */
     public Partida(String nombre, ArrayList<Integer> lvls) {

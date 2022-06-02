@@ -8,16 +8,16 @@ import doomies.Visual.Sprite;
 import doomies.Entes.Entidad;
 
 /**
- *
+ * Clase bala que hereda de entidad
+ * 
  * @author Víctor
  */
 public class Bala extends Entidad {
 
     /**
-     * Boolean que indica si esta yendo hacia la derecha
+     * Boolean que indica la direccion de la bala
      */
-    private final boolean right;//Indica direccion
-    private final int speed = 40;//La velocidad por defecto sera 40
+    private final boolean right;
 
     /**
      * Crea una bala en una posicion y en una direccion en la cual saldrá
@@ -33,10 +33,12 @@ public class Bala extends Entidad {
         this.y = y;
         this.hitbox = new Rectangle(x, y, 10, 6);
         this.right = right;
+        Speed=40;
     }
+
     /**
      * Dibuja la bala
-     * 
+     *
      * @param g Graphics donde se dibujará la bala
      */
     @Override
@@ -45,39 +47,57 @@ public class Bala extends Entidad {
         g.fillRect(this.x, this.y, this.WIDTH, this.HEIGHT);
     }
 
+    /**
+     * Actualiza la bala y su posicion
+     */
     @Override
-    public void actualizar() {//Acualizo la posicion de la bala
-        //caer(); por ahora no cae
-        if (!this.right) {
-            this.x -= this.speed;
-        } else {
-            this.x += this.speed;
-        }
-        this.y += this.ya;//es 0 por ahora
+    public void actualizar() {
+        /**
+         * Si su direccion es derecha su velocidad es positiva
+         */
+        this.x += (this.right) ? Speed : -Speed;
+        this.y += this.ya;
         this.hitbox.x = x;
         this.hitbox.y = y;
+        /**
+         * Si se sale de la pantalla lo convertimos a invisible
+         */
         if (x > 1280 || x + this.hitbox.width < 0) {
             visible = false;
         }
     }
 
-    /*
-    getters y setters
+    /**
+     * Obtener la x de la bala
+     * 
+     * @return La x de la bala
      */
     @Override
     public int getX() {
         return this.x;
     }
-
+    /**
+     * Obtener la y de la bala
+     * 
+     * @return La y de la bala
+     */
     @Override
     public int getY() {
         return this.y;
     }
-
+    /**
+     * Obtener la anchura de la bala
+     * 
+     * @return La anchura de la bala
+     */
     public int getWIDTH() {
         return this.WIDTH;
     }
-
+    /**
+     * Obtener la altura de la bala
+     * 
+     * @return La altura de la bala
+     */
     public int getHEIGHT() {
         return this.HEIGHT;
     }

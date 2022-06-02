@@ -6,6 +6,10 @@ import doomies.Entes.Entidad;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+/**
+ *
+ * @author Víctor
+ */
 public class SerVivo extends Entidad {
 
     protected int vida;
@@ -93,7 +97,7 @@ public class SerVivo extends Entidad {
             }
             this.spritesHovered[spriteActual].dibujar(g, this.hitbox.x, this.hitbox.y);
             return;
-        } 
+        }
         this.sprites[spriteActual].dibujar(g, this.hitbox.x, this.hitbox.y);
     }
 
@@ -105,7 +109,7 @@ public class SerVivo extends Entidad {
 
     //Salto
     protected void jump() {
-        
+
         this.ya = -11;
     }
 

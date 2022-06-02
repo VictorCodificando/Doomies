@@ -79,8 +79,12 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
         g.drawString(partidasGuardadas + "", (int) ((WIDTH / 2) - (g.getFont().getSize() * ((partidasGuardadas + "").length() / 2) * 0.5) - 46), (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80);
 
         //Botones
-        botonIzquierda.dibujar(g);
-        botonDerecha.dibujar(g);
+        if (index > 0) {
+            botonIzquierda.dibujar(g);
+        }
+        if (index < GestorEstados.partidas.size()) {
+            botonDerecha.dibujar(g);
+        }
         botonGuardar.dibujar(g);
         botonDatos.dibujar(g);
         dibujarPartidaActual(g);
@@ -104,8 +108,16 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
     //MENU
     public void actualizar() {
 
-        botonIzquierda.actualizar();
-        botonDerecha.actualizar();
+        if (index > 0) {
+            botonIzquierda.actualizar();
+        } else {
+            botonIzquierda.setClicked(false);
+        }
+        if (index < GestorEstados.partidas.size()) {
+            botonDerecha.actualizar();
+        } else {
+            botonDerecha.setClicked(false);
+        }
         botonGuardar.actualizar();
         if (botonIzquierda.isClicked() || botonDerecha.isClicked()) {
             System.out.println(index + "  " + GestorEstados.partidas.size());

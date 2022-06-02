@@ -36,16 +36,28 @@ public class ConectionDatabase {
             String user = "cliente";
             String pass = "12345";
             conn = DriverManager.getConnection(url, user, pass);
+            return conn;
         } catch (ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(new Frame(), "Driver no cargado");
+            JOptionPane.showMessageDialog(new Frame(), "Driver no cargado", "Error", 1);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(new Frame(), "No hay conexion con la base de datos:\n" + e);
+            JOptionPane.showMessageDialog(new Frame(), "" + (((e + "").contains("Communications link failure")) ? "No hay conexion con la base de datos\n" : e), "Conexion fallida", 2);
         } catch (Exception e) {
             System.out.println(e);
         }
+        String ruta = "";
+        try {
+            ruta = ConectionDatabase.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().toString().substring(1).replaceAll("Doomies.jar|%20", "");
+        } catch (URISyntaxException ex) {
+            System.out.println(ex);
+        }
+        if (!new File(ruta + "/mapas").exists() || !new File(ruta + "/mapas/mapa1.txt").exists()) {
+            JOptionPane.showMessageDialog(new Frame(), "Error fatal, fallo en conectar a la bdd y no hay ficheros de juego\n"
+                    + "Consiga conexion a la bdd, si el problema persiste contacte con el administrador.", "ERROR FATAL", 1);
+            System.exit(0);
+        }
         return conn;
     }
-
+    
     private static void descargarMapas(Connection conn, String fecha) throws SQLException {
         int i = 1;
         boolean morelvl = true;
@@ -67,14 +79,14 @@ public class ConectionDatabase {
             System.out.println(ex);
         }
         try {
-            FileWriter fw = new FileWriter(new File(ruta+"/mapas/update.date"));
+            FileWriter fw = new FileWriter(new File(ruta + "/mapas/update.date"));
             fw.write(fecha);
             fw.close();
         } catch (IOException e) {
             System.out.println("ERROR FATAL");
         }
     }
-
+    
     private static void exportarNivelAFichero(String nivel, int lvlNum) {
         String ruta = "";
         try {
@@ -84,6 +96,9 @@ public class ConectionDatabase {
         }
         File f = new File(ruta + "/mapas/mapa" + lvlNum + ".txt");
         try {
+            if (!new File(ruta + "/mapas").exists()) {
+                new File(ruta + "/mapas").mkdir();
+            }
             if (!f.exists()) {
                 f.createNewFile();
             }
@@ -93,9 +108,9 @@ public class ConectionDatabase {
         } catch (IOException e) {
             System.out.println("ERROR FATAL");
         }
-
+        
     }
-
+    
     private static String getAllEnemiesFromLvl(int lvl, Connection conn) throws SQLException {
         String enemigos = "";
         Statement stmt = conn.createStatement();
@@ -115,7 +130,7 @@ public class ConectionDatabase {
         stmt.close();
         return enemigos;
     }
-
+    
     private static String getAllMapTiles(int lvl, Connection conn) throws SQLException {
         String tiles = "";
         Statement stmt = conn.createStatement();
@@ -126,7 +141,7 @@ public class ConectionDatabase {
         }
         return tiles;
     }
-
+    
     public static String reemplazarAX(String c) {
         int i = 0;
         if (!c.substring(i, i + 1).equals("-")) {//Se comprueba que lo que esta en primera posicion sea distinto de "-"
@@ -169,7 +184,7 @@ public class ConectionDatabase {
         }
         return c;
     }
-
+    
     public static void intentarCargarMapas() {
         try {
             String fecha = "";
@@ -186,11 +201,11 @@ public class ConectionDatabase {
                 int oldAño = Integer.parseInt(fechaInterna.split("-")[0]);
                 int oldMes = Integer.parseInt(fechaInterna.split("-")[1]);
                 int oldDia = Integer.parseInt(fechaInterna.split("-")[2]);
-
+                
                 int año = Integer.parseInt(fecha.split("-")[0]);
                 int mes = Integer.parseInt(fecha.split("-")[1]);
                 int dia = Integer.parseInt(fecha.split("-")[2]);
-
+                
                 if (año > oldAño) {
                     descargarMapas(conn, fecha);
                 } else if (año < oldAño) {
@@ -212,19 +227,19 @@ public class ConectionDatabase {
                 }
                 cerrarConexion(conn);
             } catch (Exception e) {
-
+                
             }
         } catch (SQLException e) {
             System.out.println("Error " + e);
         } catch (Exception e) {
-
+            
         }
     }
-
+    
     private static void cerrarConexion(Connection conn) throws SQLException {
         conn.close();
     }
-
+    
     private static String getFecha() {
         String ruta = "";
         try {

@@ -11,17 +11,44 @@ import doomies.Partida;
 import java.util.ArrayList;
 
 /**
+ * Es el Gestor principal del juego, que jugara con el gestorActual para cambiar
+ * de Gestor menu a gestor de Juego
  *
- * @author Víctor Zero
+ * @see Gestor
+ * @author Víctor
+ * @version 4
+ * @since 3
  */
 public class GestorEstados implements Gestor {
 
+    /**
+     * El gestor actual que se actualiza y se dibuja, puede ser o gestorMenu o
+     * GestorJuego
+     */
     private Gestor gestorActual;
+    /**
+     * partida actual cargada por defecto "default"
+     */
     public static Partida partida;
+    /**
+     * Partidas cargadas de los ficheros
+     */
     public static ArrayList<String> partidas;
+    /**
+     * Anchura de pantalla
+     */
     private final int WIDTH;
+    /**
+     * Altura de pantalla
+     */
     private final int HEIGHT;
+    /**
+     * Teclado que controlara el usuario
+     */
     private final Teclado teclado;
+    /**
+     * Raton que controlará el usuario
+     */
     private final Mouse raton;
 
     /**
@@ -45,8 +72,9 @@ public class GestorEstados implements Gestor {
     /**
      * Dibuja el Gestor actual
      *
-     * @param g Objeto Graphics que dibujara en memoria
+     * @param g Objeto Graphics que dibujara en pantalla
      */
+    @Override
     public void dibujar(Graphics g) {
         gestorActual.dibujar(g);
     }
@@ -54,15 +82,26 @@ public class GestorEstados implements Gestor {
     /**
      * Actualiza el gestorActual
      */
+    @Override
     public void actualizar() {
         gestorActual.actualizar();
         if (this.isGestorJuego()) {
+            /**
+             * Si es gestorJuego
+             */
             this.opcionesJugando();
         } else {
+            /**
+             * Si es GestorMenu
+             */
             this.opcionesMenu();
         }
     }
 
+    /**
+     * Pasa por las diferentes opciones que se eligen en el GestorMenu, si
+     * decide jugar pasa al Gestor de Juego con el nivel elegido
+     */
     public void opcionesMenu() {
         if (!this.isGestorMenu()) {
             return;
@@ -74,6 +113,10 @@ public class GestorEstados implements Gestor {
         }
     }
 
+    /**
+     * Pasa por las diferentes opciones que se eligen en el GestorJuego, si
+     * decide salir pasa a GestorMenu
+     */
     public void opcionesJugando() {
         if (!this.isGestorJuego()) {
             return;

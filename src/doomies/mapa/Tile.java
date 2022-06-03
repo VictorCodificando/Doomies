@@ -6,16 +6,22 @@ import doomies.Entes.Entidad;
 import doomies.Visual.Sprite;
 
 /**
+ * Es una clase que se compone de una hitbox y de un sprite de ahi que herede de
+ * entidad
  *
- * @author Víctor Zero
+ * @see doomies.Entes.Entidad
+ * @author Víctor
+ * @version 4
+ * @since 2
  */
-public class Tile extends Entidad {//Nada todavia
+public class Tile extends Entidad {
 
     /**
+     * Crea un tile con una posicion y un Sprite
      *
-     * @param x
-     * @param y
-     * @param sprite
+     * @param x Posicion en x
+     * @param y Posicion en y
+     * @param sprite Sprite que representa al tile
      */
     public Tile(final int x, final int y, Sprite sprite[]) {
         super(sprite, sprite[0].getWIDTH(), sprite[0].getHEIGHT());
@@ -24,6 +30,11 @@ public class Tile extends Entidad {//Nada todavia
         this.hitbox = new Rectangle(x, y, sprite[0].getWIDTH(), sprite[0].getHEIGHT());
     }
 
+    /**
+     * Dibuja el tile en su posicion correspondiente
+     *
+     * @param g Objeto Graphics que dibujara en pantalla
+     */
     @Override
     public void dibujar(Graphics g) {
         if (this.visible) {
@@ -31,9 +42,12 @@ public class Tile extends Entidad {//Nada todavia
         }
     }
 
+    /**
+     * Actualiza la posicion del Tile, actualizando su hitbox
+     */
     @Override
     public void actualizar() {
-        x+=xa;
+        x += xa;
         this.hitbox.x = x;
         this.hitbox.y = y;
     }

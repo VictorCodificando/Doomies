@@ -6,11 +6,9 @@ package doomies.Interfaces;
 
 import doomies.Gestores.GestorEstados;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import doomies.HerramientasEntradaSalida.LoadTools;
 import doomies.HerramientasEntradaSalida.Teclado;
 import doomies.HerramientasEntradaSalida.Mouse;
 import doomies.Interfaces.Elementos.Boton;
@@ -20,32 +18,49 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
+ * Interfaz de cargado de partidas, tendra boton derecha, izquierda y cargar
  *
- * @author Víctor Zero
+ * @author Lena
+ * @version 4
+ * @since 2
  */
 public class InterfazCargar extends Interfaz {//Clase para la parte VISUAL
 
-    private final int WIDTH;
-    private final int HEIGHT;
-    private final Font font = LoadTools.loadFont("/fonts/kongtext.ttf");
-    //private final Image imagen = LoadTools.loadImage("img/mapa.png");
-    //private Boton botonCargar;
-    //private ProgressBar pb;
-    //private ThreadProgreso tp;
+    /**
+     * Dice si va a salir o no de la pantalla de carga
+     */
     private boolean salir;
+    /**
+     * Posicion actual entre las partidas
+     */
     private int index;
-    private Boton botonCargar;
-    private Boton botonIzquierda;
-    private Boton botonDerecha;
-    private Boton botonDatos;
-    private final int LVL_MAX = 10;
-    private int partidas;
+    /**
+     * Boton de cargar partida
+     */
+    private final Boton botonCargar;
+    /**
+     * Boton para desplazarse -1 en las partidas
+     */
+    private final Boton botonIzquierda;
+    /**
+     * Boton para desplazarse +1 en las partidas
+     */
+    private final Boton botonDerecha;
+    /**
+     * Boton que muestra los datos de las partidas
+     */
+    private final Boton botonDatos;
 
+    /**
+     * Crea una interfaz de cargado de partida
+     *
+     * @param WIDTH Altura de pantalla
+     * @param HEIGHT Anchura de pantalla
+     * @param teclado Teclado que usa la interfaz
+     * @param raton Raton que usa la interfaz
+     */
     public InterfazCargar(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
         super(WIDTH, HEIGHT, teclado, raton);
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
-        this.partidas = 1;
         botonCargar = new Boton(450, 550, 400, 70, "CARGAR PARTIDA", font.deriveFont(20f), Color.gray, 2, 4, raton);
         botonCargar.setFormat(10);
         botonIzquierda = new Boton(((WIDTH / 4) - 50), 300, 100, 100, "<", font.deriveFont(100f), Color.GRAY, 17, 1, raton);
@@ -55,30 +70,39 @@ public class InterfazCargar extends Interfaz {//Clase para la parte VISUAL
         botonDatos = new Boton(425, 150, 450, 350, "", font.deriveFont(30f), Color.orange, 27, 35, raton); //425,150,450,350
         botonDatos.setFormat(40);
         botonDatos.setLabel("");
-        //this.datosPartida = //conexionbasededatos o fichero
     }
 
-    //@Override
+    /**
+     * Dibuja la interfaz para que se vea cargar, izquierda y derecha
+     *
+     * @param g Clase graphics que dibuja todo en la pantalla
+     */
+    @Override
     public void dibujar(final Graphics g) {
-
-        //gradiente
+        /**
+         * Crea un gradiente de fondo de pantalla
+         */
         Graphics2D g2d = (Graphics2D) g;
         GradientPaint verticalGradient = new GradientPaint(0, 0, Color.RED, 0, this.HEIGHT, Color.ORANGE);
         g.setColor(Color.red);
         g2d.setPaint(verticalGradient);
         g2d.fillRect(0, 0, this.WIDTH, this.HEIGHT);
-        //Titulo
+        /**
+         * Titulo de CARGAR PARTIDA
+         */
         g.setColor(Color.BLACK);
         g.setFont(font);
         g.setFont(g.getFont().deriveFont(55f));
         g.drawString("CARGAR PARTIDA", ((WIDTH / 2) - (g.getFont().getSize() * (("CARGAR PARTIDA").length() / 2))), 100);
-        g.drawString(partidas + "", (int) ((WIDTH / 2) - (g.getFont().getSize() * ((partidas + "").length() / 2) * 0.5) - 46), (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80);
 
-        //Botones
+        /**
+         * Dibuja los botones, el izquierdo no se muestra si esta en la posicion
+         * minima, el derecho tampoco si esta en la posicion maxima
+         */
         if (index > 0) {
             botonIzquierda.dibujar(g);
         }
-        if (index < GestorEstados.partidas.size()-1) {
+        if (index < GestorEstados.partidas.size() - 1) {
             botonDerecha.dibujar(g);
         }
         botonCargar.dibujar(g);
@@ -86,8 +110,13 @@ public class InterfazCargar extends Interfaz {//Clase para la parte VISUAL
         dibujarPartidaActual(g);
     }
 
-    private void dibujarPartidaActual(Graphics g) {
-        if (GestorEstados.partidas.size() <= 0) {
+    /**
+     * Dibuja la partida en la que se encuentra
+     *
+     * @param g Clase graphics que dibuja todo en la pantalla
+     */
+    private void dibujarPartidaActual(final Graphics g) {
+        if (GestorEstados.partidas.size() <= 0) {//Si las partida no existe no mostrar informacion
             return;
         }
         g.setColor(Color.WHITE);
@@ -101,29 +130,30 @@ public class InterfazCargar extends Interfaz {//Clase para la parte VISUAL
         g.drawString("\nFecha: " + fecha, 450, 425);
     }
 
-    //MENU
+    /**
+     * Actualiza la interfaz pasando por todos sus botones y elementos
+     */
     public void actualizar() {
-        if (index > 0) {
+        if (index > 0) {//En el indice 0 no puede haber menos asi que el boton izquierdo no se muestra ni se actualiza
             botonIzquierda.actualizar();
         } else {
             botonIzquierda.setClicked(false);
         }
-        if (index < GestorEstados.partidas.size()-1) {
+        if (index < GestorEstados.partidas.size() - 1) {//En el indice de partida maxima, no puede haber nada mas hacia la derecha asi que el boton derecho no se actualiza
             botonDerecha.actualizar();
         } else {
             botonDerecha.setClicked(false);
         }
-
         botonCargar.actualizar();
         if (botonIzquierda.isClicked() || botonDerecha.isClicked()) {
             try {
-                index += (botonDerecha.isClicked()) ? 1 : -1;//comparar id de partida guardada en la bbdd o fichero
+                index += (botonDerecha.isClicked()) ? 1 : -1;
                 String error = GestorEstados.partidas.get(index);
             } catch (Exception e) {
                 index += (botonDerecha.isClicked()) ? -1 : 1;
             }
         }
-        //cargar
+        //Pulsa el boton de cargar y se sale
         if (botonCargar.isClicked()) {
             this.salir = cargar();
         }
@@ -132,7 +162,7 @@ public class InterfazCargar extends Interfaz {//Clase para la parte VISUAL
     /**
      *
      *
-     * @return
+     * @return Si se ha cargado con exito
      */
     private boolean cargar() {
         if (GestorEstados.partidas.size() <= 0) {
@@ -156,10 +186,10 @@ public class InterfazCargar extends Interfaz {//Clase para la parte VISUAL
         return true;
     }
 
-    public int getPartida() {
-        return this.partidas;
-    }
-
+    /**
+     *
+     * @return Si va a salir de la interfaz
+     */
     public boolean isSalir() {
         return this.salir;
     }

@@ -9,50 +9,89 @@ import java.awt.Font;
 import java.awt.image.BufferedImage;
 
 /**
+ * La clase boton es un elemento tanto visual como funcional, que puede ser
+ * clickado y sirve como link entre interfaces
  *
- * @author Víctor Zero
+ * @author Víctor
+ * @version 4
+ * @since 2
  */
 public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
 
+    /**
+     * Posicion en x
+     */
     private int x;
+    /**
+     * Posicion en y
+     */
     private int y;
+    /**
+     * Anchura del boton en px
+     */
     private int width;
+    /**
+     * Altura del boton en px
+     */
     private int height;
-    private BufferedImage imgNormal;
-    private BufferedImage imgHover;
+    /**
+     * Etiqueta que tiene por encima el boton
+     */
     private String label;
-    private BufferedImage labelImg;
+    /**
+     * Fuente usada
+     */
     private Font font;
+    /**
+     * Raton usado para saber si se esta pulsando o si esta haciendo hover
+     */
     private Mouse raton;
+    /**
+     * Color normal
+     */
     private Color color;
+    /**
+     * Color cuando pasas el raton por encima
+     */
     private Color colorHover;
+    /**
+     * Color de las letras
+     */
     private Color colorString;
-    private String tipo = "";
+    /**
+     * Relacion entre borde-tamaño, determina que tan grueso es el borde
+     */
     private int format;
+    /**
+     * Ajuste para mover el label a gusto
+     */
     private int ajusteX;
+    /**
+     * Ajuste para mover el label a gusto
+     */
     private int ajusteY;
+    /**
+     * Indica si el raton esta por encima
+     */
     private boolean hover;
+    /**
+     * Contiene todos los pixeles no transparentes
+     */
     private final ArrayList transparent = new ArrayList();
+    /**
+     * Indica si se ha clickado al boton
+     */
     private boolean clicked = false;
 
-    private Boton(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
     /**
-     * Crea el boton con una imagen encima de la imagen por defecto
+     * Crea un boton general
      *
      * @param x es el inicio en las x donde se va a imprimir el boton
      * @param y es el inicio en las y donde se va a imprimir el boton
-     * @param labelImg es la imagen que entrará como label
      */
-    private Boton(int x, int y, BufferedImage labelImg) {
-        this(x, y);
-        this.labelImg = labelImg;
-        this.width = labelImg.getWidth();
-        this.height = labelImg.getHeight();
-        tipo = "imagen";
+    private Boton(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     /**
@@ -71,7 +110,6 @@ public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
         this.height = height;
         this.label = label;
         this.font = font;
-        tipo = "String";
     }
 
     /**
@@ -86,11 +124,10 @@ public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
      * @param color es el color de fondo
      * @param ajusteX ajuste de las letras en el eje X
      * @param ajusteY ajuste de las letras en el eje Y
+     * @param raton Mouse que se usara para capturar la posicion del raton
      */
-    public Boton(int x, int y, int width, int height, String label, Font font, Color color, int ajusteX, int ajusteY, Mouse raton) {
+    public Boton(final int x, final int y, final int width, final int height, final String label, final Font font, final Color color, final int ajusteX, final int ajusteY, final Mouse raton) {
         this(x, y, width, height, label, font);
-
-        tipo = "StringColor";
         this.raton = raton;
         this.color = color;
         this.colorHover = LoadTools.brighter(color, 10);
@@ -102,9 +139,12 @@ public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
 
     }
 
+    /**
+     * Actualiza el boton
+     */
     public void actualizar() {
         hover = false;
-        for (int i = 0; i < transparent.size(); i++) {
+        for (int i = 0; i < transparent.size(); i++) {//Recorre todos sus pixeles no transparentes y ve si el raton esta por encima
             double[] posPosible = (double[]) transparent.get(i);
             if (posPosible[0] == raton.x && (posPosible[1]) == raton.y) {
                 hover = true;
@@ -112,33 +152,36 @@ public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
             }
         }
 
-        if (hover && raton.clicked) {
+        if (hover && raton.clicked) {//Si el raton esta por encima y ha clickado entonces ha clickado al boton
             clicked = true;
         } else {
             clicked = false;
         }
     }
 
-    public void dibujar(Graphics g) {
-        switch (tipo) {
-            case "StringColor":
-                g.setColor((hover) ? colorHover : color);
-                g.fillRect(x + format, y + format, width - format * 2, height - format * 2);
-                this.dibujarBorde(g);
-                g.setFont(font);
-                g.setColor((hover) ? colorHover : color);
-                this.dibujarSombra(g);
-            case "String":
-                g.setColor((hover) ? LoadTools.brighter(colorString, 10) : colorString);
-                dibujarString(g);
-                break;
-            case "imagen":
-                break;
-            default:
-        }
+    /**
+     * Dibuja el boton en su posicion en pantalla
+     *
+     * @param g Clase graphics que dibuja todo en la pantalla
+     */
+    public void dibujar(final Graphics g) {
+        g.setColor((hover) ? colorHover : color);
+        g.fillRect(x + format, y + format, width - format * 2, height - format * 2);
+        this.dibujarBorde(g);
+        g.setFont(font);
+        g.setColor((hover) ? colorHover : color);
+        this.dibujarSombra(g);
+        g.setColor((hover) ? LoadTools.brighter(colorString, 10) : colorString);
+        dibujarString(g);
     }
 
-    private void dibujarSombra(Graphics g) {
+    /**
+     * Dibuja la sombra del boton con un color algo mas oscuro que su color
+     * normal
+     *
+     * @param g Clase graphics que dibuja todo en la pantalla
+     */
+    private void dibujarSombra(final Graphics g) {
         g.setColor(LoadTools.darker(g.getColor(), 40));
         //Lineas Y
         g.fillRect(x + format, y + format * 2, format, height - format * 4);
@@ -153,14 +196,24 @@ public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
         g.fillRect(x + format * 2, y + height - format * 3, format, format);
     }
 
-    private void dibujarString(Graphics g) {
+    /**
+     * Dibuja el label por encima del boton
+     *
+     * @param g Clase graphics que dibuja todo en la pantalla
+     */
+    private void dibujarString(final Graphics g) {
         String[] labelString = label.split("/");
         for (int i = 0; i < labelString.length; i++) {
             g.drawString(labelString[i], x + height - format * ajusteX, (y + height - format * ajusteY) + font.getSize() * i);
         }
     }
 
-    private void dibujarBorde(Graphics g) {
+    /**
+     * Dibuja el borde del boton dependiendo su grosor de la variable format
+     *
+     * @param g Clase graphics que dibuja todo en la pantalla
+     */
+    private void dibujarBorde(final Graphics g) {
         g.setColor(Color.BLACK);
         //lineas Y
         g.fillRect(x, y + format, format, height - format * 2);
@@ -175,10 +228,11 @@ public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
         g.fillRect(x + format, y + height - format * 2, format, format);
     }
 
-    private void setFontSize(float size) {
-        font = font.deriveFont(size);
-    }
-
+    /**
+     * Dibuja el boton en memoria y lo recorre pixel a pixel viendo si son o no
+     * transparentes sus pixeles, si no lo son, se los guarda para comprobar mas
+     * adelante
+     */
     private void calcularPixelesTransparentes() {
         int provX = x;
         int provY = y;
@@ -201,26 +255,57 @@ public class Boton {//Clase boton, la explicare mas adelante NO TERMINADA
 
     }
 
+    /**
+     * Establece el format del boton
+     *
+     * @param format El nuevo tamaño de los bordes
+     */
     public void setFormat(int format) {
         this.format = (int) Math.floor(height / format);
     }
 
+    /**
+     * Dice si se ha clickado o no el botn
+     *
+     * @return Boolean clicked que significa si el boton esta clickado - true y
+     * sino - false
+     */
     public boolean isClicked() {
         return clicked;
     }
 
+    /**
+     * Establece si el boton esta clickado o no
+     *
+     * @param clickIn Boolean dice si esta siendo clickado o no
+     */
     public void setClicked(boolean clickIn) {
         this.clicked = clickIn;
     }
 
+    /**
+     * Obtener la etiqueta
+     *
+     * @return La etiqueta del boton
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     * Establece la nueva etiqueta para el boton
+     *
+     * @param label La nueva etiqueta
+     */
     public void setLabel(String label) {
         this.label = label;
     }
 
+    /**
+     * Mueve el boton en el eje x
+     *
+     * @param dx desplazamiento en x
+     */
     public void moveInX(int dx) {
         this.x += dx;
     }

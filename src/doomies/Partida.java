@@ -4,16 +4,24 @@
  */
 package doomies;
 
-import doomies.HerramientasEntradaSalida.LoadTools;
 import java.util.ArrayList;
 
 /**
+ * Clase Partida se usara para acceder a niveles y batir records
  *
- * @author Víctor Zero
+ * @author Víctor
+ * @version 4
+ * @since 3
  */
 public class Partida {
 
+    /**
+     * Nombre de partida
+     */
     private String nombre;
+    /**
+     * ArrayList de tiempos, que diran tambien si estan desbloqueados
+     */
     private ArrayList<Integer> nivelesDesbloqueados = new ArrayList<Integer>();
 
     /**
@@ -41,7 +49,7 @@ public class Partida {
      * Devuelve true false, si el nivel esta bloqueado o no
      *
      * @param nivel El nivel del que queremos saber la información
-     * @return
+     * @return si esta desbloqueado
      */
     public boolean isDesbloqueado(final int nivel) {//Te dice si el nivel esta desbloqueado, si no esta en el array, quiere decir que esta bloqueado.
         return (nivel <= nivelesDesbloqueados.size() + 1);

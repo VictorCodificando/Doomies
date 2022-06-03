@@ -18,21 +18,50 @@ import doomies.HerramientasEntradaSalida.Teclado;
 import doomies.Interfaces.Elementos.Boton;
 
 /**
+ * Interfaz de seleccion de niveles
  *
- * @author Víctor Zero
+ * @author Nestor
+ * @version 4
+ * @since 2
  */
 public class InterfazSeleccNiveles extends Interfaz {
 
+    /**
+     * Boton de jugar
+     */
     private Boton botonJugar;
+    /**
+     * Boton para desplazarse a la izquierda en los niveles -1
+     */
     private Boton botonIzquierda;
+    /**
+     * Boton para desplazarse a la derecha en los niveles +1
+     */
     private Boton botonDerecha;
+    /**
+     * Imagen de candado desbloqueado
+     */
     private final BufferedImage unlocked = LoadTools.loadImage("/images/lock1.png");
+    /**
+     * Imagen de candado bloqueado
+     */
     private final BufferedImage locked = LoadTools.loadImage("/images/lock0.png");
+    /**
+     * Indica si se quiere jugar el nivel
+     */
     private boolean jugar;
+    /**
+     * Indica el nivel al cual se apunta
+     */
     private static int nivel = 1;
+    /**
+     * Indica el nivel maximo al que se puede llegar
+     */
     private final static int LVL_MAX = LoadTools.countMap("/mapas");
 
     /**
+     * Crea la interfaz de seleccion de niveles con sus botones jugar,
+     * izquierda, derecha
      *
      * @param WIDTH Altura de la interfaz
      * @param HEIGHT Anchura de la interfaz
@@ -50,28 +79,39 @@ public class InterfazSeleccNiveles extends Interfaz {
         botonDerecha.setFormat(15);
     }
 
+    /**
+     * Dibuja la interfaz de seleccion de niveles
+     *
+     * @param g Clase graphics que dibuja todo en la pantalla
+     */
     @Override
     public void dibujar(final Graphics g) {
-
-        //gradiente
+        /**
+         * Fondo con gradiente
+         */
         Graphics2D g2d = (Graphics2D) g;
         GradientPaint verticalGradient = new GradientPaint(0, 0, Color.RED, 0, this.HEIGHT, Color.ORANGE);
         g.setColor(Color.red);
         g2d.setPaint(verticalGradient);
         g2d.fillRect(0, 0, this.WIDTH, this.HEIGHT);
-        //Titulo
+        /**
+         * Titulo
+         */
         g.setColor(Color.BLACK);
         g.setFont(font);
         g.setFont(g.getFont().deriveFont(55f));
         g.drawString("SELECTOR DE NIVELES", ((WIDTH / 2) - (g.getFont().getSize() * (("SELECTOR DE NIVELES").length() / 2))), 100);
-        //Nivel
+        /**
+         * Nivel
+         */
         if (GestorEstados.partida.isDesbloqueado(nivel)) {
             mostrarNivelDesbloqueado(g);
         } else {
             mostrarNivelBloqueado(g);
         }
-
-        //Botones
+        /**
+         * Botones
+         */
         botonJugar.dibujar(g);
         if (nivel != 1) {
             botonIzquierda.dibujar(g);
@@ -79,32 +119,40 @@ public class InterfazSeleccNiveles extends Interfaz {
         if (nivel != LVL_MAX) {
             botonDerecha.dibujar(g);
         }
-
         mostrarMejorTiempo(g);
-
     }
 
+    /**
+     * Actualiza la interfaz de seleccion de nivel,detectando si se ha pulsado
+     * algun boton
+     */
     public void actualizar() {
-        //Botones
+        /**
+         * Actualizacion de botones izquierda derecha
+         */
         if (nivel != 1) {
             botonIzquierda.actualizar();
-        }else{
+        } else {
             botonIzquierda.setClicked(false);
         }
         if (nivel != LVL_MAX) {
             botonDerecha.actualizar();
-        }else{
+        } else {
             botonDerecha.setClicked(false);
         }
         botonJugar.actualizar();
-        //Control y cambio de label nivel
+        /**
+         * Control y cambio de label de nivel
+         */
         if (botonIzquierda.isClicked() || botonDerecha.isClicked()) {
             nivel += (botonDerecha.isClicked()) ? 1 : -1;
             if (nivel < 1 || nivel > LVL_MAX) {
                 nivel = (nivel < 1) ? 1 : LVL_MAX;
             }
         }
-        //Jugar
+        /**
+         * Actualiazcion de boton jugar
+         */
         if (botonJugar.isClicked() && GestorEstados.partida.isDesbloqueado(nivel)) {
             this.jugar = true;
         } else if (botonJugar.isClicked()) {
@@ -113,7 +161,12 @@ public class InterfazSeleccNiveles extends Interfaz {
         }
     }
 
-    private void mostrarNivelBloqueado(Graphics g) {
+    /**
+     * Dibuja el numero actual de nivel mas oscuro como "bloqueado"
+     *
+     * @param g Clase graphics que dibuja todo en la pantalla
+     */
+    private void mostrarNivelBloqueado(final Graphics g) {
         g.setColor(LoadTools.brighter(Color.GRAY, 20));
         g.setFont(g.getFont().deriveFont(120f));
         g.drawString(nivel + "", (int) ((WIDTH / 2) - (g.getFont().getSize() * ((nivel + "").length() / 2) * 0.5) - 46), (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80);
@@ -121,14 +174,24 @@ public class InterfazSeleccNiveles extends Interfaz {
 
     }
 
-    private void mostrarNivelDesbloqueado(Graphics g) {
+    /**
+     * Dibuja el numero actual de nivel
+     *
+     * @param g Clase graphics que dibuja todo en la pantalla
+     */
+    private void mostrarNivelDesbloqueado(final Graphics g) {
         g.setColor(Color.WHITE);
         g.setFont(g.getFont().deriveFont(120f));
         g.drawString(nivel + "", (int) ((WIDTH / 2) - (g.getFont().getSize() * ((nivel + "").length() / 2) * 0.5) - 46), (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80);
         g.drawImage(unlocked, (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80, (int) ((WIDTH / 2) + (g.getFont().getSize() * ((nivel + "").length() / 2) * 0.5) - 46), null);
     }
 
-    private void mostrarMejorTiempo(Graphics g) {
+    /**
+     * Dibuja el mejor tiempo en el nivel actual
+     *
+     * @param g Clase graphics que dibuja todo en la pantalla
+     */
+    private void mostrarMejorTiempo(final Graphics g) {
         g.setColor(Color.WHITE);
         g.setFont(g.getFont().deriveFont(30f));
         try {
@@ -148,6 +211,10 @@ public class InterfazSeleccNiveles extends Interfaz {
         return jugar;
     }
 
+    /**
+     *
+     * @return Devuelve el nivel actual
+     */
     public int getNivel() {
         return this.nivel;
     }

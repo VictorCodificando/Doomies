@@ -16,6 +16,8 @@ import java.util.ArrayList;
  *
  * @see SerVivo
  * @author Víctor
+ * @version 4
+ * @since 1
  */
 public class Jugador extends SerVivo {
 
@@ -33,7 +35,7 @@ public class Jugador extends SerVivo {
      */
     private int cooldownBalas;
     /**
-     * Teclado que indica
+     * Teclado que controla al personaje
      */
     public Teclado teclado;
 
@@ -234,7 +236,7 @@ public class Jugador extends SerVivo {
      * @see doomies.Gestores.GestorJuego#mover()
      * @param entes un ArrayList que contiene o no entes
      */
-    public void addBalasAsEntidadtidad(final ArrayList entes) {
+    public void addBalasAsEntidad(final ArrayList entes) {
         /**
          * Si no hay balas no lo recorras
          */

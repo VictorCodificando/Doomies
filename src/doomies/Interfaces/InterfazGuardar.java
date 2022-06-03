@@ -21,33 +21,53 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
+ * Interfaz de guardado de mapas
  *
- * @author Víctor Zero
+ * @author Lena
+ * @version 4
+ * @since 2
  */
 public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
 
-    private final int WIDTH;
-    private final int HEIGHT;
-    private final Font font = LoadTools.loadFont("/fonts/kongtext.ttf");
-    //private final Image imagen = LoadTools.loadImage("img/mapa.png");
-    //private Boton botonCargar;
-    //private ProgressBar pb;
-    //private ThreadProgreso tp;
+    /**
+     * Si va a guardar la partida
+     */
     private boolean guardar;
+    /**
+     * Si va a salir sin guardar la partida
+     */
     private boolean salir = false;
+    /**
+     * Boton de cargar partida
+     */
     private Boton botonGuardar;
+    /**
+     * Boton para desplazarse -1 en las partidas
+     */
     private Boton botonIzquierda;
+    /**
+     * Boton para desplazarse +1 en las partidas
+     */
     private Boton botonDerecha;
+    /**
+     * Boton que muestra los datos de las partidas
+     */
     private Boton botonDatos;
+    /**
+     * Indice en el que se encuentra actualmente
+     */
     private int index = 0;
-    private final int LVL_MAX = 10;
-    private int partidasGuardadas;
 
+    /**
+     * Crea una interfaz de guardado de partida
+     *
+     * @param WIDTH Altura de pantalla
+     * @param HEIGHT Anchura de pantalla
+     * @param teclado Teclado que usa la interfaz
+     * @param raton Raton que usa la interfaz
+     */
     public InterfazGuardar(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
         super(WIDTH, HEIGHT, teclado, raton);
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
-        this.partidasGuardadas = 1;
         botonGuardar = new Boton(450, 550, 400, 70, "GUARDAR PARTIDA", font.deriveFont(20f), Color.gray, 2, 4, raton);
         botonGuardar.setFormat(10);
         botonIzquierda = new Boton(((WIDTH / 4) - 50), 300, 100, 100, "<", font.deriveFont(100f), Color.GRAY, 17, 1, raton);
@@ -57,28 +77,34 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
         botonDatos = new Boton(425, 150, 450, 350, "", font.deriveFont(30f), Color.orange, 27, 35, raton); //425,150,450,350
         botonDatos.setFormat(40);
         botonDatos.setLabel("");
-        //this.datosPartida = //conexionbasededatos o fichero
     }
 
-    //@Override
+    /**
+     *
+     * @param g Clase graphics que dibuja todo en la pantalla
+     */
+    @Override
     public void dibujar(final Graphics g) {
-
-        //gradiente
+        /**
+         * Crea un gradiente de fondo de pantalla
+         */
         Graphics2D g2d = (Graphics2D) g;
         GradientPaint verticalGradient = new GradientPaint(0, 0, Color.RED, 0, this.HEIGHT, Color.ORANGE);
         g.setColor(Color.red);
         g2d.setPaint(verticalGradient);
         g2d.fillRect(0, 0, this.WIDTH, this.HEIGHT);
         /**
-         * Titulo
+         * Titulo de GUARDAR PARTIDA
          */
         g.setColor(Color.BLACK);
         g.setFont(font);
         g.setFont(g.getFont().deriveFont(55f));
         g.drawString("GUARDAR PARTIDA", ((WIDTH / 2) - (g.getFont().getSize() * (("GUARDAR PARTIDA").length() / 2))), 100);
-        g.drawString(partidasGuardadas + "", (int) ((WIDTH / 2) - (g.getFont().getSize() * ((partidasGuardadas + "").length() / 2) * 0.5) - 46), (HEIGHT / 2) - (g.getFont().getSize() / 2) + 80);
 
-        //Botones
+        /**
+         * Dibuja los botones, el izquierdo no se muestra si esta en la posicion
+         * minima, el derecho tampoco si esta en la posicion maxima+1
+         */
         if (index > 0) {
             botonIzquierda.dibujar(g);
         }
@@ -90,8 +116,13 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
         dibujarPartidaActual(g);
     }
 
+    /**
+     * Dibuja la partida en la que se encuentra
+     *
+     * @param g Clase graphics que dibuja todo en la pantalla
+     */
     private void dibujarPartidaActual(Graphics g) {
-        if (GestorEstados.partidas.size() <= 0 || index >= GestorEstados.partidas.size()) {
+        if (GestorEstados.partidas.size() <= 0 || index >= GestorEstados.partidas.size()) {//Si las partida no existe no mostrar informacion
             return;
         }
         g.setColor(Color.WHITE);
@@ -105,15 +136,17 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
         g.drawString("\nFecha: " + fecha, 450, 425);
     }
 
-    //MENU
+    /**
+     * Actualiza la interfaz pasando por todos sus botones y elementos
+     */
     public void actualizar() {
 
-        if (index > 0) {
+        if (index > 0) {//En el indice 0 no puede haber menos asi que el boton izquierdo no se muestra ni se actualiza
             botonIzquierda.actualizar();
         } else {
             botonIzquierda.setClicked(false);
         }
-        if (index < GestorEstados.partidas.size()) {
+        if (index < GestorEstados.partidas.size()) {//En el indice de partida maxima +1 , no puede haber nada mas hacia la derecha asi que el boton derecho no se actualiza
             botonDerecha.actualizar();
         } else {
             botonDerecha.setClicked(false);
@@ -126,14 +159,14 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
                 return;
             }
             try {
-                index += (botonDerecha.isClicked()) ? 1 : -1;//comparar id de partida guardada en la bbdd o fichero
+                index += (botonDerecha.isClicked()) ? 1 : -1;
                 String error = GestorEstados.partidas.get(index);
             } catch (Exception e) {
                 index += (botonDerecha.isClicked()) ? -1 : 1;
             }
 
         }
-        //cargar
+        //Pulsa el boton de guardar y se sale
         if (botonGuardar.isClicked()) {
             this.salir = guardar();
         }
@@ -143,7 +176,7 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
      *
      * Guarda la partida con el formato: nombre;{tiempo1,...},fechaActual
      *
-     * @return
+     * @return Si se ha cargado con exito
      */
     private boolean guardar() {
         String nivelesTiempos = "{";
@@ -175,14 +208,18 @@ public class InterfazGuardar extends Interfaz {//Clase para la parte VISUAL
         return true;
     }
 
+    /**
+     *
+     * @return Si sale habiendo guardado
+     */
     public boolean isGuardar() {
         return guardar;
     }
 
-    public int getPartidasGuardadas() {
-        return this.partidasGuardadas;
-    }
-
+    /**
+     *
+     * @return Si sale normal
+     */
     public boolean isSalir() {
         return this.salir;
     }

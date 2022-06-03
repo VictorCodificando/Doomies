@@ -10,7 +10,10 @@ import java.awt.image.BufferedImage;
  * Clase de la que heredan todos los seres vivos, es la clase que define el
  * comportamiento basico de todo ser vivo, siendo lo mas característico su vida
  *
+ * @see doomies.Entes.Entidad
  * @author Víctor
+ * @version 4
+ * @since 2
  */
 public class SerVivo extends Entidad {
 
@@ -182,6 +185,10 @@ public class SerVivo extends Entidad {
             return;
         }
         if (cooldownDaño != 0) {
+            /**
+             * Si es jugador y no esta en su periodo de parpadeo se dibujara el
+             * sprite normal
+             */
             if ((this instanceof Jugador && cooldownDaño >= COOLDOWNDAÑOTOTAL - 5) || (this instanceof Jugador && inmunidad < 20 && inmunidad >= 0)) {
                 this.sprites[spriteActual].dibujar(g, this.hitbox.x, this.hitbox.y);
                 return;
@@ -192,52 +199,80 @@ public class SerVivo extends Entidad {
         this.sprites[spriteActual].dibujar(g, this.hitbox.x, this.hitbox.y);
     }
 
+    /**
+     * Actualiza a cada ser, pasa por aqui cada vez que se actualiza un ser
+     */
     @Override
     public void actualizar() {
         this.mover();
         this.actualizarSprite();
     }
 
-    //Salto
+    /**
+     * Salto default, usado por ahora por el jugador unicamente, le da una
+     * velocidad inicial hacia arriba en Y y la gravedad lo va frenando
+     *
+     * @see doomies.Entes.CuerpoGravitatorio
+     */
     protected void jump() {
-
         this.ya = -11;
     }
-
-    protected void mover() {// mueve las variables de posicion
-        hitbox.x += this.xa;//aumenta la x a la velocidad que debia
-        hitbox.y += this.ya;//aumenta la y a la velocidad que debia
-        if (this.collidingYDown) {// Si esta colisionando en Y, no puede estar cayendo
+    /**
+     * Mueve las variables de posicion
+     */
+    protected void mover() {
+        /**
+         * Mueve la hitbox en x
+         */
+        hitbox.x += this.xa;
+        /**
+         * Mueve la hitbox en y
+         */
+        hitbox.y += this.ya;
+        /**
+         * Si colisiona en y por abajo quiere decir que no esta cayendo
+         */
+        if (this.collidingYDown) {
             this.falling = false;
-            this.contGravedad = 0;//Reseteo de contador
+            this.contGravedad = 0;/**Se resetea el contador de gravedad*/
         }
+        /**
+         * Si la y se mueve entonces esta cayendo
+         */
         if (ya != 0) {
             falling = true;
         }
-        activarCooldownVida();
+        activarCooldownVida();/**Se comprueba el cooldown de la vida*/
     }
-
+    /**
+     * Hace perder 1 vida al ser y activa el cooldown del daño
+     */
     public void perderVida() {
         if (cooldownDaño == 0) {
             this.vida--;
             cooldownDaño++;
         }
-
     }
-
+    /**
+     * Contador de animacion para saber cada cuanto se tienen que cambiar las
+     * poses dinamicas(andar)
+     */
     protected void contadorAnimacion() {
-        if (this.animacion <= 30) {//La variable aumenta hasta 3'
+        if (this.animacion <= 30) {/**La variable aumenta hasta 30*/
             ++this.animacion;
-        } else {//Si llega al tope se resetea
+        } else {/**Si llega al tope se resetea*/
             this.animacion = 0;
         }
     }
-
+    /**
+     * Actualizamos el sprite que debe tener en este instante dependiendo del
+     * estado del ser y de la variable contador de animacion para poses
+     * dinamicas
+     */
     public void actualizarSprite() {
-        //Actualizamos el sprite actual
+        /**Actualizamos el sprite actual*/
         int max = 40;
         this.spriteActual = (xa != 0 && !(ya != 0 && !this.collidingYDown)) ? 4 : (ya != 0 && !this.collidingYDown) ? 8 : 0;
-
         if (walking && !((ya != 0) && !this.collidingYDown)) {
             if (animacion <= ((int) max / 2)) {
                 spriteActual = 0;
@@ -252,9 +287,12 @@ public class SerVivo extends Entidad {
             animacion = 0;
         }
         this.spriteActual += (shooting) ? 2 : 0;
-        this.spriteActual += (dir.equals("R") ? 0 : 1);
+        this.spriteActual += (dir.equals("R") ? 0 : 1);/**Se suma 1 si esta mirando a la izquierda*/
     }
-
+    /**
+     * Actualiza el contador de la vida, para respetar un tiempo minimo para
+     * recibir daño
+     */
     private void activarCooldownVida() {
         if (cooldownDaño == 0) {
         } else if (cooldownDaño < COOLDOWNDAÑOTOTAL && cooldownDaño > 0) {
@@ -263,79 +301,82 @@ public class SerVivo extends Entidad {
             cooldownDaño = 0;
         }
     }
-
+    /**
+     * Obtener la vida del ser en este instante
+     *
+     * @return La vida restante del ser
+     */
     public int getVida() {
         return vida;
     }
 
+    /**
+     * Define la vida restante del ser
+     *
+     * @param vida La vida que tendra el ser
+     */
     public void setVida(int vida) {
         this.vida = vida;
     }
 
+    /**
+     * Obtiene la direccion actual del ser
+     *
+     * @return La direccion actual del ser
+     */
     public String getDir() {
         return dir;
     }
 
+    /**
+     * Establece la direccion actual del ser
+     *
+     * @param dir La direccion a darle al ser
+     */
     public void setDir(String dir) {
         this.dir = dir;
     }
 
-    public boolean isWalking() {
-        return walking;
-    }
-
+    /**
+     * Establece si el ser esta andando o no
+     *
+     * @param walking True o false segun el ser este andando o no
+     */
     public void setWalking(boolean walking) {
         this.walking = walking;
     }
 
-    public boolean isRunning() {
-        return running;
-    }
-
-    public void setRunning(boolean running) {
-        this.running = running;
-    }
-
-    public boolean isFalling() {
-        return falling;
-    }
-
+    /**
+     * Establece si el ser esta cayendo o no
+     *
+     * @param falling True o false si esta cayendo o no
+     */
     public void setFalling(boolean falling) {
         this.falling = falling;
     }
 
-    public boolean isShooting() {
-        return shooting;
-    }
-
+    /**
+     * Establecer si el ser esta disparando
+     *
+     * @param shooting true o false si esta disparando o no
+     */
     public void setShooting(boolean shooting) {
         this.shooting = shooting;
     }
 
-    public boolean isStay() {
-        return stay;
-    }
-
+    /**
+     * Establece si el ser esta quieto o no
+     *
+     * @param stay Si el personaje esta quieto
+     */
     public void setStay(boolean stay) {
         this.stay = stay;
     }
-
-    public int getSpriteActual() {
-        return spriteActual;
-    }
-
-    public void setSpriteActual(int spriteActual) {
-        this.spriteActual = spriteActual;
-    }
-
-    public int getAnimacion() {
-        return animacion;
-    }
-
-    public void setAnimacion(int animacion) {
-        this.animacion = animacion;
-    }
-
+    /**
+     * Saber el ser esta vivo o no, si tiene 0 o menos devuelve true
+     *
+     * @return Boolean true si esta muerto y false si esta muerto
+     */
     public boolean isDead() {
         return this.vida <= 0;
     }

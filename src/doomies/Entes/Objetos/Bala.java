@@ -9,8 +9,10 @@ import doomies.Entes.Entidad;
 
 /**
  * Clase bala que hereda de entidad
- * 
+ *
  * @author Víctor
+ * @version 4
+ * @since 1
  */
 public class Bala extends Entidad {
 
@@ -33,7 +35,7 @@ public class Bala extends Entidad {
         this.y = y;
         this.hitbox = new Rectangle(x, y, 10, 6);
         this.right = right;
-        Speed=40;
+        speed = 40;
     }
 
     /**
@@ -55,7 +57,7 @@ public class Bala extends Entidad {
         /**
          * Si su direccion es derecha su velocidad es positiva
          */
-        this.x += (this.right) ? Speed : -Speed;
+        this.x += (this.right) ? speed : -speed;
         this.y += this.ya;
         this.hitbox.x = x;
         this.hitbox.y = y;
@@ -65,40 +67,5 @@ public class Bala extends Entidad {
         if (x > 1280 || x + this.hitbox.width < 0) {
             visible = false;
         }
-    }
-
-    /**
-     * Obtener la x de la bala
-     * 
-     * @return La x de la bala
-     */
-    @Override
-    public int getX() {
-        return this.x;
-    }
-    /**
-     * Obtener la y de la bala
-     * 
-     * @return La y de la bala
-     */
-    @Override
-    public int getY() {
-        return this.y;
-    }
-    /**
-     * Obtener la anchura de la bala
-     * 
-     * @return La anchura de la bala
-     */
-    public int getWIDTH() {
-        return this.WIDTH;
-    }
-    /**
-     * Obtener la altura de la bala
-     * 
-     * @return La altura de la bala
-     */
-    public int getHEIGHT() {
-        return this.HEIGHT;
     }
 }

@@ -3,39 +3,76 @@ package doomies;
 import doomies.HerramientasEntradaSalida.ConectionDatabase;
 
 /**
+ * Clase principal de las que salen todas
  *
- * @author Víctor Zero
+ * @author Víctor
+ * @version 4
+ * @since 1
  */
 //CLASE PRINCIPAL QUE TENDRA EL MAIN Y LAS CLASES QUE INICIALIZAN EL DIBUJO
 public class Doomies {
 
     //Declaramos la ventana y el lienzo(donde se dibujaran las cosas)
+    /**
+     * Frame principal
+     */
     private final Ventana ventana;
+    /**
+     * Canvas donde se dibujara todo
+     */
     private final Lienzo canvas;
+    /**
+     * Si la apliacion esta en primer plano
+     */
     private static boolean onTop;
-    private boolean enEjecucion = false;//Variable que funcionara como bucle infinito
+    /**
+     * Nos produce un bucle infinito
+     */
+    private boolean enEjecucion = false;
+    /**
+     * Hz de la pantalla del usuario
+     */
     private final long refresco = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getRefreshRate();
+    /**
+     * Sincronizacion vertical
+     */
     public static boolean vSync = false;
+    /**
+     * Limitar a 60 fps
+     */
     public static boolean fps60 = false;
 
+    /**
+     * Crea el juego principal
+     *
+     * @param width Anchura de la pantalla
+     * @param height Altura de la pantalla
+     */
     public Doomies(final int width, final int height) {//inicializo el canvas primero y luego se lo paso al frame(ventana)
         this.canvas = new Lienzo(width, height);
         this.ventana = new Ventana(canvas);
     }
 
     public static void main(String[] args) {
-        //Inicializo la clase principal con las medidas adecuadas(se pueden cambiar
+        //Intento conexion a la base de datos
         ConectionDatabase.intentarCargarMapas();
+        //Inicializo la clase principal con las medidas adecuadas
         Doomies pr = new Doomies(1280, 720);
         pr.iniciar();
     }
 
+    /**
+     * Inicia el bucle principal
+     */
     private void iniciar() {//Dice que esta en ejecucion y empieza el contador
         enEjecucion = true;
         bucleContador();
     }
 
-    private void bucleContador() {//El bucle contador llama a actualizar y a llamar
+    /**
+     * El bucle contador llama a actualizar y a dibujar
+     */
+    private void bucleContador() {
         long actual = 0;
         long anterior = 0;
         long anterior2 = 0;
@@ -69,11 +106,17 @@ public class Doomies {
         }
     }
 
-    private void actualizar() {//Actualizar mas elevado en jerarquia
+    /**
+     * Actualizar mas elevado en jerarquia
+     */
+    private void actualizar() {
         canvas.actualizar();
     }
 
-    private void dibujar() {//Dibujar mas elevado en jerarquia
+    /**
+     * Dibujar mas elevado en jerarquia
+     */
+    private void dibujar() {
         canvas.dibujar();
     }
 

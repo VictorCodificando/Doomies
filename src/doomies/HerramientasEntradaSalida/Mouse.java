@@ -5,17 +5,44 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
+ * Clase raton que actua como mouseListener, esta pendiente del estado del raton
  *
- * @author Víctor Zero
+ * @author Víctor
+ * @version 4
+ * @since 3
+ *
  */
 public class Mouse implements MouseListener {
 
+    /**
+     * Ajuste de x que representa la distancia entre el inicio de la pantalla y
+     * el incio de la x del programa
+     */
     private int AjusteX;
+    /**
+     * Ajuste de Y que representa la distancia entre el inicio de la pantalla y
+     * el incio de la Y del programa
+     */
     private int AjusteY;
+    /**
+     * posicion en x del raton
+     */
     public int x = 0;
+    /**
+     * posicion en y del raton
+     */
     public int y = 0;
+    /**
+     * Si esta pulsado
+     */
     public boolean pressed;
+    /**
+     * Si se ha soltado
+     */
     public boolean released;
+    /**
+     * Si se ha clickado(nos fijaremos en esta)
+     */
     public boolean clicked;
 
     /**

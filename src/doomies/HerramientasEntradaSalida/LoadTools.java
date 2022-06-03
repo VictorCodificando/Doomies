@@ -26,6 +26,14 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.net.URISyntaxException;
 
+/**
+ * Clase que cargara todos los recursos necesarios y nos dara diferentes
+ * herramientas
+ *
+ * @author Víctor
+ * @version 4
+ * @since 1
+ */
 public class LoadTools {
 
     public static final String RUTA_ACTUAL = ((LoadTools.class.getProtectionDomain().getCodeSource().getLocation() + "").substring(6).replaceAll("%20", " "));
@@ -78,13 +86,13 @@ public class LoadTools {
         } catch (URISyntaxException ex) {
             System.out.println(ex);
         }
-        Font font = null;
+        Font font = null;//null por defecto
         try {
             if (RUTA_ACTUAL.contains(".jar")) {
                 ClassLoader loader = Doomies.class.getClassLoader();
-                font = Font.createFont(Font.TRUETYPE_FONT, LoadTools.class.getResourceAsStream(path)).deriveFont(15f);//Cargo la imagen
+                font = Font.createFont(Font.TRUETYPE_FONT, LoadTools.class.getResourceAsStream(path)).deriveFont(15f);//Cargo la fuente
             } else {
-                font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File(ruta + path))).deriveFont(15f);//Cargo la imagen
+                font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File(ruta + path))).deriveFont(15f);//Cargo la fuente
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(new Frame(), "ERROR CARGANDO LA FUENTE EN LA RUTA\n" + path, "ERROR", 2);
@@ -99,7 +107,7 @@ public class LoadTools {
      *
      * @param c Es el color a aclarecer
      * @param n Es la cantidad claridad se quiere aplicar
-     * @return
+     * @return Color mas claro
      */
     public static Color brighter(Color c, int n) {
         int red = (c.getRed() >= (255 - n)) ? 255 : c.getRed() + n;
@@ -115,7 +123,7 @@ public class LoadTools {
      *
      * @param c Es el color a oscurecer
      * @param n Es la cantidad de oscureza se quiere aplicar
-     * @return
+     * @return Color mas oscuro
      */
     public static Color darker(Color c, int n) {
         int red = (c.getRed() <= (0 + n)) ? 0 : c.getRed() - n;
@@ -126,7 +134,7 @@ public class LoadTools {
     }
 
     /**
-     * Carga los tiles del mapa desde un archivo FUERA
+     * Carga los tiles del mapa desde un archivo
      *
      * @param path Ruta donde se encuentra el archivo que compone el mapa
      * @return Los tiles que componen el mapa del archivo
@@ -134,31 +142,31 @@ public class LoadTools {
     public static Tile[][] loadMap(String path) {
         String ruta = "";
         try {
-            ruta = LoadTools.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().toString().substring(1).replaceAll("Doomies.jar|%20", "");
+            ruta = LoadTools.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().toString().substring(1).replaceAll("Doomies.jar|%20", "");//Ruta actual
         } catch (URISyntaxException ex) {
             System.out.println(ex);
         }
         File f = null;
-        ArrayList<Tile> tiles = new ArrayList();
         Tile tilesArray[][] = null;
         String mapa = "";
-        SpriteSheet hoja = SpriteSheet.MAPA;
         try {
+            /**
+             * Abro el archivo y recorro linea a linea hasta llegar al ":" que
+             * divide los enemigos de los tiles del mapa
+             */
             Scanner lector;
             f = new File(ruta + path);
             lector = new Scanner(f);
-            //LEO EL MAPA
             for (int i = 0; lector.hasNext(); i++) {
                 mapa += lector.next();
                 mapa += ";";
                 if (mapa.contains(":")) {
                     mapa = mapa.replaceAll(":;", "");
-//                    System.out.println("te lo encontraste");
                     break;
                 }
             }
             lector.close();
-            tilesArray = loadTile(mapa);
+            tilesArray = loadTile(mapa);//Cargo los tiles de las lineas leidas
         } catch (IOException e) {
             JOptionPane.showMessageDialog(new Frame(), "ERROR MAPA NO ENCONTRADO\n" + path, "ERROR", 2);
             System.exit(0);
@@ -183,10 +191,9 @@ public class LoadTools {
             mapa[i] = inSplitted[i].split("-");
         }
         Tile[][] tiles = new Tile[mapa.length][];
-        for (int i = 0; i < mapa.length; i++) {
+        for (int i = 0; i < mapa.length; i++) {//Recorro todas las lineas, y si es xx el tile es null
             tiles[i] = new Tile[mapa[i].length];
             for (int j = 0; j < mapa[i].length; j++) {
-                //System.out.println(mapa[i][j]);
                 if (mapa[i][j].contains("x")) {
                     tiles[i][j] = null;
                     continue;
@@ -198,6 +205,13 @@ public class LoadTools {
         return tiles;
     }
 
+    /**
+     * Cargamos los entes desde el fichero de mapa
+     *
+     * @param path Ruta del fichero
+     * @param entes ArrayList al que añadiremos los entes
+     * @return entes en el mapa
+     */
     public static ArrayList<Entidad> loadEntes(String path, ArrayList<Entidad> entes) {
         String ruta = "";
         try {
@@ -206,23 +220,19 @@ public class LoadTools {
             System.out.println(ex);
         }
         File f = null;
-        ArrayList<Tile> tiles = new ArrayList();
-        Tile tilesArray[][] = null;
         String mapa = "";
-        SpriteSheet hoja = SpriteSheet.MAPA;
         try {
             Scanner lector;
             f = new File(ruta + path);
             lector = new Scanner(f);
-            //LEO EL MAPA
-
+            //Leo el fichero
             for (int i = 0; lector.hasNext(); i++) {
                 mapa += lector.next();
                 if (mapa.contains(":")) {//Hacemos que llegue a la parte que nos interesa
                     break;
                 }
             }
-            for (int i = 0; lector.hasNext(); i++) {
+            for (int i = 0; lector.hasNext(); i++) {//Empezamos a cojer la informacion de los enemigos
                 String line[] = lector.next().split(";");
                 int enemyType = Integer.parseInt(line[0]);
                 int x = Integer.parseInt(line[1]) * 64;
@@ -234,11 +244,10 @@ public class LoadTools {
 
             }
             lector.close();
-            tilesArray = loadTile(mapa);
-        } catch (IOException e) {
+        } catch (IOException e) {//Si el mapa no se ha encontrado
             JOptionPane.showMessageDialog(new Frame(), "ERROR MAPA NO ENCONTRADO\n" + path, "ERROR", 2);
             System.exit(0);
-        } catch (Exception e) {
+        } catch (Exception e) {//Si hay otro error
             JOptionPane.showMessageDialog(new Frame(), "ERROR EN LA LECTURA DEL MAPA\n" + e, "ERROR", 2);
             System.exit(0);
         }
@@ -246,10 +255,10 @@ public class LoadTools {
     }
 
     /**
-     * FUERA
+     * Cuenta la cantidad de mapas que hay en la carpeta
      *
-     * @param foldPath
-     * @return
+     * @param foldPath ruta de la carpeta
+     * @return El numero de mapas que hay
      */
     public static int countMap(String foldPath) {
         String ruta = "";
@@ -260,12 +269,12 @@ public class LoadTools {
         }
         File f = null;
         int count = 0;
-        f = new File(ruta + foldPath);
-        if (!f.exists()) {
+        f = new File(ruta + foldPath);//Se abre el archivo
+        if (!f.exists()) {//Si no existe llegado a este punto es error fatal
             JOptionPane.showMessageDialog(new Frame(), "ERROR EN LA LECTURA DEL DIRECTORIO:\n" + foldPath, "ERROR", 2);
             System.exit(0);
         }
-        String[] archivos = f.list();
+        String[] archivos = f.list();//Cojemos la lista dentro de la carpeta y nos ponemos a buscar mapas
         for (int i = 0; i < archivos.length; i++) {
             if (archivos[i].contains("mapa")) {
                 count++;
@@ -275,10 +284,10 @@ public class LoadTools {
     }
 
     /**
-     * FUERA
+     * Cargamos partida desde el fichero, si no existe lo creamos
      *
-     * @param path
-     * @return
+     * @param path Ruta del archivo
+     * @return ArrayList de partidas
      */
     public static ArrayList<String> cargarPartidas(String path) {
         String ruta = "";
@@ -289,33 +298,32 @@ public class LoadTools {
         }
         File f = null;
         ArrayList<String> partidasExtensible = new ArrayList();
-        String partidas[];
         try {
             Scanner lector;
             f = new File(ruta + path);
-            if (!f.exists()) {
+            if (!f.exists()) {//Si no existe lo creamos
                 f.createNewFile();
             }
             lector = new Scanner(f);
-            for (int i = 0; lector.hasNext(); i++) {
+            for (int i = 0; lector.hasNext(); i++) {//Recorremos el archivo buscando todas las partidas
                 partidasExtensible.add(lector.next());
             }
             lector.close();
         } catch (IOException e) {
-            System.out.println("error" + e);
-            return null;
+            JOptionPane.showMessageDialog(new Frame(), "ERROR EN LA LECTURA DE LAS PARTIDAS:\n" + e, "ERROR", 2);//Error leyendo las partidas
+            System.exit(0);
         } catch (Exception e) {
-            System.out.println("error" + e);
-            return null;
+            JOptionPane.showMessageDialog(new Frame(), "ERROR:\n" + e, "ERROR", 2);
+            System.exit(0);
         }
         return partidasExtensible;
     }
 
     /**
-     * FUERA
+     * Guardamos las partidas a un fichero
      *
-     * @param path
-     * @param partidas
+     * @param path Ruta del archivo de guardado
+     * @param partidas ArrayList de las partidas a guardar
      */
     public static void guardarPartidas(String path, ArrayList<String> partidas) {
         String ruta = "";
@@ -327,9 +335,8 @@ public class LoadTools {
         File f = null;
         FileWriter fw = null;
         try {
-            Scanner lector;
             f = new File(ruta + path);
-            if (!f.exists()) {
+            if (!f.exists()) {//Si no existe el archivo se crea
                 f.createNewFile();
             }
             fw = new FileWriter(f);
@@ -338,14 +345,22 @@ public class LoadTools {
             }
             fw.close();
         } catch (IOException e) {
-            System.out.println("ERROR IO" + e);
+            JOptionPane.showMessageDialog(new Frame(), "ERROR DE ESCRITURA:\n" + e, "ERROR", 2);//Error guardando las partidas
+            System.exit(0);
             return;
         } catch (Exception e) {
-            System.out.println("ERROR OTRO" + e);
+            JOptionPane.showMessageDialog(new Frame(), "ERROR:\n" + e, "ERROR", 2);//Error guardando las partidas
+            System.exit(0);
             return;
         }
     }
 
+    /**
+     * Creamos el teclado según lo que haya en el fichero, si no hay nada se
+     * cargan los controles por defecto
+     *
+     * @return Nuevo teclado con las opciones previstas
+     */
     public static Teclado createTeclado() {
         String ruta = "";
         try {
@@ -398,9 +413,17 @@ public class LoadTools {
             }
 
         } catch (FileNotFoundException ex) {
-
+            return new Teclado();
         } catch (Exception e) {
-
+            try {
+                f.createNewFile();
+                FileWriter fw = new FileWriter(f);
+                fw.write("37;39;16;38;67\n"
+                        + "0");
+                fw.close();
+                return new Teclado();
+            } catch (IOException ex) {
+            }
         }
         return keyboard;
     }
@@ -412,7 +435,7 @@ public class LoadTools {
         }
         File f = new File(path);
 
-        if (!f.exists()) { //IMPOSIBLE QUE PASE PERO POR SEGURIDAD
+        if (!f.exists()) {
             try {
                 f.createNewFile();
             } catch (IOException ex) {

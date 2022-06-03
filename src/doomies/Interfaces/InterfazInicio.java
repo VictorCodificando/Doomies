@@ -13,16 +13,38 @@ import doomies.HerramientasEntradaSalida.Teclado;
 import doomies.Interfaces.Elementos.Boton;
 
 /**
+ * Interfaz de inicio que muestra un fondo en movimiento, el logo y el boton de
+ * start
  *
- * @author Víctor Zero
+ * @author Javier
+ * @version 4
+ * @since 2
  */
 public class InterfazInicio extends Interfaz {
 
+    /**
+     * Poscion en x
+     */
     private int x = 0;
+    /**
+     * Si se esta moviendo hacia la derecha
+     */
     private boolean right = true;
+    /**
+     * Imagen de fondo
+     */
     private final BufferedImage background = LoadTools.loadImage("/images/BG_0.png");
+    /**
+     * Imagen del logo
+     */
     private final BufferedImage logo = LoadTools.loadImage("/images/Logo.png");
+    /**
+     * Boton de start
+     */
     private final Boton botonStart;
+    /**
+     * El boton de start se ha pulsado
+     */
     private boolean start;
 
     /**
@@ -33,24 +55,33 @@ public class InterfazInicio extends Interfaz {
      * @param raton Raton que usaran los botones de la interfaz
      */
     public InterfazInicio(final int WIDTH, final int HEIGHT, final Teclado teclado, final Mouse raton) {
-        super(WIDTH,HEIGHT,teclado,raton);
+        super(WIDTH, HEIGHT, teclado, raton);
         start = false;
         botonStart = new Boton(400, 600, 480, 84, "START", font.deriveFont(30f), Color.gray, -10, 4, raton);
     }
 
+    /**
+     * Dibuja todo lo que contiene la interfaz de inicio
+     *
+     * @param g Clase graphics que dibuja todo en la pantalla
+     */
     public void dibujar(final Graphics g) {
-
-        //FONDO
+        /**
+         * Se dibuja el fondo
+         */
         g.drawImage(background, x, -200, null);
-        //FONDO    
-
-        //LOGO
+        /**
+         * Se dibuja el logo
+         */
         g.drawImage(logo, 355, 0, null);
-        //LOGO
+        /**
+         *
+         */
         botonStart.dibujar(g);
-
     }
-
+    /**
+     * Actualiza la todos los elementos de la interfaz de inicio
+     */
     public void actualizar() {
         //Actualizacion de boton
         botonStart.actualizar();

@@ -1,58 +1,88 @@
 package doomies.mapa;
 
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import doomies.Entes.Entidad;
-import doomies.Entes.Seres.Enemigo;
-import doomies.Entes.Seres.Jugador;
-import doomies.Entes.Seres.SerVivo;
 import doomies.HerramientasEntradaSalida.LoadTools;
 
 /**
+ * Mapa que contiene el fondo e importa los tiles necesarios
  *
- * @author Víctor Zero
+ * @author Víctor
+ * @version 4
+ * @since 2
  */
 public class Mapa {
 
+    /**
+     * Los tiles que contiene el mapa
+     */
     private final Tile[][] tiles;
+    /**
+     * Anchura pantalla
+     */
     private final int SCREEN_WIDTH;
+    /**
+     * Altura pantalla
+     */
     private final int SCREEN_HEIGHT;
+    /**
+     * Anchura del mapa
+     */
     private final int WIDTH;
+    /**
+     * Altura del mapa
+     */
     private final int HEIGHT;
-    private final SerVivo[] seres;
+    /**
+     * Imagen de fondo
+     */
     private BufferedImage background;
+    /**
+     * Posicion x del fondo
+     */
     private int bg_x;
+    /**
+     * posicion x del mapa
+     */
     private int x;
-    private int y;
+    /**
+     * Velocidad en x del mapa
+     */
     private int xa;
+    /**
+     * ID del mapa
+     */
     private final int ID;
-    private int ya;
-    private boolean right;
+    /**
+     * Si la pantalla esta en el limite izquierdo del mapa
+     */
     private boolean limit = true;
+    /**
+     * Si el mapa esta en el limite derecho del mapa
+     */
     private boolean limit_fin;
-    private boolean up;
-    public ArrayList<Entidad> entesEnMapa = new ArrayList<Entidad>();
+    /**
+     * Contiene los entes del mapa
+     */
+    public ArrayList<Entidad> entesEnMapa = new ArrayList();
 
     /**
-     * Crea el mapa
+     * Crea el mapa sabiendo la altura y achura de la pantalla, y la ID del mapa
      *
-     * @param seres Seres que estan en el mapa
      * @param width Anchura de la pantalla
      * @param height Altura de la pantalla
+     * @param ID ID del mapa
      */
-    public Mapa(SerVivo[] seres, final int width, final int height, int ID) {
+    public Mapa(final int width, final int height, int ID) {
         this.SCREEN_HEIGHT = height;
         this.SCREEN_WIDTH = width;
         this.ID = ID;
-
-        this.tiles = LoadTools.loadMap("/mapas/mapa" + ID + ".txt");
+        this.tiles = LoadTools.loadMap("/mapas/mapa" + ID + ".txt");//Importamos el mapa
         this.background = LoadTools.loadImage("/images/BG_" + ID + ".png");
         this.HEIGHT = this.tiles.length * this.tiles[this.tiles.length - 1][this.tiles[this.tiles.length - 1].length - 1].getHitbox().height;
         this.WIDTH = this.tiles[this.tiles.length - 1].length * this.tiles[this.tiles.length - 1][this.tiles[this.tiles.length - 1].length - 1].getHitbox().width;
-        this.seres = seres;
         //Añadimos los tiles
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
@@ -62,18 +92,15 @@ public class Mapa {
                 entesEnMapa.add(tiles[i][j]);
             }
         }
-//        System.out.println("antes");
-        entesEnMapa = LoadTools.loadEntes("/mapas/mapa" + ID + ".txt", entesEnMapa);
-        //Añadimos los seres
-        /*for (int i = 0; i < seres.length; i++) {
-            if (seres[i]==null) {
-                continue;
-            }
-            entesEnMapa.add(seres[i]);
-        }*/
+        entesEnMapa = LoadTools.loadEntes("/mapas/mapa" + ID + ".txt", entesEnMapa);//Impoartamos los enemigos
     }
 
-    public void dibujar(Graphics g) {
+    /**
+     * Dibuja el fondo del mapa en pantalla
+     *
+     * @param g Graphics que dibujara en pantalla
+     */
+    public void dibujar(final Graphics g) {
         g.drawImage(background, (int) bg_x, -Math.abs(SCREEN_HEIGHT - this.background.getHeight()), null);
     }
 
@@ -82,13 +109,10 @@ public class Mapa {
      */
     public void actualizar() {
         //Ha llegado al final
-        //System.out.println(x);
         if (0 <= x) {
-//            System.out.println("limite izq");
             limit = true;
             limit_fin = false;
         } else if (SCREEN_WIDTH >= x + WIDTH) {
-//            System.out.println("lmiite derecho");
             limit = false;
             limit_fin = true;
         } else {
@@ -97,93 +121,36 @@ public class Mapa {
         }
         x += xa;
         bg_x = (int) ((this.background.getWidth() - SCREEN_WIDTH) * ((float) (x) / WIDTH));
-        y += ya;
     }
 
-    public BufferedImage getBackground() {
-        return background;
-    }
-
-    public void setBackground(BufferedImage background) {
-        this.background = background;
-    }
-
-    public int getBg_x() {
-        return bg_x;
-    }
-
-    public void setBg_x(int bg_x) {
-        this.bg_x = bg_x;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getXa() {
-        return xa;
-    }
-
+    /**
+     *
+     * @param xa Establece la nueva velocidad en x
+     */
     public void setXa(int xa) {
         this.xa = xa;
     }
 
-    public int getYa() {
-        return ya;
-    }
-
-    public void setYa(int ya) {
-        this.ya = ya;
-    }
-
-    public boolean isRight() {
-        return right;
-    }
-
-    public void setRight(boolean right) {
-        this.right = right;
-    }
-
-    public boolean isUp() {
-        return up;
-    }
-
-    public void setUp(boolean up) {
-        this.up = up;
-    }
-
-    public ArrayList<Entidad> getEntesEnMapa() {
-        return entesEnMapa;
-    }
-
-    public void setEntesEnMapa(ArrayList<Entidad> entesEnMapa) {
-        this.entesEnMapa = entesEnMapa;
-    }
-
+    /**
+     *
+     * @return Si esta en el limite izquierdo del mapa
+     */
     public boolean isLimit() {
         return limit;
     }
 
-    public void setLimit(boolean limit) {
-        this.limit = limit;
-    }
-
+    /**
+     *
+     * @return Si esta en el limite derecho del mapa
+     */
     public boolean isLimit_fin() {
         return limit_fin;
     }
 
+    /**
+     *
+     * @return ID del mapa
+     */
     public int getID() {
         return ID;
     }

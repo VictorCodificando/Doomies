@@ -19,6 +19,8 @@ import javax.swing.JOptionPane;
  * @see SerVivo
  * @see doomies.Entes.Entidad
  * @author Javier
+ * @version 4
+ * @since 3
  */
 public class Enemigo extends SerVivo {
 
@@ -31,7 +33,7 @@ public class Enemigo extends SerVivo {
     /**
      * Indica el tipo de enemigo que es
      */
-    private final int enemyType;
+    private final int ENEMY_TYPE;
     /**
      * Posicion x del jugador
      */
@@ -61,7 +63,7 @@ public class Enemigo extends SerVivo {
     /**
      * La velocidad en y del enemigo
      */
-    private int SpeedY;
+    private int speedY;
     /**
      * Crea un Enemigo de un tipo determinado
      * 
@@ -85,12 +87,12 @@ public class Enemigo extends SerVivo {
              *      -Andar2
              */
             case 0:
-                this.Speed = (int) (Math.floor(Math.random() * 4 + 2));
+                this.speed = (int) (Math.floor(Math.random() * 4 + 2));
                 this.vida = 10;
                 this.sprites = new Sprite[]{SpriteSheet.IMP.getSprite(0, 0), SpriteSheet.IMP.getSprite(0, 1), 
                                             SpriteSheet.IMP.getSprite(1, 0), SpriteSheet.IMP.getSprite(1, 1), 
                                             SpriteSheet.IMP.getSprite(2, 0), SpriteSheet.IMP.getSprite(2, 1)};
-                this.enemyType = 0;
+                this.ENEMY_TYPE = 0;
                 break;
            /**
             * PINKIE
@@ -103,13 +105,13 @@ public class Enemigo extends SerVivo {
             *      -Caer
             */
             case 1:
-                this.Speed = (int) (Math.floor(Math.random() * 4 + 3));
+                this.speed = (int) (Math.floor(Math.random() * 4 + 3));
                 this.vida = 12;
                 this.sprites = new Sprite[]{SpriteSheet.PINKIE.getSprite(0, 0), SpriteSheet.PINKIE.getSprite(0, 1), 
                                             SpriteSheet.PINKIE.getSprite(1, 0), SpriteSheet.PINKIE.getSprite(1, 1), 
                                             SpriteSheet.PINKIE.getSprite(2, 0), SpriteSheet.PINKIE.getSprite(2, 1), 
                                             SpriteSheet.PINKIE.getSprite(3, 0), SpriteSheet.PINKIE.getSprite(3, 1)};
-                this.enemyType = 1;
+                this.ENEMY_TYPE = 1;
                 break;
            /**
             * SOUL
@@ -123,13 +125,13 @@ public class Enemigo extends SerVivo {
             *      -Sprint
             */
             case 2:
-                this.Speed = (int) (Math.floor(Math.random() * 4 + 1));
+                this.speed = (int) (Math.floor(Math.random() * 4 + 1));
                 this.vida = 8;
                 this.sprites = new Sprite[]{SpriteSheet.SOUL.getSprite(0, 0), SpriteSheet.SOUL.getSprite(0, 1),
                                             SpriteSheet.SOUL.getSprite(0, 0), SpriteSheet.SOUL.getSprite(0, 1),
                                             SpriteSheet.SOUL.getSprite(0, 0), SpriteSheet.SOUL.getSprite(0, 1),
                                             SpriteSheet.SOUL.getSprite(0, 0), SpriteSheet.SOUL.getSprite(0, 1)};
-                this.enemyType = 2;
+                this.ENEMY_TYPE = 2;
                 break;
            /**
             * CACODEMON
@@ -142,13 +144,13 @@ public class Enemigo extends SerVivo {
             *      -Sprint
             */
             case 3://(2-5)
-                this.Speed = (int) (Math.floor(Math.random() * 4 + 2));
+                this.speed = (int) (Math.floor(Math.random() * 4 + 2));
                 this.vida = 18;
                 this.sprites = new Sprite[]{SpriteSheet.CACODEMON.getSprite(0, 0), SpriteSheet.CACODEMON.getSprite(0, 1), 
                                             SpriteSheet.CACODEMON.getSprite(1, 0), SpriteSheet.CACODEMON.getSprite(1, 1), 
                                             SpriteSheet.CACODEMON.getSprite(2, 0), SpriteSheet.CACODEMON.getSprite(2, 1), 
                                             SpriteSheet.CACODEMON.getSprite(3, 0), SpriteSheet.CACODEMON.getSprite(3, 1)};
-                this.enemyType = 3;
+                this.ENEMY_TYPE = 3;
                 break;
            /**
             * BARON
@@ -161,19 +163,19 @@ public class Enemigo extends SerVivo {
             *      -Sprint
             */
             case 4:
-                this.Speed = (int) (Math.floor(Math.random() * 3 + 2));
+                this.speed = (int) (Math.floor(Math.random() * 3 + 2));
                 this.vida = 30;
                 this.sprites = new Sprite[]{SpriteSheet.BARON.getSprite(0, 0), SpriteSheet.BARON.getSprite(0, 1), 
                                             SpriteSheet.BARON.getSprite(1, 0), SpriteSheet.BARON.getSprite(1, 1), 
                                             SpriteSheet.BARON.getSprite(2, 0), SpriteSheet.BARON.getSprite(2, 1), 
                                             SpriteSheet.BARON.getSprite(3, 0), SpriteSheet.BARON.getSprite(3, 1)};
-                this.enemyType = 4;
+                this.ENEMY_TYPE = 4;
                 break;
             /**
              * SE MUESTRA MENSAJE DE ERROR ENEMIGO NO CONOCIDO
              */
             default:
-                this.enemyType = -1;
+                this.ENEMY_TYPE = -1;
                 JOptionPane.showMessageDialog(new Frame(), "ERROR FATAL", "ERROR", 2);
                 System.exit(0);
                 sprites = null;
@@ -182,7 +184,7 @@ public class Enemigo extends SerVivo {
          * Establecemos vida total como la vida ya establecida
          */
         this.VIDA_TOTAL = vida;
-        this.SpeedY = Speed;
+        this.speedY = speed;
         this.hitbox = new Rectangle(x, y, WIDTH, HEIGHT);
     }
     /**
@@ -264,7 +266,7 @@ public class Enemigo extends SerVivo {
          * Establece la direccion, si esta mirando a la izquierda,
          * su sprite esta en una posicion mas adelantada dentro del array
          */
-        if (Speed < 0) {
+        if (speed < 0) {
             spriteActual += 1;
         }
 
@@ -281,7 +283,7 @@ public class Enemigo extends SerVivo {
             return;
         }
         spriteActual = 0;
-        switch (this.enemyType) {
+        switch (this.ENEMY_TYPE) {
             /**
              * IMP
              * Se mueve en el eje de la x sin choca con algo se gira.
@@ -371,9 +373,9 @@ public class Enemigo extends SerVivo {
          */
         if (cooldownMuestraY == 0) {
             if (this.yPlayer + 54 < hitbox.y + (hitbox.height / 2)) {
-                SpeedY = Math.abs(SpeedY) * -1;
+                speedY = Math.abs(speedY) * -1;
             } else if (this.yPlayer + 54 > hitbox.y + (hitbox.height / 2)) {
-                SpeedY = Math.abs(SpeedY);
+                speedY = Math.abs(speedY);
             }
             cooldownMuestraY++;
         } else if (cooldownMuestraY == COOLDONWMUESTRALIMIT) {
@@ -385,7 +387,7 @@ public class Enemigo extends SerVivo {
          * La velocidad será posible siempre y cuando no colisione ni abajo ni
          * arriba
          */
-        ya = ((collidingYUp && SpeedY < 0) || (collidingYDown && SpeedY > 0)) ? 0 : SpeedY;
+        ya = ((collidingYUp && speedY < 0) || (collidingYDown && speedY > 0)) ? 0 : speedY;
         this.spriteActual = WALK_ID;
         /**
          * Cambia el sprite a andar, ya que para los enemigos voladores ahi se
@@ -402,12 +404,12 @@ public class Enemigo extends SerVivo {
     private void perseguirX() {
         if (cooldownMuestra == 0) {
             if (this.xPlayer + 34 < hitbox.x + (hitbox.width / 2)) {
-                Speed = Math.abs(Speed) * -1;
+                speed = Math.abs(speed) * -1;
             } else if (this.xPlayer + 34 > hitbox.x + (hitbox.width / 2)) {
-                Speed = Math.abs(Speed);
+                speed = Math.abs(speed);
             }
             if (collidingXRight || collidingXLeft) {
-                Speed = -Speed;
+                speed = -speed;
             }
             cooldownMuestra++;
         } else if (cooldownMuestra == COOLDONWMUESTRALIMIT) {/**Reseta el contador*/
@@ -416,7 +418,7 @@ public class Enemigo extends SerVivo {
             cooldownMuestra++;
         }
         if (!(collidingXRight || collidingXLeft)) {/**Si no choca a los lados se hace su movimiento posible*/
-            xa += Speed;
+            xa += speed;
         }
         this.spriteActual = WALK_ID;
     }
@@ -440,7 +442,7 @@ public class Enemigo extends SerVivo {
     private void moverEnX() {
         if (cooldownMuestra == 0) {
             if (collidingXRight || collidingXLeft) {/**Si colisiona da la vuelta*/
-                Speed = -Speed;
+                speed = -speed;
             }
             cooldownMuestra++;
         } else if (cooldownMuestra == COOLDONWMUESTRALIMIT) {
@@ -448,24 +450,16 @@ public class Enemigo extends SerVivo {
         } else {
             cooldownMuestra++;
         }
-        xa += Speed;
+        xa += speed;
         this.spriteActual = WALK_ID;
     }
-    /**
-     * Obtienes el tipo de enemigo que es:
-     * 0-IMP 1-PINKIE 2-SOUL 3-CACODEMON 4-BARON
-     * @see Enemigo#enemyType
-     * @return El tipo de enemigo que es
-     */
-    public int getEnemyType() {
-        return enemyType;
-    }
+
     /**
      * Te da a conocer la altura y anchura
      * 
      * @see doomies.HerramientasEntradaSalida.LoadTools#loadEntes(java.lang.String, java.util.ArrayList) 
-     * @param type
-     * @return
+     * @param type Tipo de enemigo
+     * @return Array que contiene altura y anchura 
      */
     public static int[] establecerAnchuraYAlturaSegunTipo(final int type) {
         /**
@@ -498,5 +492,19 @@ public class Enemigo extends SerVivo {
             default:
         }
         return widthHeight;
+    }
+    /**
+     * Obtienes el tipo de enemigo que es: 
+     * 0-IMP 
+     * 1-PINKIE 
+     * 2-SOUL 
+     * 3-CACODEMON
+     * 4-BARON
+     *
+     * @see Enemigo#ENEMY_TYPE
+     * @return El tipo de enemigo que es
+     */
+    public int getEnemyType() {
+        return ENEMY_TYPE;
     }
 }

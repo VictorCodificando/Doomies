@@ -5,36 +5,68 @@
 package doomies.Interfaces;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import doomies.HerramientasEntradaSalida.LoadTools;
 import doomies.HerramientasEntradaSalida.Mouse;
 import doomies.HerramientasEntradaSalida.Teclado;
 import doomies.Interfaces.Elementos.Boton;
 
 /**
+ * Interfaz de cargado y guardado, es la interfaz general que desencadena en
+ * todas las demas opciones
  *
- * @author Víctor Zero
+ * @see doomies.Gestores.GestorMenu#interActual
+ * @author Lena
+ * @version 4
+ * @since 2
  */
 public class InterfazCargaGuarda extends Interfaz {
 
     /**
-     * Definicion de variables
+     * Boton de jugar
      */
     private final Boton botonJugar;
+    /**
+     * Boton de cargar
+     */
     private final Boton botonCargar;
+    /**
+     * Boton de guardar
+     */
     private final Boton botonGuardar;
+    /**
+     * Boton de salir
+     */
     private final Boton botonSalir;
+    /**
+     * Boton de opciones
+     */
     private final Boton botonOpciones;
+    /**
+     * Se he pulsado jugar
+     */
     private boolean jugar = false;
+    /**
+     * Se he pulsado cargar
+     */
     private boolean cargar = false;
+    /**
+     * Se he pulsado guardar
+     */
     private boolean guardar = false;
+    /**
+     * Se he pulsado opciones
+     */
     private boolean opciones = false;
+    /**
+     * Se he pulsado salir
+     */
     private boolean salir = false;
 
     /**
+     * Crea una interfaz de menu principal, con jugar, cargar, guardar, opciones
+     * y salir
      *
      * @param WIDTH Altura de la interfaz
      * @param HEIGHT Anchura de la interfaz
@@ -50,16 +82,26 @@ public class InterfazCargaGuarda extends Interfaz {
         botonSalir = new Boton(450, 620, 400, 70, "SALIR", font.deriveFont(20f), Color.gray, -10, 4, raton);
     }
 
+    /**
+     * Dibuja la interfaz para que se vea jugar, cargar, guardar ,opciones y
+     * salir
+     *
+     * @param g Clase graphics que dibuja todo en la pantalla
+     */
     @Override
     public void dibujar(final Graphics g) {
-        //gradiente
+        /**
+         * Dibuja un gradiente de fondo de pantalla
+         */
         Graphics2D g2d = (Graphics2D) g;
         GradientPaint verticalGradient = new GradientPaint(0, 0, Color.RED, 0, this.HEIGHT, Color.ORANGE);
         g.setColor(Color.red);
         g2d.setPaint(verticalGradient);
         g2d.fillRect(0, 0, this.WIDTH, this.HEIGHT);
 
-        //Botones
+        /**
+         * Dibuja los botones que van por encima
+         */
         botonJugar.dibujar(g);
         botonCargar.dibujar(g);
         botonGuardar.dibujar(g);
@@ -94,7 +136,7 @@ public class InterfazCargaGuarda extends Interfaz {
         if (botonOpciones.isClicked()) {
             opciones = true;
         }
-        if (botonSalir.isClicked()) {
+        if (botonSalir.isClicked()) {//Si le ha dado a salir se termina la ejecucion
             System.exit(0);
         }
 
@@ -124,6 +166,10 @@ public class InterfazCargaGuarda extends Interfaz {
         return guardar;
     }
 
+    /**
+     *
+     * @return Si se ha dado al boton de Opciones
+     */
     public boolean isOpciones() {
         return opciones;
     }

@@ -14,8 +14,12 @@ import java.util.Scanner;
 import javax.swing.JOptionPane;
 
 /**
+ * Se conecta a la base de datos e intenta descargar los mapas, si no hay
+ * conexion da los errores correspondientes
  *
- * @author Víctor Zero
+ * @author Víctor y Nestor
+ * @version 4
+ * @since 4
  */
 public class ConectionDatabase {
 
@@ -32,17 +36,24 @@ public class ConectionDatabase {
             /**
              * Se conecta con la bdd devuelve SQLException
              */
-            String url = "jdbc:mysql://localhost:3307/Doomies";
-            String user = "cliente";
-            String pass = "12345";
-            conn = DriverManager.getConnection(url, user, pass);
+            try {
+                String url = "jdbc:mysql://localhost:3307/Doomies";
+                String user = "cliente";
+                String pass = "12345";
+                conn = DriverManager.getConnection(url, user, pass);
+            } catch (SQLException e) {
+                String url = "jdbc:mysql://localhost:3306/Doomies";
+                String user = "cliente";
+                String pass = "12345";
+                conn = DriverManager.getConnection(url, user, pass);
+            }
             return conn;
         } catch (ClassNotFoundException e) {
             JOptionPane.showMessageDialog(new Frame(), "Driver no cargado", "Error", 1);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(new Frame(), "" + (((e + "").contains("Communications link failure")) ? "No hay conexion con la base de datos\n" : e), "Conexion fallida", 2);
+            JOptionPane.showMessageDialog(new Frame(), "" + (((e + "").contains("Communications link failure")) ? "No hay conexion con la base de datos\n" : "Conexion a la base de datos fallida, compruebe que la base de datos esta operativa: " + e), "Conexion fallida", 2);
         } catch (Exception e) {
-            System.out.println(e);
+            JOptionPane.showMessageDialog(new Frame(), "ERROR DESCONOCIDO: " + e, "Conexion fallida", 2);
         }
         String ruta = "";
         try {
@@ -57,7 +68,14 @@ public class ConectionDatabase {
         }
         return conn;
     }
-    
+
+    /**
+     * Descarga los mapas de la bdd
+     *
+     * @param conn Conexion a la bdd
+     * @param fecha fecha de la actualizacion que se esta descargando
+     * @throws SQLException
+     */
     private static void descargarMapas(Connection conn, String fecha) throws SQLException {
         int i = 1;
         boolean morelvl = true;
@@ -86,7 +104,13 @@ public class ConectionDatabase {
             System.out.println("ERROR FATAL");
         }
     }
-    
+
+    /**
+     * Exporta un nivel a un fichero
+     *
+     * @param nivel Informacion a escribir
+     * @param lvlNum numero del nivel
+     */
     private static void exportarNivelAFichero(String nivel, int lvlNum) {
         String ruta = "";
         try {
@@ -108,9 +132,17 @@ public class ConectionDatabase {
         } catch (IOException e) {
             System.out.println("ERROR FATAL");
         }
-        
+
     }
-    
+
+    /**
+     * Extrae los enemigos de un mapa de la bdd
+     *
+     * @param lvl Nivel a sacar
+     * @param conn Conexion con la bdd
+     * @return Todos los enemigos en un string
+     * @throws SQLException
+     */
     private static String getAllEnemiesFromLvl(int lvl, Connection conn) throws SQLException {
         String enemigos = "";
         Statement stmt = conn.createStatement();
@@ -130,7 +162,15 @@ public class ConectionDatabase {
         stmt.close();
         return enemigos;
     }
-    
+
+    /**
+     * Extrae los los tiles de un mapa de la bdd
+     *
+     * @param lvl nivel a sacar
+     * @param conn Conexion con la bdd
+     * @return Todos los tiles en un string
+     * @throws SQLException
+     */
     private static String getAllMapTiles(int lvl, Connection conn) throws SQLException {
         String tiles = "";
         Statement stmt = conn.createStatement();
@@ -141,29 +181,34 @@ public class ConectionDatabase {
         }
         return tiles;
     }
-    
-    public static String reemplazarAX(String c) {
+
+    /**
+     *
+     * @param cadena Linea no formateada
+     * @return String convertido a formato nuevo
+     */
+    public static String reemplazarAX(String cadena) {
         int i = 0;
-        if (!c.substring(i, i + 1).equals("-")) {//Se comprueba que lo que esta en primera posicion sea distinto de "-"
+        if (!cadena.substring(i, i + 1).equals("-")) {//Se comprueba que lo que esta en primera posicion sea distinto de "-"
 
             try {
-                int block = Integer.parseInt(c.substring(0, 2));//Se comprueba si lo que se mete al principio es una pareja de numeros y no otras cosas
+                int block = Integer.parseInt(cadena.substring(0, 2));//Se comprueba si lo que se mete al principio es una pareja de numeros y no otras cosas
                 i += 2;//Se salta 2 para que no se vuelva a comprobar 
             } catch (Exception e) {//si lo primero no son numeros se pone i = 0 para que se empieze a comprobar desde el principio
                 i = 0;
             }
         }
-        while (i < c.length()) {
-            if (!c.substring(i, i + 1).equals("-")) {//Se comprueba que la primera posicion es distinta a "-", si es distinta da un error porque ya se habia comprobado antes si era un numero
+        while (i < cadena.length()) {
+            if (!cadena.substring(i, i + 1).equals("-")) {//Se comprueba que la primera posicion es distinta a "-", si es distinta da un error porque ya se habia comprobado antes si era un numero
                 System.err.println("DA ERROR");//
                 System.exit(0);
-            } else if ((c.length() - 2) > (i) && c.substring(i + 1, i + 2).equals("-")) {//Se comprueba que si no es el final del String y hay un "-" seguido de otro "-" sigue con el bucle
+            } else if ((cadena.length() - 2) > (i) && cadena.substring(i + 1, i + 2).equals("-")) {//Se comprueba que si no es el final del String y hay un "-" seguido de otro "-" sigue con el bucle
                 i++;
                 continue;
-            } else if (c.length() - 2 > (i)) {//Se comprueba otra vez si no es el final del String
+            } else if (cadena.length() - 2 > (i)) {//Se comprueba otra vez si no es el final del String
 
                 try {
-                    int block = Integer.parseInt(c.substring(i + 1, i + 3));//Se comprueba que lo que se mete es una pareja de numeros y no otras cosas, sino da error
+                    int block = Integer.parseInt(cadena.substring(i + 1, i + 3));//Se comprueba que lo que se mete es una pareja de numeros y no otras cosas, sino da error
                 } catch (Exception e) {
                     System.err.println("DA ERROR");
                     System.exit(0);
@@ -173,18 +218,18 @@ public class ConectionDatabase {
                 break;
             }
         }
-        if (c.substring(0, 1).equals("-")) {//Se comprueba si el String empieza por "-" y si lo hace pone "xx" al principio
-            c = "xx" + c;
+        if (cadena.substring(0, 1).equals("-")) {//Se comprueba si el String empieza por "-" y si lo hace pone "xx" al principio
+            cadena = "xx" + cadena;
         }
-        while (c.contains("--")) {//Se comprueba que hay "--" y si las hay mete "xx" entre ellas
-            c = c.replaceAll("--", "-xx-");
+        while (cadena.contains("--")) {//Se comprueba que hay "--" y si las hay mete "xx" entre ellas
+            cadena = cadena.replaceAll("--", "-xx-");
         }
-        if (c.substring((c.length() - 1), c.length()).equals("-")) {//Se comprueba si acaba en "-" y si acaba asi añade "xx" al final
-            c = c + "xx";
+        if (cadena.substring((cadena.length() - 1), cadena.length()).equals("-")) {//Se comprueba si acaba en "-" y si acaba asi añade "xx" al final
+            cadena = cadena + "xx";
         }
-        return c;
+        return cadena;
     }
-    
+
     public static void intentarCargarMapas() {
         try {
             String fecha = "";
@@ -201,11 +246,11 @@ public class ConectionDatabase {
                 int oldAño = Integer.parseInt(fechaInterna.split("-")[0]);
                 int oldMes = Integer.parseInt(fechaInterna.split("-")[1]);
                 int oldDia = Integer.parseInt(fechaInterna.split("-")[2]);
-                
+
                 int año = Integer.parseInt(fecha.split("-")[0]);
                 int mes = Integer.parseInt(fecha.split("-")[1]);
                 int dia = Integer.parseInt(fecha.split("-")[2]);
-                
+
                 if (año > oldAño) {
                     descargarMapas(conn, fecha);
                 } else if (año < oldAño) {
@@ -227,19 +272,17 @@ public class ConectionDatabase {
                 }
                 cerrarConexion(conn);
             } catch (Exception e) {
-                
             }
         } catch (SQLException e) {
             System.out.println("Error " + e);
         } catch (Exception e) {
-            
         }
     }
-    
+
     private static void cerrarConexion(Connection conn) throws SQLException {
         conn.close();
     }
-    
+
     private static String getFecha() {
         String ruta = "";
         try {

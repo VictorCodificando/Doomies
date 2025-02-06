@@ -56,12 +56,15 @@ Doomies es un juego de desplazamiento lateral basado en el clásico Doom, desarr
 El desarrollo de Doomies fue realizado por estudiantes del IES Julián Marías, Valladolid, con la siguiente distribución de roles:
 
 - **Análisis**: [Néstor de Frutos](https://github.com/nestor115)
+  
   Responsable del análisis de requisitos y casos de uso.
   
 - **Diseño**: [Lena Simón](https://github.com/Lesiru26)
+  
   Encargada de los diagramas, diseño de la arquitectura y diseño de interfaz.
   
-- **Codificación**: [Víctor González](https://github.com/VictorCodificando)  
+- **Codificación**: [Víctor González](https://github.com/VictorCodificando)
+  
   Responsable de la implementación del código fuente y la gestión de la base de datos.
   
 - **Pruebas**: Javier Mérida  

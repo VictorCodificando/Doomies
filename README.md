@@ -67,7 +67,8 @@ El desarrollo de Doomies fue realizado por estudiantes del IES Julián Marías, 
   
   Responsable de la implementación del código fuente y la gestión de la base de datos.
   
-- **Pruebas**: Javier Mérida  
+- **Pruebas**: [Javier Mérida](https://github.com/AltRKT)
+   
   Encargado de la realización y documentación de las pruebas funcionales y no funcionales.
 
 ## Futuras Mejoras
